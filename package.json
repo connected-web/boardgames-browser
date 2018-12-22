@@ -1,17 +1,18 @@
 {
-  "name": "boardgames",
+  "name": "boardgames-browser",
+  "logName": "Board Games Browser",
   "version": "1.0.0",
-  "description": "A browser for personalized boardgame data, sourced from boardgamesgeek.com and other locations.",
+  "description": "A browser for personalized boardgame data, sourced from boardgames-api.calisaurus.net and other locations.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node create",
     "lint": "standard --fix",
     "test": "npm run lint"
   },
   "author": "John Beech",
   "license": "ISC",
   "dependencies": {
-    "promise-path": "*"
+    "promise-path": "^1.3.0"
   },
   "devDependencies": {
     "standard": "^10.0.3"
