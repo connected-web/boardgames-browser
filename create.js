@@ -31,7 +31,7 @@ const fetchJson = async (path) => {
 async function start() {
   const boardGameList = await fetchJson('https://boardgames-api.calisaurus.net/api/boardgame/list') || { games: [] }
 
-  await clean(fromHere('content'))
+  await clean(fromHere('content/games'))
   await make(fromHere('content/games'))
 
   const renderLinksTemplate = await readTemplate(fromHere('templates/links.html'))
@@ -39,12 +39,18 @@ async function start() {
   await write(fromHere(`content/index.html`), linkIndexHtml, 'utf8')
 
   const renderGameTemplate = await readTemplate(fromHere('templates/game.html'))
-  const work = boardGameList.games.map(listEntry => {
+  const work = boardGameList.games.map((listEntry, index) => {
     return async () => {
-      report('Fetching', listEntry.name, ':', listEntry.boardGameApiId)
+      report(index, 'Fetching', listEntry.name, ':', listEntry.boardGameApiId)
       const boardGame = await fetchJson(`https://boardgames-api.calisaurus.net/api/boardgame/by/${listEntry.boardGameApiId}`) || false
       if (boardGame) {
+        Object.entries(boardGame.game).map(kvp => {
+          if (kvp[0].toLowerCase().indexOf('rate') !== -1) {
+            boardGame.game[kvp[0]] = (kvp[1] * 100).toPrecision(3) + '%'
+          }
+        })
         const gameHtml = renderGameTemplate(boardGame)
+        report(index, 'Rendering', listEntry.name, ':', listEntry.boardGameApiId)
         return write(fromHere(`content/games/${boardGame.game.boardGameApiId}.html`), gameHtml, 'utf8')
       }
       return false
@@ -52,17 +58,12 @@ async function start() {
   })
 
   do {
-    let count = 0
     const batch = []
     while (batch.length < 10 && work.length > 0) {
-      const workItem = work.pop()
+      const workItem = work.shift()
       batch.push(workItem)
-      count++
     }
     await Promise.all(batch.map(n => n()))
-    if (count >= 10) {
-      return
-    }
     while (batch.length > 0) {
       batch.pop()
     }
