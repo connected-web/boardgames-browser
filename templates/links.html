@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Index - Board Games Browser</title>
+</head>
+<body>
+<heading>Board Games</heading>
+<games>
+{{#each games}}
+  <game><a href="games/{{boardGameApiId}}.html">{{name}}</a></game>
+{{/each}}
+</games>
+</body>
+</html>

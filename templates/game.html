@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{game.name}} - Board Games Browser</title>
+</head>
+<body>
+<heading>{{game.name}}</heading>
+
+<stats>
+  <stat>
+    <label>Total Games Played</label>
+    <value>{{game.totalGamesPlayed}}</value>
+  </stat>
+
+  {{#if game.coOpGamesPlayedCount}}
+  <heading>Co Op Stats</heading>
+  <stat>
+    <label>Co Op Games Played (Total)</label>
+    <value>{{game.coOpGamesPlayedCount}}</value>
+  </stat>
+  <stat>
+    <label>Co Op Games Played (%)</label>
+    <value>{{game.coOpGamesPlayedPercentage}}</value>
+  </stat>
+  <stat style="width: {{game.coOpWinRate}}">
+    <label>Won</label>
+    <value>{{game.coOpGameWins}}</value>
+    <percentage>{{game.coOpWinRate}}</percentage>
+  </stat>
+  <stat style="width: {{game.coOpLossRate}}">
+    <label>Lost</label>
+    <value>{{game.coOpGameLoses}}</value>
+    <percentage>{{game.coOpLossRate}}</percentage>
+  </stat>
+  {{/if}}
+
+  {{#if game.winnableGamesTotal}}
+  <heading>Competitive Stats</heading>
+  <stat>
+    <label>Competitive Games (Total)</label>
+    <value>{{game.winnableGamesTotal}}</value>
+  </stat>
+  <stat>
+    <label>Hannah</label>
+    <value>{{game.winCountHannah}}</value>
+    <percentage>{{game.winRateHannah}}</percentage>
+  </stat>
+  <stat>
+    <label>John</label>
+    <value>{{game.winCountJohn}}</value>
+    <percentage>{{game.winRateJohn}}</percentage>
+  </stat>
+  <stat>
+    <label>Draw</label>
+    <value>{{game.winCountDraw}}</value>
+    <percentage>{{game.winRateDraw}}</percentage>
+  </stat>
+  <stat>
+    <label>Other</label>
+    <value>{{game.winCountOther}}</value>
+    <percentage>{{game.winRateOther}}</percentage>
+  </stat>
+  <stat>
+    <label>Most Won Games</label>
+    <value>{{game.mostWonGames}}</value>
+  </stat>
+  {{/if}}
+
+</stats>
+</body>
+</html>
