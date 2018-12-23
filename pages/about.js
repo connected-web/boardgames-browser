@@ -4,8 +4,10 @@ import Layout from '../components/PageLayout.js'
 
 const About = (props) => (
   <Layout>
-    <h1>About</h1>
-    <p>About the board games browser.</p>
+    <heading>About</heading>
+    <description>
+      <p>A browser for personalized boardgame data, sourced from boardgames-api.calisaurus.net and other locations.</p>
+    </description>
   </Layout>
 )
 

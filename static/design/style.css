@@ -49,3 +49,15 @@ stat > percentage::before {
 stat > percentage::after {
   content: ')'
 }
+
+description {
+  display: block;
+}
+
+description > p {
+  margin: 5px 0 10px 0;
+}
+
+.hidden {
+  display: none;
+}

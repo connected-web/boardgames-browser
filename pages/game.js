@@ -12,6 +12,7 @@ function renderGame(game) {
   return (
     <Layout>
       <heading>{game.name}</heading>
+      <description>{game.description.map(line => (<p>{line}</p>))}</description>
       <stats>
         <stat>
           <label>Total Games Played</label>
