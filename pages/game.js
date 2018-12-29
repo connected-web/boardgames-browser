@@ -11,68 +11,68 @@ function pct(val) {
 function renderGame(game) {
   return (
     <Layout>
-      <heading>{game.name}</heading>
-      <description>{game.description.map(line => (<p>{line}</p>))}</description>
-      <stats>
-        <stat>
+      <h1>{game.name}</h1>
+      <div className="description">{game.description.map((line, idx) => (<p key={'line' + idx}>{line}</p>))}</div>
+      <div className="stats">
+        <div className="stat">
           <label>Total Games Played</label>
-          <value>{game.totalGamesPlayed}</value>
-        </stat>
+          <div className="value">{game.totalGamesPlayed}</div>
+        </div>
 
         <section className={`coop stats ${game.coOpGamesPlayedCount ? 'visible' : 'hidden'}`}>
-          <heading>Co Op Stats</heading>
-          <stat>
+          <h2>Co Op Stats</h2>
+          <div className="stat">
             <label>Co Op Games Played (Total)</label>
-            <value>{game.coOpGamesPlayedCount}</value>
-          </stat>
-          <stat>
+            <div className="value">{game.coOpGamesPlayedCount}</div>
+          </div>
+          <div className="stat">
             <label>Co Op Games Played (%)</label>
-            <value>{pct(game.coOpGamesPlayedPercentage)}</value>
-          </stat>
-          <stat>
+            <div className="value">{pct(game.coOpGamesPlayedPercentage)}</div>
+          </div>
+          <div className="stat">
             <label>Won</label>
-            <value>{game.coOpGameWins}</value>
+            <div className="value">{game.coOpGameWins}</div>
             <percentage>{pct(game.coOpWinRate)}</percentage>
-          </stat>
-          <stat>
+          </div>
+          <div className="stat">
             <label>Lost</label>
-            <value>{game.coOpGameLoses}</value>
+            <div className="value">{game.coOpGameLoses}</div>
             <percentage>{pct(game.coOpLossRate)}</percentage>
-          </stat>
+          </div>
         </section>
 
         <section className={`competitive stats ${game.winnableGamesTotal ? 'visible' : 'hidden'}`}>
-          <heading>Competitive Stats</heading>
-          <stat>
+          <h2>Competitive Stats</h2>
+          <div className="stat">
             <label>Competitive Games (Total)</label>
-            <value>{game.winnableGamesTotal}</value>
-          </stat>
-          <stat>
+            <div className="value">{game.winnableGamesTotal}</div>
+          </div>
+          <div className="stat">
             <label>Hannah</label>
-            <value>{game.winCountHannah}</value>
+            <div className="value">{game.winCountHannah}</div>
             <percentage>{pct(game.winRateHannah)}</percentage>
-          </stat>
-          <stat>
+          </div>
+          <div className="stat">
             <label>John</label>
-            <value>{game.winCountJohn}</value>
+            <div className="value">{game.winCountJohn}</div>
             <percentage>{pct(game.winRateJohn)}</percentage>
-          </stat>
-          <stat>
+          </div>
+          <div className="stat">
             <label>Draw</label>
-            <value>{game.winCountDraw}</value>
+            <div className="value">{game.winCountDraw}</div>
             <percentage>{pct(game.winRateDraw)}</percentage>
-          </stat>
-          <stat>
+          </div>
+          <div className="stat">
             <label>Other</label>
-            <value>{game.winCountOther}</value>
+            <div className="value">{game.winCountOther}</div>
             <percentage>{pct(game.winRateOther)}</percentage>
-          </stat>
-          <stat>
+          </div>
+          <div className="stat">
             <label>Most Won Games</label>
-            <value>{game.mostWonGames}</value>
-          </stat>
+            <div className="value">{game.mostWonGames}</div>
+          </div>
         </section>
-      </stats>
+      </div>
     </Layout>
   )
 }

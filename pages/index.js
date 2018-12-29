@@ -4,16 +4,16 @@ import Layout from '../components/PageLayout.js'
 
 const Index = (props) => (
   <Layout>
-    <heading>Board Games Browser</heading>
-    <stats>
+    <h1>Board Games Browser</h1>
+    <div className="stats">
       {props.games.map((game) => (
-        <stat key={game.boardGameApiId}>
+        <div className="stat" key={game.boardGameApiId}>
           <Link href={`/game?id=${game.boardGameApiId}`}>
             <a>{game.name}</a>
           </Link>
-        </stat>
+        </div>
       ))}
-    </stats>
+    </div>
   </Layout>
 )
 
