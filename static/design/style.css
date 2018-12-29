@@ -47,12 +47,17 @@ h1, h2 {
   display: inline-block;
 }
 
-.stat > percentage::before {
-  content: ' ('
+.stat > .percentage {
+  display: inline-block;
 }
 
-.stat > percentage::after {
-  content: ')'
+.stat > .percentage::before {
+  content: ' (';
+  margin-left: 4px;
+}
+
+.stat > .percentage::after {
+  content: ')';
 }
 
 .description {

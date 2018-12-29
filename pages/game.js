@@ -32,12 +32,12 @@ function renderGame(game) {
           <div className="stat">
             <label>Won</label>
             <div className="value">{game.coOpGameWins}</div>
-            <percentage>{pct(game.coOpWinRate)}</percentage>
+            <div className="percentage">{pct(game.coOpWinRate)}</div>
           </div>
           <div className="stat">
             <label>Lost</label>
             <div className="value">{game.coOpGameLoses}</div>
-            <percentage>{pct(game.coOpLossRate)}</percentage>
+            <div className="percentage">{pct(game.coOpLossRate)}</div>
           </div>
         </section>
 
@@ -50,22 +50,22 @@ function renderGame(game) {
           <div className="stat">
             <label>Hannah</label>
             <div className="value">{game.winCountHannah}</div>
-            <percentage>{pct(game.winRateHannah)}</percentage>
+            <div className="percentage">{pct(game.winRateHannah)}</div>
           </div>
           <div className="stat">
             <label>John</label>
             <div className="value">{game.winCountJohn}</div>
-            <percentage>{pct(game.winRateJohn)}</percentage>
+            <div className="percentage">{pct(game.winRateJohn)}</div>
           </div>
           <div className="stat">
             <label>Draw</label>
             <div className="value">{game.winCountDraw}</div>
-            <percentage>{pct(game.winRateDraw)}</percentage>
+            <div className="percentage">{pct(game.winRateDraw)}</div>
           </div>
           <div className="stat">
             <label>Other</label>
             <div className="value">{game.winCountOther}</div>
-            <percentage>{pct(game.winRateOther)}</percentage>
+            <div className="percentage">{pct(game.winRateOther)}</div>
           </div>
           <div className="stat">
             <label>Most Won Games</label>
