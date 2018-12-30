@@ -1,5 +1,3 @@
-import Link from 'next/link'
-import fetch from 'isomorphic-unfetch'
 import Layout from '../components/PageLayout.js'
 
 const About = (props) => (
