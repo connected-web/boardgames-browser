@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
+    "export": "next export",
     "start": "next start",
     "test": "npm run lint",
     "lint": "standard --fix"
