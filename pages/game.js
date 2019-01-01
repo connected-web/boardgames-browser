@@ -8,10 +8,11 @@ function pct (val) {
 }
 
 function renderGame (game) {
+  const description = game.description || []
   return (
     <Layout>
       <h1>{game.name}</h1>
-      <div className='description'>{game.description.map((line, idx) => (<p key={'line' + idx}>{line}</p>))}</div>
+      <div className='description'>{description.map((line, idx) => (<p key={'line' + idx}>{line}</p>))}</div>
       <div className='stats'>
         <div className='stat'>
           <label>Total Games Played</label>
