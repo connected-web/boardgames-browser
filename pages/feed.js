@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import fetch from 'isomorphic-unfetch'
 import Layout from '../components/PageLayout.js'
 import Chart from 'react-chartjs2'

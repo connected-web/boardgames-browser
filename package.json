@@ -9,7 +9,7 @@
     "build": "next build",
     "export": "next export",
     "start": "next start",
-    "test": "npm run lint",
+    "test": "standard",
     "lint": "standard --fix"
   },
   "author": "John Beech",
