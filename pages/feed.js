@@ -67,7 +67,7 @@ Feed.getInitialProps = async function () {
   const chartData = {
     labels: months,
     datasets: [{
-      label: "Co-op Games Played",
+      label: 'Co-op Games Played',
       backgroundColor: 'rgb(255, 99, 132)',
       borderColor: 'rgb(255, 99, 132)',
       data: coOpGamesPlayedByMonth
