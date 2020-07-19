@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import fetch from 'isomorphic-unfetch'
 import Layout from '../components/PageLayout.js'
 import Chart from 'react-chartjs2'
@@ -67,7 +66,7 @@ Feed.getInitialProps = async function () {
   const chartData = {
     labels: months,
     datasets: [{
-      label: "Co-op Games Played",
+      label: 'Co-op Games Played',
       backgroundColor: 'rgb(255, 99, 132)',
       borderColor: 'rgb(255, 99, 132)',
       data: coOpGamesPlayedByMonth

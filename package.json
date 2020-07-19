@@ -9,7 +9,7 @@
     "build": "next build",
     "export": "next export",
     "start": "next start",
-    "test": "npm run lint",
+    "test": "standard",
     "lint": "standard --fix"
   },
   "author": "John Beech",
@@ -25,6 +25,6 @@
     "react-dom": "^16.7.0"
   },
   "devDependencies": {
-    "standard": "^10.0.3"
+    "standard": "^14.3.4"
   }
 }
