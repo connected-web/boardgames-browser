@@ -1,24 +1,17 @@
-name: Deploy to Github Pages Branch
-on: 
-  push:
-    branches:
-      - master
+name: Build and Deploy
+on: [push]
 jobs:
-  deploy:
-    name: Build and Deploy
+  build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@master
 
-    - name: Use Node JS LTS
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12.x
-
-    - name: Install npm dependencies
-      run: npm install
-
-    - name: Run build steps
-      run: ./deploy.sh
+    - name: vuepress-deploy
+      uses: jenkey2011/vuepress-deploy@master
+      env:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        TARGET_REPO: connected-web/boardgames-browser
+        TARGET_BRANCH: gh-pages
+        BUILD_SCRIPT: yarn && yarn build
+        BUILD_DIR: docs/.vuepress/dist/
