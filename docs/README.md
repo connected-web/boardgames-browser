@@ -1,3 +1,3 @@
 # Boardgames Browser
 
-<BoardgameList />
+<BoardgameBrowser />
