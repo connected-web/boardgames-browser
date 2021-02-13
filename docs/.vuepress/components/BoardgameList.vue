@@ -13,6 +13,7 @@ import axios from 'axios'
 const boardgamesApiUrl = 'https://boardgames-api.calisaurus.net'
 
 export default {
+  name: 'BoardgameList',
   data: function () {
     return {
       message: `Loading data from ${boardgamesApiUrl}`,

@@ -17,6 +17,7 @@ import axios from 'axios'
 const boardgamesApiUrl = 'https://boardgames-api.calisaurus.net'
 
 export default {
+  name: 'BoardgameSummary',
   props: ['gameId'],
   data: function () {
     return {

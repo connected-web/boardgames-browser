@@ -1,0 +1,3 @@
+# Boardgame Grid
+
+<BoardgameGridBrowser />

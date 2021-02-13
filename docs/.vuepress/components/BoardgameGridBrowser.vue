@@ -1,20 +1,20 @@
 <template>
-  <BoardgameSummary v-if="gameId" :gameId="gameId" />
-  <BoardgameList v-else />
+  <BoardgameGrid v-if="$data.dateCode" :dateCode="$data.dateCode" />
+  <BoardgameGridList v-else />
 </template>
 
 <script>
 export default {
-  name: 'BoardgameBrowser',
+  name: 'BoardgameGrids',
   data: function () {
     return {
-      gameId: false,
+      dateCode: false,
     }
   },
   async beforeMount() { 
     const params = getParamsFromUrl(document.location)
-    const { game } = params
-    this.$data.gameId = game
+    const { dateCode } = params
+    this.$data.dateCode = dateCode
     console.log('Params', params)
   }
 }
