@@ -2,24 +2,28 @@
 <div class="boardgame-list">
   <p>{{message}}</p>
   <ul>
-    <li v-for="item in items">{{ item.first_name }} {{ item.last_name }}</li>
+    <li v-for="game in games">{{ game.name }}</li>
   </ul>
 </div>
 </template>
 
 <script>
 import axios from 'axios'
+
+const boardgamesApiUrl = 'https://boardgames-api.calisaurus.net'
+
 export default {
   data: function () {
     return {
-      message: 'Gotta start somewhere!',
-      items: []
+      message: `Loading data from ${boardgamesApiUrl}`,
+      games: []
     }
   },
   beforeMount() {
-    axios.get('https://reqres.in/api/users')
+    axios.get(`${boardgamesApiUrl}/api/boardgame/list`)
     .then(response => {
-       this.$data.items = response.data.data
+      this.$data.games = response.data.games
+      this.$data.message = `${this.$data.games.length} games in list:`
     })
     .catch(error => {
         console.log(error);
