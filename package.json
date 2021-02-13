@@ -5,24 +5,12 @@
   "description": "A browser for personalized boardgame data, sourced from boardgames-api.calisaurus.net and other locations.",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
-    "build": "next build",
-    "export": "next export",
-    "start": "next start",
     "test": "standard",
     "lint": "standard --fix"
   },
   "author": "John Beech",
   "license": "ISC",
   "dependencies": {
-    "chart.js": "^2.9.3",
-    "handlebars": "^4.7.6",
-    "isomorphic-unfetch": "^3.0.0",
-    "next": "^9.4.4",
-    "promise-path": "^1.4.0",
-    "react": "^16.13.1",
-    "react-chartjs2": "^1.2.1",
-    "react-dom": "^16.13.1"
   },
   "devDependencies": {
     "standard": "^14.3.4"

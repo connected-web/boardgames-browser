@@ -1,5 +1,2 @@
 node_modules
-content/**/*.html
 *.log
-.next
-out
