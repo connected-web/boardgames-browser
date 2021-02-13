@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     boardgameLink(game) {
-      return `?game=${game.boardGameApiId}`
+      return `/boardgames-browser/game/?game=${game.boardGameApiId}`
     }
   }
 }

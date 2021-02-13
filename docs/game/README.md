@@ -1,3 +1,3 @@
-# Boardgames Index
+# Boardgame Summary
 
 <BoardgameBrowser />
