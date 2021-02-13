@@ -11,6 +11,13 @@
         <b>{{challengeGrid.challenge.gamesToPlayCountPerFamily}}</b> times each to complete the challenge!
       </p>
     </div>
+    <div class="challenge grid">
+      <div class="challenge row" v-for="entry in challengeGrid.grid">
+        <div class="game family name">{{ entry.gameFamily }}</div>
+        <div class="game family play count">{{ entry.gamesPlayedCount }}</div>
+        <div class="game family play percentage">{{ entry.gamesPlayedPercentage * 100 }}%</div>
+      </div>
+    </div>
     <div class="boardgame"><pre><code>{{ JSON.stringify(challengeGrid, null, 2) }}</code></pre></div>
   </div>
   <div v-else>
@@ -52,3 +59,12 @@ async function loadBoardgameGrid(dateCode) {
 }
 
 </script>
+
+<style scoped>
+.challenge.row > * {
+  display: inline-block;
+}
+.game.family.name {
+  width: 200px;
+}
+</style>
