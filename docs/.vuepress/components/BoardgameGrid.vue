@@ -14,8 +14,11 @@
     <div class="challenge grid">
       <div class="challenge row" v-for="entry in challengeGrid.grid">
         <div class="game family name">{{ entry.gameFamily }}</div>
-        <div class="game family play count">{{ entry.gamesPlayedCount }}</div>
+        <div class="game family play count">P {{ entry.gamesPlayedCount }}</div>
         <div class="game family play percentage">{{ entry.gamesPlayedPercentage * 100 }}%</div>
+        <div class="game family play stats">
+          <GameStatBox v-for="game in entry.gameStats" :game="game" />
+        </div>
       </div>
     </div>
     <div class="boardgame"><pre><code>{{ JSON.stringify(challengeGrid, null, 2) }}</code></pre></div>
@@ -37,7 +40,9 @@ export default {
   data: function () {
     return {
       message: `Loading data from ${boardgamesApiUrl}`,
-      challengeGrid: {}
+      challengeGrid: {
+        challenge: {}
+      }
     }
   },
   async beforeMount() {
@@ -66,5 +71,11 @@ async function loadBoardgameGrid(dateCode) {
 }
 .game.family.name {
   width: 200px;
+}
+.game.family.play.count {
+  width: 40px;
+}
+.game.family.play.percentage {
+  width: 40px;
 }
 </style>
