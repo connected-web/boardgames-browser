@@ -14,10 +14,12 @@
     <div class="challenge grid">
       <div class="challenge row" v-for="entry in challengeGrid.grid">
         <div class="game family name">{{ entry.gameFamily }}</div>
-        <div class="game family play count">P {{ entry.gamesPlayedCount }}</div>
-        <div class="game family play percentage">{{ entry.gamesPlayedPercentage * 100 }}%</div>
+        <div class="game family progress">
+          <div class="play count label">P {{ entry.gamesPlayedCount }}</div>
+          <div class="progress bar" :style="`width: ${fmp(entry.gamesPlayedPercentage)};`"></div>
+        </div>
         <div class="game family play stats">
-          <GameStatBox v-for="game in entry.gameStats" :game="game" />
+          <GameStatBox v-for="game in limit(entry.gameStats, challengeGrid.challenge.gamesToPlayCountPerFamily)" :game="game" />
         </div>
       </div>
     </div>
@@ -48,6 +50,15 @@ export default {
   async beforeMount() {
     this.$data.challengeGrid = await loadBoardgameGrid(this.dateCode)
     this.$data.message = false
+  },
+  methods: {
+    limit(list, count) {
+      return list.slice(0, count * 2)
+    },
+    fmp(number) {
+      const maxed = Math.min(number, 1.0)
+      return (maxed * 100).toFixed(0) + '%'
+    } 
   }
 }
 
@@ -68,14 +79,35 @@ async function loadBoardgameGrid(dateCode) {
 <style scoped>
 .challenge.row > * {
   display: inline-block;
+  background: #eee;
 }
 .game.family.name {
+  margin: 2px;
+  padding: 2px;
+  font-size: 0.8em;
   width: 200px;
 }
-.game.family.play.count {
-  width: 40px;
+.game.family.progress {
+  position: relative;
+  margin: 2px;
+  padding: 2px;
+  font-size: 0.8em;
+  width: 80px;
+  background: #ccc;
 }
-.game.family.play.percentage {
-  width: 40px;
+.progress.bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #999;
+  height: 100%;
+  z-index: 1;
+}
+.play.count.label {
+  position: relative;
+  z-index: 2;
+}
+.game.family.play.stats {
+  display: inline-flex;
 }
 </style>
