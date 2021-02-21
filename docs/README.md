@@ -1,3 +1,5 @@
 # Boardgames Index
 
-<BoardgameBrowser />
+<ClientOnly>
+  <BoardgameBrowser />
+</ClientOnly>

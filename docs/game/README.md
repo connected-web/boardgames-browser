@@ -1,3 +1,5 @@
 # Boardgame Summary
 
-<BoardgameBrowser />
+<ClientOnly>
+  <BoardgameBrowser />
+</ClientOnly>

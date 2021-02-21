@@ -1,3 +1,4 @@
 # Boardgame Grids
-
-<BoardgameGridBrowser />
+<ClientOnly>
+  <BoardgameGridBrowser />
+</ClientOnly>

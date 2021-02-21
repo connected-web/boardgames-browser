@@ -1,3 +1,5 @@
 # Boardgame Grid
 
-<BoardgameGridBrowser />
+<ClientOnly>
+  <BoardgameGridBrowser />
+</ClientOnly>

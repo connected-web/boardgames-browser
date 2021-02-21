@@ -10,6 +10,10 @@
       <p>There are <b>{{challengeGrid.challenge.gameFamiliesCount}}</b> families of games that need to be played
         <b>{{challengeGrid.challenge.gamesToPlayCountPerFamily}}</b> times each to complete the challenge!
       </p>
+      <p>So far <b>{{ challengeGrid.overview.gamesPlayedCount }}</b> games have been played, 
+        or <b>{{ fmp(challengeGrid.overview.gamesPlayedPercentage) }}</b>
+        out of a total of <b>{{ challengeGrid.overview.totalGamesToPlayCount }}</b>.</p>
+      </p>
     </div>
     <div class="challenge grid">
       <div class="challenge row" v-for="entry in challengeGrid.grid">
@@ -23,7 +27,10 @@
         </div>
       </div>
     </div>
-    <div class="boardgame"><pre><code>{{ JSON.stringify(challengeGrid, null, 2) }}</code></pre></div>
+    <div class="challenge details">
+      <p>The available data covers <b>{{ challengeGrid.sequence.daysInSequenceCount }}</b> days between
+        <b>{{ challengeGrid.sequence.earliestDate }}</b> and <b>{{ challengeGrid.sequence.latestDate }}</b>.</p>
+     </div>
   </div>
   <div v-else>
     <p>No date code set - <a href="./">back to grids</a>?</p>
