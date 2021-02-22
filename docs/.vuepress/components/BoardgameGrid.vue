@@ -33,17 +33,7 @@
           <GameStatBox v-for="game in limit(entry.gameStats, challengeGrid.challenge.gamesToPlayCountPerFamily)" :game="game" />
         </div>
       </div>
-      <div class="grid key">
-        <b>Key:</b>
-        <div class="horizontal items">
-          <GameStatKeyBox symbol="j" label="John" />
-          <GameStatKeyBox symbol="h" label="Hannah" />
-          <GameStatKeyBox symbol="o" label="Other" />
-          <GameStatKeyBox symbol="d" label="Draw" />
-          <GameStatKeyBox symbol="w" label="Co-op: Win" />
-          <GameStatKeyBox symbol="l" label="Co-op: Lose" />
-        </div>
-      </div>
+      <game-stat-key />
     </div>
     <div class="challenge details">
       <p>The available data covers <b>{{ challengeGrid.sequence.daysInSequenceCount }}</b> days between
@@ -159,14 +149,6 @@ async function loadBoardgameGrid(dateCode) {
 .game.family.play.stats {
   display: inline-flex;
 }
-.horizontal.items {
-  display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-}
-.horizontal.items > * {
-  margin: 5px;
-}
 @media (max-width: 959px) {
   .game.family.play.stats {
     display: none;
@@ -177,15 +159,6 @@ async function loadBoardgameGrid(dateCode) {
   .challenge.row > .game.family {
     flex: 1 2;
   }
-}
-.grid.key {
-  display: block;
-  background: #F5F5F5;
-  margin: 2px;
-  padding: 4px;
-}
-.grid.key > b {
-  font-size: 0.8em;
 }
 .coop.won, .coop.win {
   color: black;
