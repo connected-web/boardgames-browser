@@ -9,35 +9,16 @@ const boardgamesApiUrl = 'https://boardgames-api.calisaurus.net'
 
 export default {
   name: 'GameStatBox',
-  props: ['game'],
+  props: ['game', 'name'],
   methods: {
     gameStat(game) {
-      try {
-        return game.coOp.toLowerCase() === 'yes' ? this.coopStat(game) : this.vsStat(game)
-      }
-      catch (ex) {
-        console.warn('Bad data - gameStat - error processing:', JSON.stringify(game, null, 2))
-        return {
-          className: 'x',
-          code: 'x',
-          title: `Date: ${game.date}, Game: ${game.name}, Result: ${game.coOpOutcome || game.winner};`
-        }
-      }
-    },
-    coopStat(game) {
-      const winLoss = game.coOpOutcome.charAt(0).toLowerCase()
+      const winLoss = (game.coOpOutcome || game.winner || 'x').toLowerCase()
+      const vsOrCoOp = (game.coOp || 'no').toLowerCase() === 'yes' ? 'coop' : 'vs'
+      const gameTypes = { coop: 'Co-op', vs: 'Vs'}
       return {
-        className: `coop ${game.coOpOutcome.toLowerCase()}`,
-        code: winLoss,
-        title: `Date: ${game.date}, Game: ${game.name}, Co-op Result: ${game.coOpOutcome}`
-      }
-    },
-    vsStat(game) {
-      const winner = game.winner.charAt(0).toLowerCase()
-      return {
-        className: `vs ${game.winner.toLowerCase()}`,
-        code: winner,
-        title: `Date: ${game.date}, Game: ${game.name}, Winner: ${game.winner}`
+        className: [vsOrCoOp, winLoss].join(' '),
+        code: winLoss.charAt(0).toLowerCase(),
+        title: `Date: ${game.date}, Game: ${game.name || this.name}, Outcome: ${game.coOpOutcome || game.winner}, Game Type: ${gameTypes[vsOrCoOp]}`
       }
     }
   }
@@ -53,6 +34,7 @@ export default {
   padding: 2px;
   font-size: 0.8em;
   text-transform: uppercase;
+  cursor: help;
 }
 .coop.won, .coop.win {
   color: black;
@@ -77,5 +59,29 @@ export default {
 .vs.hannah {
   color: black;
   background-color: #8e7cc3;
+}
+.coop.other {
+  color: #333;
+  outline-color: #dca;
+  outline: 2px solid;
+  outline-offset: -2px;
+}
+.coop.draw {
+  color: #333;
+  outline-color: #ffe599;
+  outline: 2px solid;
+  outline-offset: -2px;
+}
+.coop.john {
+  color: black;
+  outline-color: #dd7e6b;
+  outline: 2px solid;
+  outline-offset: -2px;
+}
+.coop.hannah {
+  color: black;
+  outline-color: #8e7cc3;
+  outline: 2px solid;
+  outline-offset: -2px;
 }
 </style>
