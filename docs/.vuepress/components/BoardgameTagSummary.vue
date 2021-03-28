@@ -59,6 +59,7 @@
   </div>
   <div v-else-if="tag">
     <!--Loading data for {{ tag }}-->
+    <pre v-if="Object.keys(summary).length > 0"><code>{{ JSON.stringify(summary, null, 2) }}</code></pre>
   </div>
   <div v-else>
     <p>No Boardgame Tag or Value set - <a href="./">back to index</a>?</p>
