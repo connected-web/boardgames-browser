@@ -6,10 +6,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
-const boardgamesApiUrl = 'https://boardgames-api.calisaurus.net'
-
 export default {
   name: 'GameStatBox',
   props: ['symbol', 'label'],
@@ -64,5 +60,8 @@ export default {
 .vs.hannah {
   color: black;
   background-color: #8e7cc3;
+}
+.x {
+  outline: 2px solid #333;
 }
 </style>

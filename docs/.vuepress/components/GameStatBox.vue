@@ -3,10 +3,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
-const boardgamesApiUrl = 'https://boardgames-api.calisaurus.net'
-
 export default {
   name: 'GameStatBox',
   props: ['game', 'name'],
@@ -82,6 +78,11 @@ export default {
   color: black;
   outline-color: #8e7cc3;
   outline: 2px solid;
+  outline-offset: -2px;
+}
+.x {
+  outline: 2px solid;
+  outline-color: #999;
   outline-offset: -2px;
 }
 </style>

@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: 'BoardgameSummary',
+  name: 'StatValue',
   props: ['label']
 }
 </script>
