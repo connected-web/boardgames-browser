@@ -1,5 +1,5 @@
 <template>
-  <BoardgameTag v-if="$data.tag && $data.value" :tag="$data.tag" :value="$data.value" />
+  <BoardgameTagSummary v-if="$data.tag && $data.value" :tag="$data.tag" :value="$data.value" />
   <BoardgameTagList v-else />
 </template>
 

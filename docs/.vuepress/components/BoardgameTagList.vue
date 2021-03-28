@@ -2,12 +2,12 @@
 <div class="boardgame-list">
   <p v-if="message">{{message}}</p>
   <ul>
-    <li v-for="(item, key) in $data.tags" :key="`li_tag_${key}`">{{ key }}</li>
+    <li v-for="(item, key) in $data.tags" :key="`li_tag_${key}`"><a :href="`#${key}`">{{ key }}</a></li>
   </ul>
-  <div v-for="(item, key) in $data.tags" :key="`div_tag_${key}`">
-    <h2>By {{ key }}</h2>
+  <div v-for="(tagGroup, tagKey) in $data.tags" :key="`div_tag_${tagKey}`">
+    <h2 :id="`${tagKey}`">By {{ tagKey }}</h2>
     <ul>
-      <li v-for="(item, key) in item" :key="`li_value_${item}`">{{ item }}</li>
+      <li v-for="value in tagGroup" :key="`li_value_${value}`"><a :href="boardgameTagLink(tagKey, value)">{{ value }}</a></li>
     </ul>
   </div>
 </div>
@@ -31,8 +31,8 @@ export default {
     this.$data.message = `${Object.keys(this.$data.tags).length} tags in list:`
   },
   methods: {
-    boardgameTagLink(game) {
-      return `/boardgames-browser/tags/?tag=${tag}&value=${value}`
+    boardgameTagLink(tag, value) {
+      return `/boardgames-browser/tags/byValue/?tag=${tag}&value=${value}`
     }
   }
 }

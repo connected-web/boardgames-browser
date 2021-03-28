@@ -11,7 +11,7 @@
     <div class="play summary">
       <stat-value label="Total Games Played">{{ game.totalGamesPlayed }}</stat-value>
       <p>
-        <game-stat-box v-for="playRecord in game.playRecords" :game="playRecord" :name="game.name" />
+        <game-stat-box v-for="(playRecord, index) in game.playRecords" :game="playRecord" :name="game.name" :key="`gameStat_${playRecord.date}_${index}`" />
       </p>
       <game-stat-key />
     </div>
@@ -44,7 +44,7 @@
     </div>
     <h3>Play Records</h3>
     <div class="play records">
-      <p v-for="playRecord in game.playRecords">
+      <p v-for="(playRecord, index) in game.playRecords" :key="`playRecord_${playRecord.date}_${index}`">
         <stat-value :label="playRecord.date">
           <game-stat-box :game="playRecord" :name="game.name" />
           <span>{{ playRecord.winner || playRecord.coOpOutcome }}</span>

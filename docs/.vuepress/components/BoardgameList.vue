@@ -2,7 +2,7 @@
 <div class="boardgame-list">
   <p v-if="message">{{message}}</p>
   <ul>
-    <li v-for="game in games"><a :href="boardgameLink(game)">{{ game.name }}</a></li>
+    <li v-for="game in games" :key="`game_${game.gameId}`"><a :href="boardgameLink(game)">{{ game.name }}</a></li>
   </ul>
 </div>
 </template>
