@@ -44,7 +44,15 @@
     </div>
     <h3>Play Records</h3>
     <div class="play records">
-      <p v-for="(playRecord, index) in game.playRecords" :key="`playRecord_${playRecord.date}_${index}`">
+      <p class="by-year">
+        <span :class="selectedYearClass('year-in-use', false)"
+          v-on:click="selectYear(false)">All Records</span>
+        <span v-for="year in yearsFor(game.playRecords)" :key="year"
+          :class="selectedYearClass('year-in-use', year)"
+          v-on:click="selectYear(year)">{{ year }}</span>
+      </p>
+      <p>Found {{filteredPlayRecords.length}} play records:</p>
+      <p v-for="(playRecord, index) in filteredPlayRecords" :key="`playRecord_${playRecord.date}_${index}`">
         <stat-value :label="playRecord.date">
           <game-stat-box :game="playRecord" :name="game.name" />
           <span>{{ playRecord.winner || playRecord.coOpOutcome }}</span>
@@ -75,6 +83,7 @@ export default {
   data: function () {
     return {
       message: `Loading data from ${boardgamesApiUrl}`,
+      activeYear: false,
       game: {}
     }
   },
@@ -82,10 +91,34 @@ export default {
     this.$data.game = await loadBoardgame(this.gameId)
     this.$data.message = false
   },
+  computed: {
+    filteredPlayRecords() {
+      const playRecords = this.game.playRecords || []
+      const sortedPlayRecords = playRecords.sort((a, b) => {
+        const da = Date.parse(a.date)
+        const db = Date.parse(b.date)
+        return db - da
+      })
+      if (this.activeYear) {
+        return sortedPlayRecords.filter(r => r.date.substring(0, 4) === this.activeYear)
+      }
+      return sortedPlayRecords
+    }
+  },
   methods: {
     fmp(number) {
       const maxed = Math.min(number, 1.0)
       return (maxed * 100).toFixed(0) + '%'
+    },
+    yearsFor(playRecords) {
+      return [...new Set(playRecords.map(r => r.date.substring(0, 4)))]
+    },
+    selectedYearClass(className, year) {
+      const selected = year === this.activeYear ? 'selected' : false
+      return [className, selected].filter(n => n).join(' ')
+    },
+    selectYear(year) {
+      this.activeYear = year
     }
   }
 }
@@ -102,3 +135,22 @@ async function loadBoardgame(gameId) {
 }
 
 </script>
+
+<style scoped>
+.by-year > .year-in-use {
+  margin-right: 1em;
+  padding: 5px 10px;
+  background: #fbfbfb;
+  border-bottom: 3px solid #aaa;
+  cursor: pointer;
+}
+.by-year > .year-in-use:hover {
+  background: #eee;
+}
+.by-year > .year-in-use:active {
+  background: rgb(164, 223, 203);
+}
+.by-year > .year-in-use.selected {
+  border-bottom: 3px solid rgb(164, 223, 203);
+}
+</style>

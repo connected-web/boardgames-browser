@@ -45,7 +45,15 @@
     </div>
     <h3>Games Played</h3>
     <div class="play records" v-if="summary.gamesPlayed">
-      <p v-for="(playRecord, index) in summary.gamesPlayed" :key="`playRecord_${playRecord.date}_${playRecord.name}_${index}`">
+      <p class="by-year">
+        <span :class="selectedYearClass('year-in-use', false)"
+          v-on:click="selectYear(false)">All Records</span>
+        <span v-for="year in yearsFor(summary.gamesPlayed)" :key="year"
+          :class="selectedYearClass('year-in-use', year)"
+          v-on:click="selectYear(year)">{{ year }}</span>
+      </p>
+      <p>Found {{filteredPlayRecords.length}} play records:</p>
+      <p v-for="(playRecord, index) in filteredPlayRecords" :key="`playRecord_${playRecord.date}_${playRecord.name}_${index}`">
         <b>{{ playRecord.name }}</b>
         <stat-value label="Date" v-if="playRecord.date">{{ playRecord.date }}</stat-value>
         <stat-value label="Outcome">
@@ -77,6 +85,7 @@ export default {
   props: ['tag', 'value'],
   data: function () {
     return {
+      activeYear: false,
       message: `Loading data from ${boardgamesApiUrl}`,
       summary: {}
     }
@@ -85,10 +94,34 @@ export default {
     this.$data.summary = await loadBoardgameSummaryByTag(this.tag, this.value)
     this.$data.message = false
   },
+  computed: {
+    filteredPlayRecords() {
+      const playRecords = this.summary.gamesPlayed || []
+      const sortedPlayRecords = playRecords.sort((a, b) => {
+        const da = Date.parse(a.date)
+        const db = Date.parse(b.date)
+        return db - da
+      })
+      if (this.activeYear) {
+        return sortedPlayRecords.filter(r => r.date.substring(0, 4) === this.activeYear)
+      }
+      return sortedPlayRecords
+    }
+  },
   methods: {
     fmp(number) {
       const maxed = Math.min(number, 1.0)
       return (maxed * 100).toFixed(0) + '%'
+    },
+    yearsFor(playRecords) {
+      return [...new Set(playRecords.map(r => r.date.substring(0, 4)))]
+    },
+    selectedYearClass(className, year) {
+      const selected = year === this.activeYear ? 'selected' : false
+      return [className, selected].filter(n => n).join(' ')
+    },
+    selectYear(year) {
+      this.activeYear = year
     }
   }
 }
@@ -105,3 +138,22 @@ async function loadBoardgameSummaryByTag(tag, value) {
 }
 
 </script>
+
+<style scoped>
+.by-year > .year-in-use {
+  margin-right: 1em;
+  padding: 5px 10px;
+  background: #fbfbfb;
+  border-bottom: 3px solid #aaa;
+  cursor: pointer;
+}
+.by-year > .year-in-use:hover {
+  background: #eee;
+}
+.by-year > .year-in-use:active {
+  background: rgb(164, 223, 203);
+}
+.by-year > .year-in-use.selected {
+  border-bottom: 3px solid rgb(164, 223, 203);
+}
+</style>
