@@ -16,7 +16,7 @@
       </p>
     </div>
     <div class="challenge grid">
-      <div class="challenge row" v-for="entry in challengeGrid.grid">
+      <div class="challenge row" v-for="entry in challengeGrid.grid" :key="entry.gameFamily">
         <div class="game family name">{{ entry.gameFamily }}</div>
         <div class="game family progress">
           <div class="play count label">P {{ entry.gamesPlayedCount }}</div>
@@ -30,8 +30,11 @@
           </div>
         </div>
         <div class="game family play stats">
-          <GameStatBox v-for="game in limit(entry.gameStats, challengeGrid.challenge.gamesToPlayCountPerFamily)" :game="game" />
+          <GameStatBox v-for="game in limit(entry.gameStats, challengeGrid.challenge.gamesToPlayCountPerFamily)"
+            :game="game" :key="game.game" />
         </div>
+        <div v-if="entry.gameStats.length > challengeGrid.challenge.gamesToPlayCountPerFamily"
+          class="overplayed" :title="`${entry.gameStats.length} ${entry.gameFamily} games played!`">+</div>
       </div>
       <game-stat-key />
     </div>
@@ -79,7 +82,7 @@ export default {
   },
   methods: {
     limit(list, count) {
-      return list.slice(0, count * 2)
+      return list.slice(0, count)
     },
     fmp(number) {
       const maxed = Math.min(number, 1.0)
@@ -109,6 +112,11 @@ async function loadBoardgameGrid(dateCode) {
 </script>
 
 <style scoped>
+.challenge.row {
+  display: flex;
+  justify-content: stretch;
+  align-items: center;
+}
 .challenge.row > * {
   display: inline-block;
   background: #eee;
@@ -158,6 +166,7 @@ async function loadBoardgameGrid(dateCode) {
   }
   .challenge.row > .game.family {
     flex: 1 2;
+    max-width: 45%;
   }
 }
 .coop.won, .coop.win {
@@ -183,5 +192,13 @@ async function loadBoardgameGrid(dateCode) {
 .vs.hannah {
   color: black;
   background-color: #8e7cc3;
+}
+.overplayed {
+  display: inline-block;
+  padding: 2px 6px;
+  margin-left: 3px;
+  height: 100%;
+  font-size: 0.8em;
+  font-weight: bold;
 }
 </style>
