@@ -10,9 +10,9 @@
       <p>There are <b>{{challengeGrid.challenge.gameFamiliesCount}}</b> families of games that need to be played
         <b>{{challengeGrid.challenge.gamesToPlayCountPerFamily}}</b> times each to complete the challenge!
       </p>
-      <p>So far <b>{{ challengeGrid.overview.gamesPlayedCount }}</b> games have been played, 
-        or <b>{{ fmp(challengeGrid.overview.gamesPlayedPercentage) }}</b>
-        out of a total of <b>{{ challengeGrid.overview.totalGamesToPlayCount }}</b>.</p>
+      <p>So far <b>{{ challengeGrid.overview.gamesPlayedCount }}</b>
+        ({{ fmp(challengeGrid.overview.gamesPlayedPercentage) }}) games have been played, 
+        out of a total of <b>{{ challengeGrid.overview.totalGamesToPlayCount }}</b>.
       </p>
     </div>
     <div class="challenge grid">
