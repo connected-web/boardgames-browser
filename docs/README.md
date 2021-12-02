@@ -10,4 +10,4 @@ Welcome to the boardgames browser!
 
 ## Things to do
 
-- Coming soon - boardgame play tracker!
+- Coming soon - [boardgame play tracker](./boardgame-tracker.md)!
