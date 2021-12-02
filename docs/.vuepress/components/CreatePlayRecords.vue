@@ -2,7 +2,7 @@
   <div>
     <p>Hi</p>
 
-    <form onSubmit={this.handleSubmit}>
+    <form v-on:submit="handleSubmit">
           <label>
             Title
             <input 
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   data() {
     return {
@@ -60,15 +61,24 @@ export default {
     }
   },
   methods: {
-    handleInputChange(ev) {
-      console.log("Input changed!", ev)
+    handleSubmit(event) {
+      event.preventDefault()
+      console.log(`You played ${this.title} on ${this.date}. ${this.winner} was the winner!`)
+      const dataToSend = {
+        title: this.title,
+        date: this.date,
+        coop: this.coop,
+        winner: this.winner,
+        noOfPlayers: this.noOfPlayers,
+      }
+      axios.post('https://32r96w1hxa.execute-api.eu-west-2.amazonaws.com/Prod/createPlayRecord', dataToSend)
     }
   }
 }
 </script>
 
 <style scoped>
- pre{
+ pre {
    color: white
  }
 </style>
