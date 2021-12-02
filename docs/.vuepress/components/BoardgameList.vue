@@ -2,7 +2,7 @@
 <div class="boardgame-list">
   <p v-if="message">{{message}}</p>
   <ul>
-    <li v-for="game in games" :key="`game_${game.gameId}`"><a :href="boardgameLink(game)">{{ game.name }}</a></li>
+    <li v-for="game in games" :key="`game_${game.boardGameApiId}`"><a :href="boardgameLink(game)">{{ game.name }}</a></li>
   </ul>
 </div>
 </template>
@@ -21,7 +21,8 @@ export default {
     }
   },
   async beforeMount() { 
-    this.$data.games = await loadBoardgameList(this)
+    const games = await loadBoardgameList(this)
+    this.$data.games = games
     this.$data.message = `${this.$data.games.length} games in list:`
   },
   methods: {
