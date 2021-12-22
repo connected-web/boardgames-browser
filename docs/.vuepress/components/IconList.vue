@@ -3,7 +3,10 @@
     <div>
       <input v-model="iconFilter" placeholder="Filter icon by name..." />
     </div>
-    <icon v-for="icon in filteredIcons" :key="icon" :icon="icon" />
+    <p v-for="icon in filteredIcons" :key="icon">
+      <icon :icon="icon" />
+      <label>{{ icon }}</label>
+    </p>
   </div>
 </template>
 
@@ -21,8 +24,21 @@ export default {
     filteredIcons() {
       const { iconFilter, icons } = this
       const filter = iconFilter.toLowerCase()
-      return iconFilter ? icons.filter(icon => icon.includes(filter) || filter.includes(icon)) : icons   
+      const result = iconFilter ? icons.filter(icon => icon.includes(filter) || filter.includes(icon)) : icons   
+      return result.slice(0, 40)
     }
   }
 }
 </script>
+
+<style scoped>
+input {
+  font-size: 1em;
+  padding: 0.5em;
+}
+.icon {
+  font-size: 1.2em;
+}
+</style>
+
+</style

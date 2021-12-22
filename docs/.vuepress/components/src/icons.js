@@ -14,7 +14,7 @@ function icons () {
       .replace('hsquare', 'h-square')
       .replace('icursor', 'i-cursor')
       .replace('stopwatch20', 'stopwatch-20')
-  }).filter(a => a !== 'font-awesome-logo-full')
+  }).filter(a => !['font-awesome-logo-full', 'ad'].includes(a))
   return remapped
 }
 
