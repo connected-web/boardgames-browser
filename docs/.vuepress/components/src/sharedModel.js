@@ -6,10 +6,20 @@ const state = {
   params: {}
 }
 
+state.boardgamesApiUrlStatus = `${state.boardgamesApiUrl}/api/endpoints`
+state.boardgamesSamApiUrlStatus = `${state.boardgamesSamApiUrl}/status`
+
 function update() {
   state.params = getParamsFromUrl(document.location)
 }
 
+function getAuthHeaders() {
+  return {
+    'calisaurus-user': localStorage.getItem('api-user-name'),
+    'calisaurus-user-api-key': localStorage.getItem('api-user-key')
+  }
+}
+
 update()
 
-export default { update, state }
+export default { update, state, getAuthHeaders }

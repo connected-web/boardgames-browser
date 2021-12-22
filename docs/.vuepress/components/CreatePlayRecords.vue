@@ -79,10 +79,7 @@ export default {
       }
       const url = `${boardgamesApiUrl}/playrecords/create`
       const axiosConfig = {
-        headers: {
-          'calisaurus-user': localStorage.getItem('api-user-name'),
-          'calisaurus-user-api-key': localStorage.getItem('api-user-key')
-        }
+        headers: sharedModel.getAuthHeaders()
       }
       try {
         console.log('Do the thing')
