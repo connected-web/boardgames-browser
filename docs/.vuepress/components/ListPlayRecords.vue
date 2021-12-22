@@ -2,7 +2,10 @@
   <div>
     <p>Here is the full list of play records available on the Boardgames SAM API:</p>
     <div v-if="status.playRecords">
-      <pre v-for="record in status.playRecords" :key="record.key"><code>{{ record }}</code></pre>
+      <div v-for="record in status.playRecords" :key="record.key" class="play record">
+        <pre><code>{{ record }}</code></pre>
+        <icon icon="lock" />
+      </div>
     </div>
     <pre v-else><code>{{ status }}</code></pre>
     <p>{{ message }}</p>
