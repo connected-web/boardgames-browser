@@ -2,16 +2,13 @@
 <div class="boardgame-list">
   <p v-if="message">{{ $data.message }}</p>
   <ul>
-    <li v-for="dateCode in gridDateCodes"><a :href="gridLink(dateCode)">{{ dateCode }}</a></li>
+    <li v-for="dateCode in gridDateCodes" :key="dateCode"><a :href="gridLink(dateCode)">{{ dateCode }}</a></li>
   </ul>
 </div>
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
-  name: 'BoardgameGridList',
   data: function () {
     return {
       gridDateCodes: ['2018', '2020', '2021'],

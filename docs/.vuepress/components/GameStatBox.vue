@@ -4,7 +4,6 @@
 
 <script>
 export default {
-  name: 'GameStatBox',
   props: ['game', 'name'],
   methods: {
     gameStat(game) {

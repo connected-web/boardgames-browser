@@ -7,7 +7,6 @@
 
 <script>
 export default {
-  name: 'GameStatBox',
   props: ['symbol', 'label'],
   computed: {
     className() {

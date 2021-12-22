@@ -1,29 +1,32 @@
 <template>
-<div class="boardgame-list">
-  <p v-if="message">{{message}}</p>
-  <ul>
-    <li v-for="(item, key) in $data.tags" :key="`li_tag_${key}`"><a :href="`#${key}`">{{ key }}</a></li>
-  </ul>
-  <div v-for="(tagGroup, tagKey) in $data.tags" :key="`div_tag_${tagKey}`">
-    <h2 :id="`${tagKey}`">By {{ tagKey }}</h2>
+  <div class="boardgame-list">
+    <p v-if="message">{{message}}</p>
     <ul>
-      <li v-for="value in tagGroup" :key="`li_value_${value}`"><a :href="boardgameTagLink(tagKey, value)">{{ value }}</a></li>
+      <li v-for="(item, key) in $data.tags" :key="`li_tag_${key}`"><a :href="`#${key}`">{{ key }}</a></li>
     </ul>
+    <div v-for="(tagGroup, tagKey) in $data.tags" :key="`div_tag_${tagKey}`">
+      <h2 :id="`${tagKey}`">By {{ tagKey }}</h2>
+      <ul>
+        <li v-for="value in tagGroup" :key="`li_value_${value}`"><a :href="boardgameTagLink(tagKey, value)">{{ value }}</a></li>
+      </ul>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
 import axios from 'axios'
+import sharedModel from './src/sharedModel'
 
-const boardgamesApiUrl = 'https://boardgames-api.calisaurus.net'
+const { boardgamesApiUrl } = sharedModel.state 
 
 export default {
   name: 'BoardgameTagList',
   data: function () {
     return {
       message: `Loading data from ${boardgamesApiUrl}`,
-      games: []
+      games: [],
+      tags: [],
+      messasge: ''
     }
   },
   async beforeMount() { 

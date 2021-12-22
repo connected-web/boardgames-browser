@@ -74,11 +74,11 @@
 
 <script>
 import axios from 'axios'
+import sharedModel from './src/sharedModel'
 
-const boardgamesApiUrl = 'https://boardgames-api.calisaurus.net'
+const { boardgamesApiUrl } = sharedModel.state
 
 export default {
-  name: 'BoardgameSummary',
   props: ['gameId'],
   data: function () {
     return {

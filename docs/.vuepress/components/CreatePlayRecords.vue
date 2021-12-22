@@ -51,6 +51,10 @@
 
 <script>
 import axios from 'axios'
+import sharedModel from './src/sharedModel'
+
+const { boardgamesApiUrl } = sharedModel.state
+
 export default {
   data() {
     return {
@@ -73,7 +77,7 @@ export default {
         winner: this.winner,
         noOfPlayers: this.noOfPlayers,
       }
-      const url = 'https://nn58gn0krl.execute-api.eu-west-2.amazonaws.com/Prod/playrecords/create'
+      const url = `${boardgamesApiUrl}/playrecords/create`
       const axiosConfig = {
         headers: {
           'calisaurus-user': localStorage.getItem('api-user-name'),
