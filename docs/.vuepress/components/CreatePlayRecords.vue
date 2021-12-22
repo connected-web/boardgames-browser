@@ -73,9 +73,16 @@ export default {
         winner: this.winner,
         noOfPlayers: this.noOfPlayers,
       }
+      const url = 'https://nn58gn0krl.execute-api.eu-west-2.amazonaws.com/Prod/playrecords/create'
+      const axiosConfig = {
+        headers: {
+          'calisaurus-user': localStorage.getItem('user-api-name'),
+          'calisaurus-user-api-key': localStorage.getItem('user-api-key')
+        }
+      }
       try {
         console.log('Do the thing')
-        await axios.post('https://nn58gn0krl.execute-api.eu-west-2.amazonaws.com/Prod/playrecords/create', dataToSend)
+        await axios.post(url, dataToSend, axiosConfig)
         this.message = "Successfully stored data"
       }
       catch (error) {
