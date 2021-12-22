@@ -1,4 +1,4 @@
-# Submit A Play Record
+# Submit a Play Record
 
 <ClientOnly>
   <CreatePlayRecords />

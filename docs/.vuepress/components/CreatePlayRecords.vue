@@ -1,46 +1,23 @@
 <template>
   <div>
-    <p>Hi</p>
-
+    <p></p>
     <form v-on:submit="handleSubmit">
-          <label>
-            Title
-            <input 
-            type="text"
-            v-model="title"
-            />
-          </label>
-          <br />
-          <label>
-            Date
-            <input 
-            type="text"
-            v-model="date" />
-          </label>
-          <br />
-          <label>
-            Co-op
-            <input 
-            type="text" 
-            v-model="coop" />
-          </label>
-          <br />
-          <label>
-            Winner
-            <input 
-            type="text"
-            v-model="winner" />
-          </label>
-          <br />
-          <label>
-            Number of Players
-            <input 
-            type="text"
-            v-model="noOfPlayers" />
-          </label>
-          <br />
-          <br />
-          <button type="submit">Submit</button>
+          <h3>Which game? <span class="default info">(Required Field!)</span></h3>
+          <input type="text" v-model="title" placeholder="The name of the game"  />
+         
+          <h3>When was the game played? <span class="default info">(Default: today)</span></h3>
+          <input type="text" v-model="date" placeholder="dd/mm/yyyy" />
+
+          <h3>Was this game co-operative? <span class="default info">(Default: no)</span></h3>
+          <input type="text" v-model="coop" placeholder="Yes / No" />
+          
+          <h3>Who won? <span class="default info">(Default: draw)</span></h3>
+          <input type="text" v-model="winner" placeholder="Who won?" />
+          
+          <h3>Number of Players <span class="default info">(Default: 2)</span></h3>
+          <input type="text" v-model="noOfPlayers" placeholder="How many players were there?" />
+
+          <p class="buttons"><button type="submit">Submit</button></p>
         </form>
         <br />
         <b>Data preview</b>
@@ -53,12 +30,12 @@
 import axios from 'axios'
 import sharedModel from './src/sharedModel'
 
-const { boardgamesApiUrl } = sharedModel.state
+const { boardgamesSamApiUrl } = sharedModel.state
 
 export default {
   data() {
     return {
-      title: 'Hello Hannah',
+      title: '',
       date: '',
       coop: '',
       winner: '',
@@ -77,7 +54,7 @@ export default {
         winner: this.winner,
         noOfPlayers: this.noOfPlayers,
       }
-      const url = `${boardgamesApiUrl}/playrecords/create`
+      const url = `${boardgamesSamApiUrl}/playrecords/create`
       const axiosConfig = {
         headers: sharedModel.getAuthHeaders()
       }
@@ -96,7 +73,22 @@ export default {
 </script>
 
 <style scoped>
- pre {
-   color: white
- }
+pre {
+  color: white
+}
+input {
+  width: 98%;
+  padding: 5px;
+  font-size: 1.0em;
+}
+.buttons {
+  text-align: right;
+}
+button {
+  padding: 5px;
+  font-size: 1.0em;
+}
+.default.info {
+  color: #99A;
+}
 </style>

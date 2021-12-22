@@ -13,14 +13,15 @@ import icons from './src/icons'
 export default {
   data() {
     return {
-      iconFilter: '',
+      iconFilter: 'ice',
       icons: icons()
     }
   },
   computed: {
     filteredIcons() {
       const { iconFilter, icons } = this
-      return iconFilter ? icons.filter(icon => icon.includes(iconFilter) || iconFilter.includes(icon)) : icons   
+      const filter = iconFilter.toLowerCase()
+      return iconFilter ? icons.filter(icon => icon.includes(filter) || filter.includes(icon)) : icons   
     }
   }
 }
