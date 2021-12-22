@@ -76,8 +76,8 @@ export default {
       const url = 'https://nn58gn0krl.execute-api.eu-west-2.amazonaws.com/Prod/playrecords/create'
       const axiosConfig = {
         headers: {
-          'calisaurus-user': localStorage.getItem('user-api-name'),
-          'calisaurus-user-api-key': localStorage.getItem('user-api-key')
+          'calisaurus-user': localStorage.getItem('api-user-name'),
+          'calisaurus-user-api-key': localStorage.getItem('api-user-key')
         }
       }
       try {
