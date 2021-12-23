@@ -3,7 +3,7 @@
     <p></p>
     <form v-on:submit="handleSubmit">
           <h3>Which game? <span class="default info">(Required Field!)</span></h3>
-          <input type="text" v-model="title" placeholder="The name of the game"  />
+          <v-select :options="listOfGames" v-model="title" />
          
           <h3>When was the game played? <span class="default info">(Default: today, Format: dd/mm/yyyy)</span></h3>
           <input type="text" v-model="date" :placeholder="today" />
@@ -59,12 +59,16 @@
 
 <script>
 import axios from 'axios'
-import sharedModel from './src/sharedModel'
 import dayjs from 'dayjs'
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css'
 
-const { boardgamesSamApiUrl } = sharedModel.state
+import sharedModel from './src/sharedModel'
+
+const { boardgamesApiUrl, boardgamesSamApiUrl } = sharedModel.state
 
 export default {
+  components: { vSelect },
   data() {
     return {
       title: '',
@@ -72,7 +76,8 @@ export default {
       coop: 'no',
       winner: '',
       noOfPlayers: '',
-      message: ''
+      message: '',
+      listOfGames: []
     }
   },
   computed: {
@@ -122,6 +127,16 @@ export default {
         console.error("Could not post to endpoint", error)
       }
     }
+  },
+  async mounted() {
+    const url = `${boardgamesApiUrl}/api/boardgame/list`
+    try {
+      const { data } = await axios.get(url)
+      const { games } = data || []
+      this.listOfGames = games.map(entry => entry.name)
+    } catch (error) {
+      console.log('Unable to load board game list from', url, 'Error:', error.message)
+    }
   }
 }
 </script>
@@ -157,6 +172,7 @@ div.option {
   text-align: center;
   transition: background 0.1s ease-out;
   border: 2px solid orange;
+  border-radius: 0.2em;
 }
 div.option.selected {
   background: lightskyblue;
