@@ -2,23 +2,38 @@
   <div>
     <p></p>
     <form v-on:submit="handleSubmit">
-          <h3>Which game? <span class="default info">(Required Field!)</span></h3>
-          <v-select :options="listOfGames" v-model="title" />
+          <h3>What was the name of the game?</h3>
+          <p class="default info">(Required Field!)</p>
+          <v-select taggable :options="listOfGames" v-model="title" />
          
-          <h3>When was the game played? <span class="default info">(Default: today, Format: dd/mm/yyyy)</span></h3>
-          <input type="text" v-model="date" :placeholder="today" />
-
-          <h3>Was this game co-operative? <span class="default info">(Default: no)</span></h3>
+          <h3>When was the game played?</h3>
+          <p class="default info">(Default: today, Format: dd/mm/yyyy)</p>
           <div class="row">
-            <div :class="coopClass('yes')" v-on:click="selectCoop('yes')">
-              <label for="coop-yes">Yes</label>
+            <input type="text" v-model="date" :placeholder="dateToday" />
+            <div :class="dateClass(dateToday)" v-on:click="selectDate(dateToday)">
+              <label for="date-today">Today ({{ dayOfMonth(dateToday) }})</label>
             </div>
+            <div :class="dateClass(dateYesterday)" v-on:click="selectDate(dateYesterday)">
+              <label for="date-yesterday">Yesterday ({{ dayOfMonth(dateYesterday) }})</label>
+            </div>
+            <div :class="dateClass(dateTwoDaysAgo)" v-on:click="selectDate(dateTwoDaysAgo)">
+              <label for="date-yesterday">{{ twoDaysAgo }} ({{ dayOfMonth(dateTwoDaysAgo) }})</label>
+            </div>
+          </div>
+
+          <h3>Was this game vs. or co-operative?</h3>
+          <p class="default info">(Default: vs)</p>
+          <div class="row">
             <div :class="coopClass('no')" v-on:click="selectCoop('no')">
-              <label for="coop-no">No</label>
+              <label for="coop-no">Vs</label>
+            </div>
+            <div :class="coopClass('yes')" v-on:click="selectCoop('yes')">
+              <label for="coop-yes">Co-op</label>
             </div>
           </div>
           
-          <h3>Who won? <span class="default info">(Default: draw)</span></h3>
+          <h3>Who won?</h3>
+          <p class="default info">(Default: draw)</p>
           <div v-if="coop === 'yes'" class="row">
             <div :class="winnerClass('win')" v-on:click="winner = 'win'">
               <label for="coop-yes">Win</label>
@@ -45,25 +60,45 @@
             </div>
           </div>
           
-          <h3>Number of Players <span class="default info">(Default: 2)</span></h3>
-          <input type="text" v-model="noOfPlayers" placeholder="How many players were there?" />
+          <h3>Number of Players</h3>
+          <p class="default info">(Default: 2)</p>
+          <div class="row">
+            <input type="text" v-model="noOfPlayers" placeholder="#" />
+            <div :class="playerCountClass('2')" v-on:click="noOfPlayers = 2">
+              <label for="coop-yes">2</label>
+            </div>
+            <div :class="playerCountClass('3')" v-on:click="noOfPlayers = 3">
+              <label for="coop-no">3</label>
+            </div>
+            <div :class="playerCountClass('4')" v-on:click="noOfPlayers = 4">
+              <label for="coop-no">4</label>
+            </div>
+          </div>
 
-          <p class="buttons"><button type="submit">Submit</button></p>
+          <p class="buttons">
+            <button v-if="sending" type="submit" disabled>Sending...</button>
+            <button v-else type="submit">Submit</button>
+          </p>
+          <p v-if="message">{{message}}</p>
         </form>
         <br />
         <b>Data preview</b>
         <pre>{{JSON.stringify({ dataToSend }, null, 2)}}</pre>
-        <p v-if="message">{{message}}</p>
       </div>    
 </template>
 
 <script>
 import axios from 'axios'
 import dayjs from 'dayjs'
+import advancedFormat from 'dayjs/plugin/advancedFormat'
+
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 
+import './src/icons'
 import sharedModel from './src/sharedModel'
+
+dayjs.extend(advancedFormat)
 
 const { boardgamesApiUrl, boardgamesSamApiUrl } = sharedModel.state
 
@@ -73,25 +108,38 @@ export default {
     return {
       title: '',
       date: '',
-      coop: 'no',
+      coop: '',
       winner: '',
       noOfPlayers: '',
       message: '',
-      listOfGames: []
+      listOfGames: [],
+      sending: false
     }
   },
   computed: {
-    today() {
+    dateToday() {
       const now = new Date()
       return dayjs(now).format('DD/MM/YYYY')
+    },
+    dateYesterday() {
+      const yesterday = dayjs().add(-1, 'day')
+      return dayjs(yesterday).format('DD/MM/YYYY')
+    },
+    dateTwoDaysAgo() {
+      const pastDate = dayjs().add(-2, 'day')
+      return dayjs(pastDate).format('DD/MM/YYYY')
+    },
+    twoDaysAgo() {
+      const pastDate = dayjs().add(-2, 'day')
+      return dayjs(pastDate).format('dddd')
     },
     dataToSend() {
       return {
         title: this.title,
-        date: this.date || this.today,
+        date: this.date || this.dateToday,
         coop: this.coop || 'no',
         winner: this.winner || 'draw',
-        noOfPlayers: Number.parseInt(this.noOfPlayers) || 2,
+        noOfPlayers: Number.parseInt(this.noOfPlayers + '') || 2,
       }
     }
   },
@@ -101,8 +149,18 @@ export default {
       const className = selected ? 'selected' : 'deselected'
       return ['option', className].join(' ')
     },
+    dateClass(value) {
+      const selected = value === this.date
+      const className = selected ? 'selected' : 'deselected'
+      return ['option', className].join(' ')
+    },
     winnerClass(value) {
       const selected = value === this.winner
+      const className = selected ? 'selected' : 'deselected'
+      return ['option', className].join(' ')
+    },
+    playerCountClass(value) {
+      const selected = (value + '') === (this.noOfPlayers + '')
       const className = selected ? 'selected' : 'deselected'
       return ['option', className].join(' ')
     },
@@ -110,7 +168,16 @@ export default {
       this.coop = value
       this.winner = ''
     },
+    dayOfMonth(input) {
+      const dateParts = input.split('/')
+      const dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0])
+      return dayjs(dateObject).format('Do')
+    },
+    selectDate(value) {
+      this.date = value
+    },
     async handleSubmit(event) {
+      this.sending = true
       event.preventDefault()
       console.log(`You played ${this.title} on ${this.date}. ${this.winner} was the winner!`)
       const url = `${boardgamesSamApiUrl}/playrecords/create`
@@ -118,14 +185,14 @@ export default {
         headers: sharedModel.getAuthHeaders()
       }
       try {
-        console.log('Do the thing')
         await axios.post(url, this.dataToSend, axiosConfig)
-        this.message = "Successfully stored data"
+        this.message = "Successfully stored the new play record."
       }
       catch (error) {
         this.message = error.message
         console.error("Could not post to endpoint", error)
       }
+      this.sending = false
     }
   },
   async mounted() {
@@ -159,9 +226,14 @@ button {
 }
 .default.info {
   color: #99A;
+  margin: -1.5em 0 0.5em 0;
 }
 div.row {
   display: flex;
+}
+div.row > input {
+  width: 25%;
+  text-align: center;
 }
 div.option {
   flex: 5 5;
@@ -170,11 +242,36 @@ div.option {
   font-weight: bold;
   padding: 0.5em;
   text-align: center;
-  transition: background 0.1s ease-out;
-  border: 2px solid orange;
+  transition: background 0.1s ease-out, border 0.1s ease-out;
+  border: 2px solid rgb(221, 140, 64);
   border-radius: 0.2em;
 }
+div.option:hover {
+  background: rgb(187, 229, 255);
+  border: 2px solid lightskyblue;
+}
 div.option.selected {
+  background: lightskyblue;
+  border: 2px solid navy;
+}
+label > .icon {
+  width: inherit;
+}
+button {
+  background: peachpuff;
+  margin: 0 0.5em;
+  font-weight: bold;
+  padding: 0.5em;
+  text-align: center;
+  transition: background 0.1s ease-out, border 0.1s ease-out;
+  border: 2px solid rgb(221, 140, 64);
+  border-radius: 0.2em;
+}
+button:hover {
+  background: rgb(187, 229, 255);
+  border: 2px solid lightskyblue;
+}
+button:active {
   background: lightskyblue;
   border: 2px solid navy;
 }
