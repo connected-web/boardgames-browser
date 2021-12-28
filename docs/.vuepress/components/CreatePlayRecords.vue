@@ -213,7 +213,6 @@ pre {
   color: white
 }
 input {
-  width: 98%;
   padding: 5px;
   font-size: 1.0em;
 }
@@ -230,21 +229,28 @@ button {
 }
 div.row {
   display: flex;
+  justify-items: center;
+  overflow: hidden;
+}
+div.row > * {
+  text-align: center;
+  margin: 0.5em 0.5em 0 0;
 }
 div.row > input {
-  width: 25%;
-  text-align: center;
+  font-weight: bold;
+  color: #333;
 }
 div.option {
   flex: 5 5;
-  background: peachpuff;
-  margin: 0 0.5em;
+  background: #ddd;
+  color: #333;
+  border: 2px solid #666;
+  border-radius: 0.2em;
   font-weight: bold;
   padding: 0.5em;
   text-align: center;
   transition: background 0.1s ease-out, border 0.1s ease-out;
-  border: 2px solid rgb(221, 140, 64);
-  border-radius: 0.2em;
+  white-space: nowrap;
 }
 div.option:hover {
   background: rgb(187, 229, 255);
@@ -258,14 +264,15 @@ label > .icon {
   width: inherit;
 }
 button {
-  background: peachpuff;
+  background: #ddd;
+  color: #333;
+  border: 2px solid #666;
+  border-radius: 0.2em;
   margin: 0 0.5em;
   font-weight: bold;
   padding: 0.5em;
   text-align: center;
   transition: background 0.1s ease-out, border 0.1s ease-out;
-  border: 2px solid rgb(221, 140, 64);
-  border-radius: 0.2em;
 }
 button:hover {
   background: rgb(187, 229, 255);
@@ -274,5 +281,19 @@ button:hover {
 button:active {
   background: lightskyblue;
   border: 2px solid navy;
+}
+@media (max-width: 719px) {
+  div.row {
+    flex-wrap: wrap;
+  }
+  div.row > * {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    flex: 5 5;
+  }
+  div.row > input {
+    min-width: 30%;
+    flex: 10 10;
+  }
 }
 </style>
