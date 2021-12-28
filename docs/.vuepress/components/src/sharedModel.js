@@ -6,7 +6,7 @@ const state = {
   params: {}
 }
 
-state.boardgamesApiUrlStatus = `${state.boardgamesApiUrl}/api/endpoints`
+state.boardgamesApiUrlStatus = `${state.boardgamesApiUrl}/api/status`
 state.boardgamesSamApiUrlStatus = `${state.boardgamesSamApiUrl}/status`
 
 function update() {
