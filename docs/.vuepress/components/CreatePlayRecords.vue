@@ -4,7 +4,7 @@
     <form v-on:submit="handleSubmit">
           <h3>What was the name of the game?</h3>
           <p class="default info">(Required Field!)</p>
-          <v-select taggable :options="listOfGames" v-model="title" />
+          <v-select taggable :options="listOfGames" v-model="name" />
          
           <h3>When was the game played?</h3>
           <p class="default info">(Default: today, Format: dd/mm/yyyy)</p>
@@ -24,39 +24,39 @@
           <h3>Was this game vs. or co-operative?</h3>
           <p class="default info">(Default: vs)</p>
           <div class="row">
-            <div :class="coopClass('no')" v-on:click="selectCoop('no')">
-              <label for="coop-no">Vs</label>
+            <div :class="coOpClass('no')" v-on:click="selectCoop('no')">
+              <label for="coOp-no">Vs</label>
             </div>
-            <div :class="coopClass('yes')" v-on:click="selectCoop('yes')">
-              <label for="coop-yes">Co-op</label>
+            <div :class="coOpClass('yes')" v-on:click="selectCoop('yes')">
+              <label for="coOp-yes">Co-op</label>
             </div>
           </div>
           
           <h3>Who won?</h3>
           <p class="default info">(Default: draw)</p>
-          <div v-if="coop === 'yes'" class="row">
-            <div :class="winnerClass('win')" v-on:click="winner = 'win'">
-              <label for="coop-yes">Win</label>
+          <div v-if="coOp === 'yes'" class="row">
+            <div :class="coOpOutcomeClass('win')" v-on:click="coOpOutcome = 'win'">
+              <label for="coOp-yes">Win</label>
             </div>
-            <div :class="winnerClass('loss')" v-on:click="winner = 'loss'">
-              <label for="coop-no">Loss</label>
+            <div :class="coOpOutcomeClass('loss')" v-on:click="coOpOutcome = 'loss'">
+              <label for="coOp-no">Loss</label>
             </div>
-            <div :class="winnerClass('draw')" v-on:click="winner = 'draw'">
-              <label for="coop-no">Draw</label>
+            <div :class="coOpOutcomeClass('draw')" v-on:click="coOpOutcome = 'draw'">
+              <label for="coOp-no">Draw</label>
             </div>
           </div>
           <div v-else class="row">
             <div :class="winnerClass('Hannah')" v-on:click="winner = 'Hannah'">
-              <label for="coop-yes">Hannah</label>
+              <label for="coOp-yes">Hannah</label>
             </div>
             <div :class="winnerClass('John')" v-on:click="winner = 'John'">
-              <label for="coop-no">John</label>
+              <label for="coOp-no">John</label>
             </div>
             <div :class="winnerClass('draw')" v-on:click="winner = 'draw'">
-              <label for="coop-no">Draw</label>
+              <label for="coOp-no">Draw</label>
             </div>
             <div :class="winnerClass('other')" v-on:click="winner = 'other'">
-              <label for="coop-no">Other</label>
+              <label for="coOp-no">Other</label>
             </div>
           </div>
           
@@ -65,13 +65,13 @@
           <div class="row">
             <input type="text" v-model="noOfPlayers" placeholder="#" />
             <div :class="playerCountClass('2')" v-on:click="noOfPlayers = 2">
-              <label for="coop-yes">2</label>
+              <label for="coOp-yes">2</label>
             </div>
             <div :class="playerCountClass('3')" v-on:click="noOfPlayers = 3">
-              <label for="coop-no">3</label>
+              <label for="coOp-no">3</label>
             </div>
             <div :class="playerCountClass('4')" v-on:click="noOfPlayers = 4">
-              <label for="coop-no">4</label>
+              <label for="coOp-no">4</label>
             </div>
           </div>
 
@@ -106,10 +106,11 @@ export default {
   components: { vSelect },
   data() {
     return {
-      title: '',
+      name: '',
       date: '',
-      coop: '',
+      coOp: '',
       winner: '',
+      coOpOutcome: '',
       noOfPlayers: '',
       message: '',
       listOfGames: [],
@@ -134,18 +135,25 @@ export default {
       return dayjs(pastDate).format('dddd')
     },
     dataToSend() {
-      return {
-        title: this.title,
+      const result = {
+        name: this.name,
         date: this.date || this.dateToday,
-        coop: this.coop || 'no',
-        winner: this.winner || 'draw',
+        coOp: this.coOp || 'no',
         noOfPlayers: Number.parseInt(this.noOfPlayers + '') || 2,
       }
+
+      if (this.coOp === 'yes') {
+        result.coOpOutcome = this.coOpOutcome || 'draw'
+      } else {
+        result.winner = this.winner || 'draw'
+      }
+
+      return result
     }
   },
   methods: {
-    coopClass(value) {
-      const selected = value === this.coop
+    coOpClass(value) {
+      const selected = value === this.coOp
       const className = selected ? 'selected' : 'deselected'
       return ['option', className].join(' ')
     },
@@ -159,13 +167,18 @@ export default {
       const className = selected ? 'selected' : 'deselected'
       return ['option', className].join(' ')
     },
+    coOpOutcomeClass(value) {
+      const selected = value === this.coOpOutcome
+      const className = selected ? 'selected' : 'deselected'
+      return ['option', className].join(' ')
+    },
     playerCountClass(value) {
       const selected = (value + '') === (this.noOfPlayers + '')
       const className = selected ? 'selected' : 'deselected'
       return ['option', className].join(' ')
     },
     selectCoop(value) {
-      this.coop = value
+      this.coOp = value
       this.winner = ''
     },
     dayOfMonth(input) {
@@ -179,7 +192,7 @@ export default {
     async handleSubmit(event) {
       this.sending = true
       event.preventDefault()
-      console.log(`You played ${this.title} on ${this.date}. ${this.winner} was the winner!`)
+      console.log(`You played ${this.name} on ${this.date}. ${this.winner} was the winner!`)
       const url = `${boardgamesSamApiUrl}/playrecords/create`
       const axiosConfig = {
         headers: sharedModel.getAuthHeaders()
