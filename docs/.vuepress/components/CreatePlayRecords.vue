@@ -75,6 +75,11 @@
             </div>
           </div>
 
+          <h3>Notes</h3>
+          <div style="position: relative; width: 94%;">
+            <textarea type="text" v-model="notes" placeholder="Any extra notes about the game..." rows="4" />
+          </div>
+
           <p class="buttons">
             <button v-if="sending" type="submit" disabled>Sending...</button>
             <button v-else type="submit">Submit</button>
@@ -112,6 +117,7 @@ export default {
       winner: '',
       coOpOutcome: '',
       noOfPlayers: '',
+      notes: '',
       message: '',
       listOfGames: [],
       sending: false
@@ -148,6 +154,9 @@ export default {
         result.winner = this.winner || 'draw'
       }
 
+      if (this.notes) {
+        result.notes = this.notes
+      }
       return result
     }
   },
@@ -179,6 +188,7 @@ export default {
     },
     selectCoop(value) {
       this.coOp = value
+      this.coOpOutcome = ''
       this.winner = ''
     },
     dayOfMonth(input) {
@@ -226,8 +236,8 @@ pre {
   color: white
 }
 input {
-  padding: 5px;
-  font-size: 1.0em;
+  padding: 0.5em;
+  font-size: 1em;
 }
 .buttons {
   text-align: right;
@@ -252,6 +262,14 @@ div.row > * {
 div.row > input {
   font-weight: bold;
   color: #333;
+}
+textarea {
+  display: block;
+  width: 100%;
+  font-size: 1em;
+  font-family: inherit;
+  text-align: left;
+  padding: 1em;
 }
 div.option {
   flex: 5 5;
