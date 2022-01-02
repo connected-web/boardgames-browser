@@ -9,11 +9,11 @@
           <h3>Were any expansions involved?</h3>
           <p class="default info">(Optional: Search or type names of any expansions used)</p>
           <v-select taggable multiple push-tags :options="listOfGames" v-model="expansions" />
-          
+
           <h3>When was the game played?</h3>
           <p class="default info">(Default: today, Format: dd/mm/yyyy)</p>
-          <div class="row">
-            <input type="text" v-model="date" :placeholder="dateToday" />
+          <div class="row c3">
+            <input type="text" v-model="date" :placeholder="dateToday" class="option" />
             <div :class="dateClass(dateToday)" v-on:click="selectDate(dateToday)">
               <label for="date-today">Today ({{ dayOfMonth(dateToday) }})</label>
             </div>
@@ -27,7 +27,7 @@
 
           <h3>Was this game vs. or co-operative?</h3>
           <p class="default info">(Default: vs)</p>
-          <div class="row">
+          <div class="row c2">
             <div :class="coOpClass('no')" v-on:click="selectCoop('no')">
               <label for="coOp-no">Vs</label>
             </div>
@@ -38,7 +38,7 @@
           
           <h3>Who won?</h3>
           <p class="default info">(Default: draw)</p>
-          <div v-if="coOp === 'yes'" class="row">
+          <div v-if="coOp === 'yes'" class="row c3">
             <div :class="coOpOutcomeClass('win')" v-on:click="coOpOutcome = 'win'">
               <label for="coOp-yes">Win</label>
             </div>
@@ -49,7 +49,7 @@
               <label for="coOp-no">Draw</label>
             </div>
           </div>
-          <div v-else class="row">
+          <div v-else class="row c4">
             <div :class="winnerClass('Hannah')" v-on:click="winner = 'Hannah'">
               <label for="coOp-yes">Hannah</label>
             </div>
@@ -67,7 +67,7 @@
           <h3>Number of Players</h3>
           <p class="default info">(Default: 2)</p>
           <div class="row">
-            <input type="text" v-model="noOfPlayers" placeholder="#" />
+            <input type="text" v-model="noOfPlayers" placeholder="#" class="option" />
             <div :class="playerCountClass('2')" v-on:click="noOfPlayers = 2">
               <label for="coOp-yes">2</label>
             </div>
@@ -261,18 +261,19 @@ button {
 }
 div.row {
   display: flex;
+  flex-wrap: wrap;
   justify-items: center;
+  overflow: hidden;
 }
 div.row > * {
   text-align: center;
   margin: 0.5em 0.5em 0 0;
+  flex: 5 5;
 }
-div.row > .v-select {
-  flex: 10 10;
-}
-div.row > input {
+div.row > input.option {
   font-weight: bold;
   color: #333;
+  background: white;
 }
 textarea {
   display: block;
@@ -282,8 +283,7 @@ textarea {
   text-align: left;
   padding: 1em;
 }
-div.option {
-  flex: 5 5;
+.option {
   background: #ddd;
   color: #333;
   border: 2px solid #666;
@@ -293,6 +293,9 @@ div.option {
   text-align: center;
   transition: background 0.1s ease-out, border 0.1s ease-out;
   white-space: nowrap;
+  min-width: 20%;
+  max-width: 50%;
+  overflow: hidden;
 }
 div.option:hover {
   background: rgb(187, 229, 255);
@@ -333,9 +336,21 @@ button:active {
     margin-bottom: 0.5em;
     flex: 5 5;
   }
-  div.row > input {
-    min-width: 30%;
-    flex: 10 10;
+  .c4 > .option {
+    min-width: 45%;
+    max-width: 30%;
+  }
+  .c3 > .option {
+    max-width: 30%;
+  }
+}
+@media (max-width: 959px) {
+  .c4 > .option {
+    min-width: 40%;
+    max-width: 50%;
+  }
+  .c3 > .option {
+    max-width: 50%;
   }
 }
 </style>
