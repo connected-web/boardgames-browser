@@ -1,5 +1,5 @@
 # Authorise a user
 
 <ClientOnly>
-  <AuthoriseUser />
+<AuthoriseUser />
 </ClientOnly>

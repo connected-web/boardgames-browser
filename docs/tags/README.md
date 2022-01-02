@@ -3,5 +3,5 @@
 Board games stats organised by tags.
 
 <ClientOnly>
-  <BoardGameTagBrowser />
+<BoardGameTagBrowser />
 </ClientOnly>

@@ -1,5 +1,5 @@
 # Track Board Game
 
 <ClientOnly>
-  <CreatePlayRecords />
+<CreatePlayRecords />
 </ClientOnly>
