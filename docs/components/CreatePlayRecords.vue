@@ -6,6 +6,10 @@
           <p class="default info">(Required Field!)</p>
           <v-select taggable :options="listOfGames" v-model="name" />
          
+          <h3>Were any expansions involved?</h3>
+          <p class="default info">(Optional: Search or type names of any expansions used)</p>
+          <v-select taggable multiple push-tags :options="listOfGames" v-model="expansions" />
+          
           <h3>When was the game played?</h3>
           <p class="default info">(Default: today, Format: dd/mm/yyyy)</p>
           <div class="row">
@@ -112,6 +116,7 @@ export default {
   data() {
     return {
       name: '',
+      expansions: [],
       date: '',
       coOp: '',
       winner: '',
@@ -152,6 +157,10 @@ export default {
         result.coOpOutcome = this.coOpOutcome || 'draw'
       } else {
         result.winner = this.winner || 'draw'
+      }
+
+      if (this.expansions.length > 0) {
+        result.expansions = this.expansions
       }
 
       if (this.notes) {
@@ -253,11 +262,13 @@ button {
 div.row {
   display: flex;
   justify-items: center;
-  overflow: hidden;
 }
 div.row > * {
   text-align: center;
   margin: 0.5em 0.5em 0 0;
+}
+div.row > .v-select {
+  flex: 10 10;
 }
 div.row > input {
   font-weight: bold;
