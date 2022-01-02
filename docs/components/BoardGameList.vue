@@ -21,24 +21,24 @@ export default {
     }
   },
   async beforeMount() { 
-    const games = await loadBoardgameList(this)
+    const games = await loadBoardGameList(this)
     this.$data.games = games
     this.$data.message = `${this.$data.games.length} games in list:`
   },
   methods: {
     boardgameLink(game) {
-      return `/boardgames-browser/game/?game=${game.boardGameApiId}`
+      return `/boardgames-browser/browser/?game=${game.boardGameApiId}`
     }
   }
 }
 
-async function loadBoardgameList() {
+async function loadBoardGameList() {
   let games
   try {
     const response = await axios.get(`${boardgamesApiUrl}/api/boardgame/list`)
     games = response.data.games
   } catch (error) {
-    console.log('Load Boardgame List:', error);
+    console.log('Load Board Game List:', error);
   }
   return games.sort((a, b) => a.name.localeCompare(b.name))
 }
@@ -46,6 +46,6 @@ async function loadBoardgameList() {
 
 <style scoped>
 .boardgame-list {
-  border-top: 8px solid #EEE;
+  border-top: 2px solid #EEE;
 }
 </style>

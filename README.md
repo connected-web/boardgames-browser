@@ -1,4 +1,4 @@
-# Boardgames Browser
+# Board Games Browser
 
 A browser for personalized boardgame data, sourced from boardgames-api.calisaurus.net.
 

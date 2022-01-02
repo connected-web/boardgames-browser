@@ -68,7 +68,7 @@ export default {
     }
   },
   async beforeMount() {
-    this.$data.challengeGrid = await loadBoardgameGrid(this.dateCode)
+    this.$data.challengeGrid = await loadBoardGameGrid(this.dateCode)
     this.$data.message = false
   },
   computed: {
@@ -98,14 +98,14 @@ export default {
   }
 }
 
-async function loadBoardgameGrid(dateCode) {
+async function loadBoardGameGrid(dateCode) {
   let challengeGrid = {}
   try {
     const response = await axios.get(`${boardgamesApiUrl}/api/boardgame/grids/byYear/${dateCode}`)
     challengeGrid = response.data
   } catch (error) {
     challengeGrid.title = `Unable to load challenge grid: ${error.message}`
-    console.log('Load Boardgame Grid:', error);
+    console.log('Load Board Game Grid:', error);
   }
   return challengeGrid
 }

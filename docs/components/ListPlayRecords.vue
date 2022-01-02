@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>Here is the full list of play records available on the Boardgames SAM API:</p>
+    <p>Here is the full list of play records available on the Board Games SAM API:</p>
     <div v-if="status.playRecords">
       <div v-for="record in status.playRecords" :key="record.key" class="play record">
         <pre><code>{{ record }}</code></pre>

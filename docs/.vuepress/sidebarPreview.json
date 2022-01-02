@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Board Games Home",
+    "path": "/"
+  },
+  {
+    "title": "Board Game Browser",
+    "path": "browser/"
+  },
+  {
+    "title": "Board Game Grids",
+    "path": "grids/"
+  },
+  {
+    "title": "Board Game Tags",
+    "path": "tags/"
+  },
+  {
+    "title": "Review Play Records",
+    "path": "playrecords/review-records.md"
+  },
+  {
+    "title": "Track Board Game",
+    "path": "playrecords/boardgame-tracker.md"
+  }
+]

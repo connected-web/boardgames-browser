@@ -1,4 +1,4 @@
-# List Play Records
+# Review Play Records
 
 <ClientOnly>
 <ListPlayRecords />

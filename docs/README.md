@@ -1,4 +1,4 @@
-# Boardgames Browser
+# Board Games Home
 
 Welcome to the boardgames browser!
 

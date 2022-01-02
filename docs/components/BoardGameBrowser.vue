@@ -1,6 +1,6 @@
 <template>
-  <BoardgameSummary v-if="gameId" :gameId="gameId" />
-  <BoardgameList v-else />
+  <BoardGameSummary v-if="gameId" :gameId="gameId" />
+  <BoardGameList v-else />
 </template>
 
 <script>

@@ -20,7 +20,6 @@ import sharedModel from './src/sharedModel'
 const { boardgamesApiUrl } = sharedModel.state 
 
 export default {
-  name: 'BoardgameTagList',
   data: function () {
     return {
       message: `Loading data from ${boardgamesApiUrl}`,
@@ -30,23 +29,23 @@ export default {
     }
   },
   async beforeMount() { 
-    this.$data.tags = await loadBoardgameTagsList(this)
+    this.$data.tags = await loadBoardGameTagsList(this)
     this.$data.message = `${Object.keys(this.$data.tags).length} tags in list:`
   },
   methods: {
     boardgameTagLink(tag, value) {
-      return `/boardgames-browser/tags/byValue/?tag=${tag}&value=${value}`
+      return `/boardgames-browser/tags/?tag=${tag}&value=${value}`
     }
   }
 }
 
-async function loadBoardgameTagsList() {
+async function loadBoardGameTagsList() {
   let tags
   try {
     const response = await axios.get(`${boardgamesApiUrl}/api/boardgame/tags/list`)
     tags = response.data.boardGameTags
   } catch (error) {
-    console.log('Load Boardgame List:', error);
+    console.log('Load Board Game List:', error);
   }
   return tags
 }
@@ -54,6 +53,6 @@ async function loadBoardgameTagsList() {
 
 <style scoped>
 .boardgame-list {
-  border-top: 8px solid #EEE;
+  border-top: 2px solid #EEE;
 }
 </style>

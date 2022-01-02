@@ -1,5 +1,7 @@
-# Boardgames Index
+# Board Game Browser
+
+Board game play stats organised by game name.
 
 <ClientOnly>
-  <BoardgameBrowser />
+  <BoardGameBrowser />
 </ClientOnly>

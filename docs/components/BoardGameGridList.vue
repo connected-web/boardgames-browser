@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     gridLink(dateCode) {
-      return `/boardgames-browser/grids/byYear/?dateCode=${dateCode}`
+      return `/boardgames-browser/grids/?dateCode=${dateCode}`
     }
   }
 }
@@ -29,6 +29,6 @@ export default {
 
 <style scoped>
 .boardgame-list {
-  border-top: 8px solid #EEE;
+  border-top: 2px solid #EEE;
 }
 </style>

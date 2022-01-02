@@ -1,5 +1,7 @@
-# Boardgame Tags
+# Board Game Tags
+
+Board games stats organised by tags.
 
 <ClientOnly>
-  <BoardgameTagBrowser />
+  <BoardGameTagBrowser />
 </ClientOnly>

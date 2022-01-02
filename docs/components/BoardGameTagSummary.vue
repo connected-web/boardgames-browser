@@ -70,7 +70,7 @@
     <pre v-if="Object.keys(summary).length > 0"><code>{{ JSON.stringify(summary, null, 2) }}</code></pre>
   </div>
   <div v-else>
-    <p>No Boardgame Tag or Value set - <a href="./">back to index</a>?</p>
+    <p>No Board Game Tag or Value set - <a href="./">back to index</a>?</p>
   </div>
 </div>
 </template>
@@ -91,7 +91,7 @@ export default {
     }
   },
   async beforeMount() {
-    this.$data.summary = await loadBoardgameSummaryByTag(this.tag, this.value)
+    this.$data.summary = await loadBoardGameSummaryByTag(this.tag, this.value)
     this.$data.message = false
   },
   computed: {
@@ -126,13 +126,13 @@ export default {
   }
 }
 
-async function loadBoardgameSummaryByTag(tag, value) {
+async function loadBoardGameSummaryByTag(tag, value) {
   let summary
   try {
     const response = await axios.get(`${boardgamesApiUrl}/api/boardgame/stats/byTag/${tag}/${value}`)
     summary = response.data
   } catch (error) {
-    console.log('Load Boardgame:', error);
+    console.log('Load Board Game:', error);
   }
   return summary
 }

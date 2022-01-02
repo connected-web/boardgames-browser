@@ -13,15 +13,18 @@
   "author": "John Beech",
   "license": "ISC",
   "devDependencies": {
-    "standard": "^14.3.4",
-    "vuepress": "^1.8.1"
+    "standard": "^14.3.4"
   },
   "dependencies": {
+    "@connected-web/md2json": "^1.1.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/vue-fontawesome": "^2.0.6",
+    "@vuepress/plugin-register-components": "^1.8.2",
+    "vuepress": "^1.8.1",
     "axios": "^0.21.1",
     "dayjs": "^1.10.7",
+    "promise-path": "^1.4.1",
     "vue-select": "^3.16.0"
   }
 }

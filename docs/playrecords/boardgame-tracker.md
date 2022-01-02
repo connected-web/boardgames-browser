@@ -1,4 +1,4 @@
-# Submit a Play Record
+# Track Board Game
 
 <ClientOnly>
   <CreatePlayRecords />

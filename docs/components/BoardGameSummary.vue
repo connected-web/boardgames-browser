@@ -67,7 +67,7 @@
     <!--Loading data for {{ gameId }}-->
   </div>
   <div v-else>
-    <p>No Boardgame ID set - <a href="./">back to index</a>?</p>
+    <p>No Board Game ID set - <a href="./">back to index</a>?</p>
   </div>
 </div>
 </template>
@@ -88,7 +88,7 @@ export default {
     }
   },
   async beforeMount() {
-    this.$data.game = await loadBoardgame(this.gameId)
+    this.$data.game = await loadBoardGame(this.gameId)
     this.$data.message = false
   },
   computed: {
@@ -123,13 +123,13 @@ export default {
   }
 }
 
-async function loadBoardgame(gameId) {
+async function loadBoardGame(gameId) {
   let game
   try {
     const response = await axios.get(`${boardgamesApiUrl}/api/boardgame/by/${gameId}`)
     game = response.data.game
   } catch (error) {
-    console.log('Load Boardgame:', error);
+    console.log('Load Board Game:', error);
   }
   return game
 }

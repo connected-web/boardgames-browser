@@ -1,6 +1,6 @@
 <template>
-  <BoardgameTagSummary v-if="$data.tag && $data.value" :tag="$data.tag" :value="$data.value" />
-  <BoardgameTagList v-else />
+  <BoardGameTagSummary v-if="$data.tag && $data.value" :tag="$data.tag" :value="$data.value" />
+  <BoardGameTagList v-else />
 </template>
 
 <script>

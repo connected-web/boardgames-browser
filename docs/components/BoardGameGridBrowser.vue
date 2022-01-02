@@ -1,6 +1,6 @@
 <template>
-  <BoardgameGrid v-if="$data.dateCode" :dateCode="$data.dateCode" />
-  <BoardgameGridList v-else />
+  <BoardGameGrid v-if="$data.dateCode" :dateCode="$data.dateCode" />
+  <BoardGameGridList v-else />
 </template>
 
 <script>
