@@ -10,5 +10,5 @@ Welcome to the boardgames browser!
 
 ## Things to do
 
-- [Submit a play record](./boardgame-tracker.md)
-- [List play records](./playrecords/list.md)
+- [Track board game](./playrecords/boardgame-tracker.md)
+- [Review play records](./playrecords/review-records.md)
