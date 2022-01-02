@@ -1,3 +1,4 @@
+/* global localStorage */
 import getParamsFromUrl from './getParamsFromUrl'
 
 const state = {
@@ -9,16 +10,17 @@ const state = {
 state.boardgamesApiUrlStatus = `${state.boardgamesApiUrl}/api/status`
 state.boardgamesSamApiUrlStatus = `${state.boardgamesSamApiUrl}/status`
 
-function update() {
+function update () {
   if (typeof document !== 'undefined') {
     state.params = getParamsFromUrl(document.location)
   }
 }
 
-function getAuthHeaders() {
+function getAuthHeaders () {
+  const ls = (typeof localStorage !== 'undefined') ? localStorage : { getItem () { return 'Local' } }
   return {
-    'calisaurus-user': localStorage.getItem('api-user-name'),
-    'calisaurus-user-api-key': localStorage.getItem('api-user-key')
+    'calisaurus-user': ls.getItem('api-user-name'),
+    'calisaurus-user-api-key': ls.getItem('api-user-key')
   }
 }
 
