@@ -10,7 +10,9 @@ state.boardgamesApiUrlStatus = `${state.boardgamesApiUrl}/api/status`
 state.boardgamesSamApiUrlStatus = `${state.boardgamesSamApiUrl}/status`
 
 function update() {
-  state.params = getParamsFromUrl(document.location)
+  if (typeof document !== 'undefined') {
+    state.params = getParamsFromUrl(document.location)
+  }
 }
 
 function getAuthHeaders() {

@@ -1,5 +1,5 @@
 <template>
-  <div :class="`game stat box ${gameStat(game).className}`"  :title="gameStat(game).title">{{ gameStat(game).code }}</div>
+  <div v-if="game" :class="`game stat box ${gameStat(game).className}`"  :title="gameStat(game).title">{{ gameStat(game).code }}</div>
 </template>
 
 <script>
