@@ -16,8 +16,20 @@
     "path": "tags/"
   },
   {
+    "title": "Boardgame Stats",
+    "path": "stats/"
+  },
+  {
     "title": "Review Play Records",
     "path": "playrecords/review-records.md"
+  },
+  {
+    "title": "Stats : Month to Date",
+    "path": "stats/by-month-to-date.md"
+  },
+  {
+    "title": "Stats : Year to Date",
+    "path": "stats/by-year-to-date.md"
   },
   {
     "title": "Track Board Game",
