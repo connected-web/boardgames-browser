@@ -1,6 +1,6 @@
 <template>
 <div class="boardgame-list">
-  <p v-if="message">{{ $data.message }}</p>
+  <p v-if="message">{{ message }}</p>
   <ul>
     <li v-for="dateCode in gridDateCodes" :key="dateCode"><a :href="gridLink(dateCode)">{{ dateCode }}</a></li>
   </ul>
@@ -16,7 +16,7 @@ export default {
     }
   },
   async beforeMount() { 
-    this.$data.message = `${this.$data.gridDateCodes.length} grids available:`
+    this.message = `${this.gridDateCodes.length} grids available:`
   },
   methods: {
     gridLink(dateCode) {

@@ -1,5 +1,5 @@
 <template>
-  <BoardGameGrid v-if="$data.dateCode" :dateCode="$data.dateCode" />
+  <BoardGameGrid v-if="dateCode" :dateCode="dateCode" />
   <BoardGameGridList v-else />
 </template>
 
@@ -7,7 +7,7 @@
 import sharedModel from './src/sharedModel'
 
 export default {
-  data: function () {
+  data() {
     return {
       dateCode: false,
     }
@@ -15,7 +15,7 @@ export default {
   async beforeMount() { 
     sharedModel.update()
     const { dateCode } = sharedModel.state.params
-    this.$data.dateCode = dateCode
+    this.dateCode = dateCode
   }
 }
 </script>

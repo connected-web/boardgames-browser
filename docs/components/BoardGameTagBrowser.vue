@@ -1,5 +1,5 @@
 <template>
-  <BoardGameTagSummary v-if="$data.tag && $data.value" :tag="$data.tag" :value="$data.value" />
+  <BoardGameTagSummary v-if="tag && value" :tag="tag" :value="value" />
   <BoardGameTagList v-else />
 </template>
 
@@ -7,7 +7,7 @@
 import sharedModel from './src/sharedModel'
 
 export default {
-  data: function () {
+  data() {
     return {
       dateCode: false,
     }
@@ -15,8 +15,8 @@ export default {
   async beforeMount() { 
     sharedModel.update()
     const { tag, value } = sharedModel.state.params
-    this.$data.tag = tag
-    this.$data.value = value
+    this.tag = tag
+    this.value = value
   }
 }
 </script>

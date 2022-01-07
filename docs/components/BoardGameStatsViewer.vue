@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import modelCache from './src/modelCache'
 
 export default {
   props: {
@@ -144,7 +144,8 @@ export default {
   async mounted() {
     const { datasourceUrl } = this
     try {
-      this.response = await axios.get(datasourceUrl)
+      const data = modelCache.get(datasourceUrl)
+      this.response = { data }
     } catch (ex) {
       this.response = ex.response
       this.error = `Unable to load ${datasourceUrl} : ${ex.message}`

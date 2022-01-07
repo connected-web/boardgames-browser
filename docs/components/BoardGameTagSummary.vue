@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import modelCache from './src/modelCache'
 import sharedModel from './src/sharedModel'
 
 const { boardgamesApiUrl } = sharedModel.state
@@ -91,8 +91,8 @@ export default {
     }
   },
   async beforeMount() {
-    this.$data.summary = await loadBoardGameSummaryByTag(this.tag, this.value)
-    this.$data.message = false
+    this.summary = await loadBoardGameSummaryByTag(this.tag, this.value)
+    this.message = false
   },
   computed: {
     filteredPlayRecords() {
@@ -129,10 +129,9 @@ export default {
 async function loadBoardGameSummaryByTag(tag, value) {
   let summary
   try {
-    const response = await axios.get(`${boardgamesApiUrl}/api/boardgame/stats/byTag/${tag}/${value}`)
-    summary = response.data
+    summary = await modelCache.get(`${boardgamesApiUrl}/api/boardgame/stats/byTag/${tag}/${value}`)
   } catch (error) {
-    console.log('Load Board Game:', error);
+    console.error('Load Board Game Summary by Tag:', error);
   }
   return summary
 }

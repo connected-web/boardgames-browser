@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import modelCache from './src/modelCache'
 import sharedModel from './src/sharedModel'
 
 const { boardgamesApiUrl } = sharedModel.state
@@ -68,13 +68,13 @@ export default {
     }
   },
   async beforeMount() {
-    this.$data.challengeGrid = await loadBoardGameGrid(this.dateCode)
-    this.$data.message = false
+    this.challengeGrid = await loadBoardGameGrid(this.dateCode)
+    this.message = false
   },
   computed: {
     gamesToPlayCountPerFamily() {
       try {
-        return this.$data.challengeGrid.challenge.gamesToPlayCountPerFamily
+        return this.challengeGrid.challenge.gamesToPlayCountPerFamily
       } catch (ex) {
         return 1
       }
@@ -101,8 +101,7 @@ export default {
 async function loadBoardGameGrid(dateCode) {
   let challengeGrid = {}
   try {
-    const response = await axios.get(`${boardgamesApiUrl}/api/boardgame/grids/byYear/${dateCode}`)
-    challengeGrid = response.data
+    challengeGrid = await modelCache.get(`${boardgamesApiUrl}/api/boardgame/grids/byYear/${dateCode}`)
   } catch (error) {
     challengeGrid.title = `Unable to load challenge grid: ${error.message}`
     console.log('Load Board Game Grid:', error);

@@ -15,7 +15,7 @@ export default {
   async beforeMount() {
     sharedModel.update()
     const { game } = sharedModel.state.params
-    this.$data.gameId = game
+    this.gameId = game
   }
 }
 

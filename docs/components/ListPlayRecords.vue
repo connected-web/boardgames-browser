@@ -19,7 +19,7 @@
 <script>
 import axios from 'axios'
 import sharedModel from './src/sharedModel'
-import icons from './src/icons'
+import './src/icons'
 
 const { boardgamesSamApiUrl } = sharedModel.state
 
