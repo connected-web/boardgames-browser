@@ -52,7 +52,7 @@
         <h3>Most played games</h3>
         <ul>
           <li v-for="item in stats.mostPlayedGames" :key="`mpg-${item.name}`">
-            <stat-value :label="`${item.name}`">{{ item.plays }} play {{ item.plays && item.plays.length > 1 ? 's' : '' }}</stat-value>
+            <stat-value :label="`${item.name}`">{{ item.plays }} {{ item.plays > 1 ? 'plays' : 'play' }}</stat-value>
           </li>
         </ul>
       </div>
@@ -64,7 +64,7 @@
         <h3>Hannah's most won games</h3>
         <ul>
           <li v-for="item in stats.mostWonGamesHannah" :key="`mpg-${item.game}`">
-            <stat-value :label="`${item.game}`">{{ item.plays }} play {{ item.plays && item.plays.length > 1 ? 's' : '' }}</stat-value>
+            <stat-value :label="`${item.game}`">{{ item.plays }} {{ item.plays > 1 ? 'plays' : 'play' }}</stat-value>
           </li>
         </ul>
       </div>
@@ -72,7 +72,7 @@
         <h3>John's most won games</h3>
         <ul>
           <li v-for="item in stats.mostWonGamesJohn" :key="`mpg-${item.game}`">
-            <stat-value :label="`${item.game}`">{{ item.plays }} play {{ item.plays.length > 1 ? 's' : '' }}</stat-value>
+            <stat-value :label="`${item.game}`">{{ item.plays }} {{ item.plays > 1 ? 'plays' : 'play' }}</stat-value>
           </li>
         </ul>
       </div>
