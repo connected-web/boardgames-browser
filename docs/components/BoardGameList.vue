@@ -8,13 +8,13 @@
 </template>
 
 <script>
-import axios from 'axios'
+import modelCache from './src/modelCache'
 import sharedModel from './src/sharedModel'
 
 const { boardgamesApiUrl } = sharedModel.state
 
 export default {
-  data: function () {
+  data() {
     return {
       message: `Loading data from ${boardgamesApiUrl}`,
       games: []
@@ -22,8 +22,8 @@ export default {
   },
   async beforeMount() { 
     const games = await loadBoardGameList(this)
-    this.$data.games = games
-    this.$data.message = `${this.$data.games.length} games in list:`
+    this.games = games
+    this.message = `${this.games.length} games in list:`
   },
   methods: {
     boardgameLink(game) {
@@ -35,8 +35,8 @@ export default {
 async function loadBoardGameList() {
   let games
   try {
-    const response = await axios.get(`${boardgamesApiUrl}/api/boardgame/list`)
-    games = response.data.games
+    const data = await modelCache.get(`${boardgamesApiUrl}/api/boardgame/list`)
+    games = data?.games || [] 
   } catch (error) {
     console.log('Load Board Game List:', error);
   }
