@@ -1,4 +1,3 @@
-/* global localStorage */
 import getParamsFromUrl from './getParamsFromUrl'
 import localStorage from './localStorage'
 
@@ -12,7 +11,7 @@ const state = {
 state.boardgamesApiUrlStatus = `${state.boardgamesApiUrl}/api/status`
 state.boardgamesSamApiUrlStatus = `${state.boardgamesSamApiUrl}/status`
 
-function getStoredState() {
+function getStoredState () {
   let storedState
   try {
     storedState = JSON.parse(localStorage.getItem('sharedModel') || '{}')
@@ -22,7 +21,7 @@ function getStoredState() {
   return storedState || {}
 }
 
-function saveStoredState() {
+function saveStoredState () {
   const body = JSON.stringify(state)
   localStorage.setItem('sharedModel', body)
 }
