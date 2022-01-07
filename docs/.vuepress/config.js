@@ -15,7 +15,8 @@ async function generateVueConfig() {
         { text: 'Grids', link: '/grids/' },
         { text: 'Tags', link: '/tags/' },
         { text: 'Review', link: '/playrecords/review-records.md'},
-        { text: 'Track', link: '/playrecords/boardgame-tracker.md'}
+        { text: 'Track', link: '/playrecords/boardgame-tracker.md'},
+        { text: 'Github', link: 'https://github.com/connected-web/boardgames-browser' }
       ],
       siteRoot: fromHere('../'),
     },
