@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul v-if="monthsInUse">
-      <li v-for="month in monthsInUse" :key="month.dateCode">{{ month.dateCode }}</li>
+      <li v-for="month in monthsInUse" :key="month.dateCode"><a :href="statsLink(month)">{{ month.dateCode }}</a></li>
     </ul>
     <p v-else>Loading months in use from API...</p>
   </div>
@@ -18,6 +18,11 @@ export default {
   data() {
     return {
       monthsInUse: false
+    }
+  },
+  methods: {
+    statsLink(item) {
+      return `/boardgames-browser/stats/by-date.html?dateCode=${item.dateCode}`
     }
   },
   async mounted() {

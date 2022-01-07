@@ -32,11 +32,11 @@
       </div>
       <div class="stats group">
         <h3>Most games played in a day</h3>
-        <p v-if="stats.mostGamesPlayedInADay.length > 1">There were multiple days that tied for most games played in a day.</p>
+        <p v-if="stats.mostGamesPlayedInADay && stats.mostGamesPlayedInADay.length > 1">There were multiple days that tied for most games played in a day.</p>
         <div v-for="day in stats.mostGamesPlayedInADay" :key="day.date">
           <h4>{{ day.date }}</h4>
           <ul>
-            <li v-for="game in day.games" :key="`mp-${game}`">{{ game }}</li>
+            <li v-for="(game, idx) in day.games" :key="`mpiad-${game}-${idx}`">{{ game }}</li>
           </ul>
         </div>
       </div>
@@ -52,7 +52,7 @@
         <h3>Most played games</h3>
         <ul>
           <li v-for="item in stats.mostPlayedGames" :key="`mpg-${item.name}`">
-            <stat-value :label="`${item.name}`">{{ item.plays }} play {{ item.plays.length > 1 ? 's' : '' }}</stat-value>
+            <stat-value :label="`${item.name}`">{{ item.plays }} play {{ item.plays && item.plays.length > 1 ? 's' : '' }}</stat-value>
           </li>
         </ul>
       </div>
@@ -64,7 +64,7 @@
         <h3>Hannah's most won games</h3>
         <ul>
           <li v-for="item in stats.mostWonGamesHannah" :key="`mpg-${item.game}`">
-            <stat-value :label="`${item.game}`">{{ item.plays }} play {{ item.plays.length > 1 ? 's' : '' }}</stat-value>
+            <stat-value :label="`${item.game}`">{{ item.plays }} play {{ item.plays && item.plays.length > 1 ? 's' : '' }}</stat-value>
           </li>
         </ul>
       </div>
@@ -144,7 +144,7 @@ export default {
   async mounted() {
     const { datasourceUrl } = this
     try {
-      const data = modelCache.get(datasourceUrl)
+      const data = await modelCache.get(datasourceUrl)
       this.response = { data }
     } catch (ex) {
       this.response = ex.response

@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul v-if="yearsInUse">
-      <li v-for="year in yearsInUse" :key="year.dateCode">{{ year.dateCode }}</li>
+      <li v-for="year in yearsInUse" :key="year.dateCode"><a :href="statsLink(year)">{{ year.dateCode }}</a></li>
     </ul>
     <p v-else>Loading years in use from API...</p>
   </div>
@@ -18,6 +18,11 @@ export default {
   data() {
     return {
       yearsInUse: false
+    }
+  },
+  methods: {
+    statsLink(item) {
+      return `/boardgames-browser/stats/by-date.html?dateCode=${item.dateCode}`
     }
   },
   async mounted() {

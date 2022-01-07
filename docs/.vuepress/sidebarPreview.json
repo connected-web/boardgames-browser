@@ -24,6 +24,10 @@
     "path": "playrecords/review-records.md"
   },
   {
+    "title": "Stats : By Date",
+    "path": "stats/by-date.md"
+  },
+  {
     "title": "Stats : Month to Date",
     "path": "stats/by-month-to-date.md"
   },
