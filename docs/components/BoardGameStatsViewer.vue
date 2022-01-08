@@ -196,10 +196,10 @@ export default {
   margin: 0;
   overflow: hidden;
 }
-.percentage.bar > .game.stat.slim {
+.percentage.bar > .game.stat.box {
   padding: 0;
 }
-.percentage.bar > .game.stat.slim > span {
+.percentage.bar > .game.stat.box.slim > span {
   display: inline-block;
   transform: rotate(90deg);
 }
