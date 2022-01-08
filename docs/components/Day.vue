@@ -27,9 +27,9 @@ export default {
   background: #f5f5f5;
   margin: 0.1em;
   padding: 0.2em;
-  transition: background 0.1 ease-in;
   width: 1.5em;
   text-align: center;
+  transition: background 0.1 ease-in;
 }
 .day-box:hover {
   background: #f0f0f0;

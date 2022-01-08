@@ -6,6 +6,7 @@
 
 <script>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import './src/icons'
 
 export default {
   props: {

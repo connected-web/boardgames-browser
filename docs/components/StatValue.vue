@@ -15,10 +15,6 @@ export default {
 </script>
 
 <style scoped>
-label::after {
-  content: ':';
-}
-
 div.stat {
   display: flex;
   flex-wrap: wrap;
