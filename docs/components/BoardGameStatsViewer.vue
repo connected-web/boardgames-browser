@@ -60,13 +60,13 @@
         <stat-value label="Co-op Games Played">{{ stats.coOpGamesPlayedCount }}</stat-value>
         <stat-value label="Co-op Games Percentage">{{ pc(stats.coOpGamesPlayedPercentage) }}</stat-value>
         <stat-value label="Co-op Games Won">{{ stats.coOpGameWins }}</stat-value>
-        <stat-value label="Co-op Games Lost">{{ stats.coOpGameLosses }}</stat-value>
+        <stat-value label="Co-op Games Lost">{{ stats.coOpGameLoses }}</stat-value>
 
         <div class="percentage bar">
           <GameStatBox :game="{ coOp: 'Yes', coOpOutcome: 'Win', name: `Co-operative win percentage` }"
-            :style="`width: ${pc(stats.coOpWinRate)};`"><span>Win<br />{{ pc(stats.winPercentageHannah) }}</span></GameStatBox>
+            :style="`width: ${pc(stats.coOpWinRate)};`"><span>Win<br />{{ pc(stats.coOpWinRate) }}</span></GameStatBox>
           <GameStatBox :game="{ coOp: 'Yes', coOpOutcome: 'Loss', name: `Co-operative loss percentage` }"
-            :style="`width: ${pc(stats.coOpLossRate)};`"><span>Loss<br />{{ pc(stats.winPercentageJohn) }}</span></GameStatBox>
+            :style="`width: ${pc(stats.coOpLossRate)};`"><span>Loss<br />{{ pc(stats.coOpLossRate) }}</span></GameStatBox>
         </div>
         
       </div>
@@ -196,8 +196,11 @@ export default {
   margin: 0;
   overflow: hidden;
 }
+.percentage.bar > .game.stat.slim {
+  padding: 0;
+}
 .percentage.bar > .game.stat.slim > span {
   display: inline-block;
-  transform: rotate(90deg)
+  transform: rotate(90deg);
 }
 </style>
