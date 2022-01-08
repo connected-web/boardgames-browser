@@ -1,6 +1,5 @@
 <template>
   <div>
-    <p>Date code: {{ dateCode || 'No date code set' }}</p>
     <BoardGameStatsViewer v-if="dateCode" :datasourceUrl="statsUrl" />
   </div>
 </template>
