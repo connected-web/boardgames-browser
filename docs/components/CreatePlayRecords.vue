@@ -36,17 +36,17 @@
             </div>
           </div>
           
-          <h3>Who won?</h3>
+          <h3>{{ coOp === 'yes' ? 'What was the outcome?' : 'Who won?' }}</h3>
           <p class="default info">(Default: draw)</p>
           <div v-if="coOp === 'yes'" class="row c3">
             <div :class="coOpOutcomeClass('win')" v-on:click="coOpOutcome = 'win'">
-              <label for="coOp-yes">Win</label>
+              <label for="coOp-yes">Co-op Win</label>
             </div>
             <div :class="coOpOutcomeClass('loss')" v-on:click="coOpOutcome = 'loss'">
-              <label for="coOp-no">Loss</label>
+              <label for="coOp-no">Co-op Loss</label>
             </div>
             <div :class="coOpOutcomeClass('draw')" v-on:click="coOpOutcome = 'draw'">
-              <label for="coOp-no">Draw</label>
+              <label for="coOp-no">Co-op Draw</label>
             </div>
           </div>
           <div v-else class="row c4">
