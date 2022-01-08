@@ -1,5 +1,7 @@
 <template>
-  <div v-if="game" :class="`game stat box ${gameStat(game).className}`" :title="gameStat(game).title">{{ gameStat(game).code }}</div>
+  <div v-if="game" :class="`game stat box ${gameStat(game).className}`" :title="gameStat(game).title">
+    <slot>{{ gameStat(game).code }}</slot>
+  </div>
 </template>
 
 <script>
@@ -10,10 +12,16 @@ export default {
       const winLoss = (game.coOpOutcome || game.winner || 'x').toLowerCase()
       const vsOrCoOp = (game.coOp || 'no').toLowerCase() === 'yes' ? 'coop' : 'vs'
       const gameTypes = { coop: 'Co-op', vs: 'Vs'}
+      const titleLabels = Object.entries({
+        Date: game.date,
+        Game: game.name || this.name,
+        Outcome: game.coOpOutcome || game.winner,
+        'Game Type': gameTypes[vsOrCoOp] 
+      }).filter(([,v]) => v)
       return {
         className: [vsOrCoOp, winLoss].join(' '),
-        code: winLoss.charAt(0).toLowerCase(),
-        title: `Date: ${game.date}, Game: ${game.name || this.name}, Outcome: ${game.coOpOutcome || game.winner}, Game Type: ${gameTypes[vsOrCoOp]}`
+        code: winLoss.charAt(0).toUpperCase(),
+        title: titleLabels.map(([k,v]) => `${k}: ${v}`).join(', ')
       }
     }
   }
@@ -28,14 +36,13 @@ export default {
   margin: 2px;
   padding: 2px;
   font-size: 0.8em;
-  text-transform: uppercase;
   cursor: help;
 }
 .coop.won, .coop.win {
   color: black;
   background-color: #93c47d;
 }
-.coop.lost, .coop.lose {
+.coop.lost, .coop.lose, .coop.loss {
   color: white;
   background-color: #434343;
 }
@@ -47,11 +54,11 @@ export default {
   color: #333;
   background-color: #ffe599;
 }
-.vs.john {
+.vs.john, .coop.john {
   color: black;
   background-color: #dd7e6b;
 }
-.vs.hannah {
+.vs.hannah, .coop.hannah {
   color: black;
   background-color: #8e7cc3;
 }

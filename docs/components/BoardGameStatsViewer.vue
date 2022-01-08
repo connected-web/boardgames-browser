@@ -15,6 +15,17 @@
         <stat-value label="Wins by John">{{ stats.winCountJohn }}</stat-value>
         <stat-value label="Wins by Other players">{{ stats.winCountOther }}</stat-value>
         <stat-value label="Drawn games">{{ stats.winCountDraw }}</stat-value>
+
+        <div class="percentage bar">
+          <GameStatBox :game="{ coOp: 'No', winner: 'Hannah', name: `Hannah's total win percentage` }"
+            :style="`width: ${pc(stats.winPercentageHannah)};`"><span>Hannah<br />{{ pc(stats.winPercentageHannah) }}</span></GameStatBox>
+          <GameStatBox :game="{ coOp: 'No', winner: 'John', name: `John's total win percentage` }"
+            :style="`width: ${pc(stats.winPercentageJohn)};`"><span>John<br />{{ pc(stats.winPercentageJohn) }}</span></GameStatBox>
+          <GameStatBox :game="{ coOp: 'No', winner: 'Other', name: 'Other winners percentage' }"
+            :style="`width: ${pc(stats.winPercentageOther)};`" class="slim"><span>Other</span></GameStatBox>
+          <GameStatBox :game="{ coOp: 'No', winner: 'Draw', name: 'Draw percentage' }"
+            :style="`width: ${pc(stats.winPercentageDraw)};`" class="slim"><span>Draw</span></GameStatBox>
+        </div>
       </div>
 
       <div class="stats group">
@@ -36,15 +47,6 @@
       </div>
 
       <div class="stats group">
-        <h3>Win Percentages</h3>
-        <stat-value label="Winnable games total">{{ stats.winnableGamesTotal }}</stat-value>
-        <stat-value label="Win percentage Hannah">{{ pc(stats.winPercentageHannah) }}</stat-value>
-        <stat-value label="Win percentage John">{{ pc(stats.winPercentageJohn) }}</stat-value>
-        <stat-value label="Win percentage by Other players">{{ pc(stats.winPercentageOther) }}</stat-value>
-        <stat-value label="Percentage of drawn games">{{ pc(stats.winPercentageDraw) }}</stat-value>
-      </div>
-
-      <div class="stats group">
         <h3>Most played games</h3>
         <ul>
           <li v-for="item in stats.mostPlayedGames" :key="`mpg-${item.name}`">
@@ -57,10 +59,16 @@
         <h3>Co-op Stats</h3>
         <stat-value label="Co-op Games Played">{{ stats.coOpGamesPlayedCount }}</stat-value>
         <stat-value label="Co-op Games Percentage">{{ pc(stats.coOpGamesPlayedPercentage) }}</stat-value>
-        <stat-value label="Co-op Games Win Rate">{{ pc(stats.coOpWinRate) }}</stat-value>
-        <stat-value label="Co-op Games Loss Rate">{{ pc(stats.coOpLossRate) }}</stat-value>
         <stat-value label="Co-op Games Won">{{ stats.coOpGameWins }}</stat-value>
-        <stat-value label="Co-op Games Lost">{{ stats.coOpLossRate }}</stat-value>
+        <stat-value label="Co-op Games Lost">{{ stats.coOpGameLosses }}</stat-value>
+
+        <div class="percentage bar">
+          <GameStatBox :game="{ coOp: 'Yes', coOpOutcome: 'Win', name: `Co-operative win percentage` }"
+            :style="`width: ${pc(stats.coOpWinRate)};`"><span>Win<br />{{ pc(stats.winPercentageHannah) }}</span></GameStatBox>
+          <GameStatBox :game="{ coOp: 'Yes', coOpOutcome: 'Loss', name: `Co-operative loss percentage` }"
+            :style="`width: ${pc(stats.coOpLossRate)};`"><span>Loss<br />{{ pc(stats.winPercentageJohn) }}</span></GameStatBox>
+        </div>
+        
       </div>
 
       <div class="stats group">
@@ -118,6 +126,7 @@
       <div class="stats group">
         <h3>Games played per day</h3>
         <Day v-for="(item, index) in stats.gamesPlayedPerDay" :key="`day-${index}`"
+          :class="`val-${item}`"
           :offset="Number.parseInt(index)" :date="new Date(stats.sequenceStartDate)">{{ item }}</Day>
       </div>
 
@@ -174,3 +183,21 @@ export default {
   }
 }
 </script>
+
+<style>
+.percentage.bar {
+  display: flex;
+  height: 100px;
+}
+.percentage.bar > .game.stat.box {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  overflow: hidden;
+}
+.percentage.bar > .game.stat.slim > span {
+  display: inline-block;
+  transform: rotate(90deg)
+}
+</style>
