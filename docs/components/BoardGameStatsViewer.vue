@@ -89,7 +89,7 @@
           <stat-value label="Unique games">{{ stats.uniqueGamesPlayedCount }}</stat-value>
           <stat-value label="Unique games percent">{{ pc(stats.uniqueGamesPlayedPercentage) }}</stat-value>
         <Collapsed title="List of games">
-          <PaginatedItems :items="stats.uniqueGamesPlayed" :showFilter="false">
+          <PaginatedItems :items="stats.uniqueGamesPlayed" :showFilter="false" itemTypePlural="games">
             <template v-slot="{ paginatedItems }">
               <ul>
                 <li v-for="game in paginatedItems" :key="`u-${game}`">{{ game }}</li>
@@ -113,7 +113,7 @@
         <stat-value label="Average games played per day">{{ stats.averageGamesPlayedPerDay }}</stat-value>
 
         <Collapsed title="List of play records">
-          <PaginatedItems :items="sortedPlayRecords" :pageSize="10">
+          <PaginatedItems :items="sortedPlayRecords" :pageSize="10" itemTypePlural="play records">
             <template v-slot="{ paginatedItems }">
               <div v-for="(playRecord, index) in paginatedItems" :key="`playRecord_${playRecord.date}_${playRecord.name}_${index}`">
                 <h4>{{ playRecord.name }}</h4>

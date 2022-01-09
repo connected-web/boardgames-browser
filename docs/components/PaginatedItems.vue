@@ -10,11 +10,11 @@
         placeholder="Type to filter"
         class="search-filter"
       >
-      <span class="hide-on-small-screen">Found {{ filteredItems(items).length }} items {{ filter ? `Containing "${filter}"` : '' }}</span>
+      <span class="hide-on-small-screen">Found {{ filteredItems(items).length }} {{ itemTypePlural }} {{ filter ? `Containing "${filter}"` : '' }}</span>
     </div>
     <div v-if="items && filteredItems(items).length > 0">
       <div v-if="isPaginated(items)" class="pagination-top">
-        <span class="pagination-size hide-on-small-screen">{{ pageSize }} items / page; {{ paginatedItems.length }} in view of {{ items.length }}:</span>
+        <span class="pagination-size hide-on-small-screen">{{ pageSize }} {{ itemTypePlural }} / page; {{ paginatedItems.length }} in view of {{ items.length }}:</span>
         <span class="buttons">
           <button @click="previousPage">
             <Icon icon="angle-left" />
@@ -47,7 +47,7 @@
       </div>
     </div>
     <div v-else>
-      <p>No items found containing "{{ filter }}".</p>
+      <p>No {{ itemTypePlural }} found containing "{{ filter }}".</p>
     </div>
   </div>
 </template>
@@ -68,6 +68,10 @@ export default {
     pageSize: {
       type: Number,
       default: 20
+    },
+    itemTypePlural: {
+      type:String,
+      default: 'items'
     }
   },
   data() {
