@@ -10,11 +10,11 @@
         placeholder="Type to filter"
         class="search-filter"
       >
-      <span>Found {{ filteredItems(items).length }} items {{ filter ? `Containing "${filter}"` : '' }}</span>
+      <span class="hide-on-small-screen">Found {{ filteredItems(items).length }} items {{ filter ? `Containing "${filter}"` : '' }}</span>
     </div>
     <div v-if="items && filteredItems(items).length > 0">
       <div v-if="isPaginated(items)" class="pagination-top">
-        <span class="pagination-size">{{ pageSize }} items / page; {{ paginatedItems.length }} in view of {{ items.length }}:</span>
+        <span class="pagination-size hide-on-small-screen">{{ pageSize }} items / page; {{ paginatedItems.length }} in view of {{ items.length }}:</span>
         <span class="buttons">
           <button @click="previousPage">
             <Icon icon="angle-left" />
@@ -32,7 +32,7 @@
         <pre>{{ paginatedItems }}</pre>
       </slot>
       <div v-if="isPaginated(items)" class="pagination-bottom">
-        <span class="pagination-eop">End of page</span>
+        <span class="pagination-eop hide-on-small-screen">End of page</span>
         <span class="buttons">
           <button @click="previousPage">
             <Icon icon="angle-left" />
@@ -203,5 +203,23 @@ button > label.right {
 .pagination-size, .pagination-eop {
   font-size: 1.0em;
   color: #aaa;
+}
+@media (max-width: 719px) {
+  .hide-on-small-screen {
+    display: none;
+  }
+  .pagination-top, .pagination-bottom {
+    justify-content: space-evenly;
+    margin-left: -0.5em;
+  }
+  .pagination-top > .buttons, .pagination-bottom > .buttons {
+    flex: 1 10;
+  }
+  .pagination-numbers {
+    flex: 1 10;
+  }
+  input.search-filter {
+    margin: 0;
+  }
 }
 </style>
