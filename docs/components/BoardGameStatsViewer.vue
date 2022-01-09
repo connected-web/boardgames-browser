@@ -89,9 +89,13 @@
           <stat-value label="Unique games">{{ stats.uniqueGamesPlayedCount }}</stat-value>
           <stat-value label="Unique games percent">{{ pc(stats.uniqueGamesPlayedPercentage) }}</stat-value>
         <Collapsed title="List of games">
-          <ul>
-            <li v-for="game in stats.uniqueGamesPlayed" :key="`u-${game}`">{{ game }}</li>
-          </ul>
+          <PaginatedItems :items="stats.uniqueGamesPlayed" :showFilter="false">
+            <template v-slot="{ paginatedItems }">
+              <ul>
+                <li v-for="game in paginatedItems" :key="`u-${game}`">{{ game }}</li>
+              </ul>
+            </template>
+          </PaginatedItems>
         </Collapsed>
       </div>
 
@@ -109,17 +113,20 @@
         <stat-value label="Average games played per day">{{ stats.averageGamesPlayedPerDay }}</stat-value>
 
         <Collapsed title="List of play records">
-          <p>Found {{sortedPlayRecords.length}} play records:</p>
-          <p v-for="(playRecord, index) in sortedPlayRecords" :key="`playRecord_${playRecord.date}_${playRecord.name}_${index}`">
-            <b>{{ playRecord.name }}</b>
-            <stat-value label="Date" v-if="playRecord.date">{{ playRecord.date }}</stat-value>
-            <stat-value label="Outcome">
-              <span>{{ (playRecord.coOp + '').toLowerCase() === 'yes' ? 'Co-op' : 'Won by' }} {{ playRecord.winner || playRecord.coOpOutcome || 'Unknown' }}</span>
-              <game-stat-box :game="playRecord" :name="playRecord.name" />
-            </stat-value>
-            <stat-value label="Notes" v-if="playRecord.notes">{{ playRecord.notes }}</stat-value>
-            <!-- <pre><code>{{ JSON.stringify(playRecord, null, 2) }}</code></pre> -->
-          </p>
+          <PaginatedItems :items="sortedPlayRecords" :pageSize="10">
+            <template v-slot="{ paginatedItems }">
+              <div v-for="(playRecord, index) in paginatedItems" :key="`playRecord_${playRecord.date}_${playRecord.name}_${index}`">
+                <h4>{{ playRecord.name }}</h4>
+                <stat-value label="Date" v-if="playRecord.date">{{ playRecord.date }}</stat-value>
+                <stat-value label="Outcome">
+                  <span>{{ (playRecord.coOp + '').toLowerCase() === 'yes' ? 'Co-op' : 'Won by' }} {{ playRecord.winner || playRecord.coOpOutcome || 'Unknown' }}</span>
+                  <game-stat-box :game="playRecord" :name="playRecord.name" />
+                </stat-value>
+                <stat-value label="Notes" v-if="playRecord.notes">{{ playRecord.notes }}</stat-value>
+                <!-- <pre><code>{{ JSON.stringify(playRecord, null, 2) }}</code></pre> -->
+              </div>
+            </template>
+          </PaginatedItems>
         </Collapsed>
       </div>
 
