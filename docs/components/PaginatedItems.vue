@@ -10,7 +10,7 @@
         placeholder="Type to filter"
         class="search-filter"
       >
-      <span class="hide-on-small-screen">Found {{ filteredItems(items).length }} {{ itemTypePlural }} {{ filter ? `Containing "${filter}"` : '' }}</span>
+      <span class="hide-on-small-screen">Found {{ filteredItems(items).length }} {{ itemTypePlural }} {{ filter ? `containing "${filter}"` : '' }}</span>
     </div>
     <div v-if="items && filteredItems(items).length > 0">
       <div v-if="isPaginated(items)" class="pagination-top">
