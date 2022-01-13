@@ -82,6 +82,7 @@ export default {
       }
     },
     askToRemovePlayRecord(playRecord) {
+      this.message = ''
       this.playRecordToBeRemoved = playRecord
     },
     async removePlayRecord(key) {
