@@ -1,8 +1,8 @@
 <template>
   <div>
     <p>Here is the full list of play records available on the Board Games SAM API:</p>
-    <div v-if="status.playRecords">
-      <div v-for="record in status.playRecords" :key="record.key" class="play record">
+    <div v-if="playRecords.length">
+      <div v-for="record in playRecords" :key="record.key" class="play record">
         <pre><code>{{ record }}</code></pre>
         <button class="trash" v-on:click="removePlayRecord(record.key)">
           <icon icon="trash" />
@@ -23,11 +23,18 @@ import './src/icons'
 
 const { boardgamesSamApiUrl } = sharedModel.state
 
+function sortPlayRecordsByDate(a, b) {
+  const da = (new Date(a.date)).getTime()
+  const db = (new Date(b.date)).getTime()
+  return db - da
+}
+
 export default {
   data() {
     return {
       sharedModel,
       status: 'Loading data...',
+      playRecords: [],
       message: ''
     }
   },
@@ -43,6 +50,7 @@ export default {
         }
         const { data } = await axios.get(url, axiosConfig)
         this.status = data
+        this.playRecords = (data?.playRecords || []).sort(sortPlayRecordsByDate)
       } catch (ex) {
         const { data } = ex.response || {}
         this.message = data.message || `Unable to load status: ${ex.message}`
