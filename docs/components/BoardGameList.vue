@@ -1,9 +1,13 @@
 <template>
 <div class="boardgame-list">
   <p v-if="message">{{message}}</p>
-  <ul>
-    <li v-for="game in games" :key="`game_${game.boardGameApiId}`"><a :href="boardgameLink(game)">{{ game.name }}</a></li>
-  </ul>
+  <PaginatedItems :items="games">
+    <template v-slot="{ paginatedItems }">
+      <ul>
+        <li v-for="game in paginatedItems" :key="`game_${game.boardGameApiId}`"><a :href="boardgameLink(game)">{{ game.name }}</a></li>
+      </ul>
+    </template>
+  </PaginatedItems>
 </div>
 </template>
 
