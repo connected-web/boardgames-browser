@@ -13,7 +13,7 @@
   "author": "John Beech",
   "license": "ISC",
   "devDependencies": {
-    "standard": "^14.3.4"
+    "standard": "^16.0.4"
   },
   "dependencies": {
     "@connected-web/md2json": "^1.1.0",
@@ -27,6 +27,6 @@
     "node-localstorage": "^2.2.1",
     "promise-path": "^1.4.1",
     "vue-select": "^3.16.0",
-    "vuepress": "^1.8.2"
+    "vuepress": "^0.14.11"
   }
 }
