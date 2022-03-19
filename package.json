@@ -27,6 +27,6 @@
     "node-localstorage": "^2.2.1",
     "promise-path": "^1.4.1",
     "vue-select": "^3.16.0",
-    "vuepress": "^0.14.11"
+    "vuepress": "^1.9.7"
   }
 }
