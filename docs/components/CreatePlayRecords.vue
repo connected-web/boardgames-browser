@@ -84,9 +84,14 @@
             <textarea type="text" v-model="notes" placeholder="Any extra notes about the game..." rows="4" />
           </div>
 
-          <p class="buttons">
-            <button v-if="sending" type="submit" disabled>Sending...</button>
-            <button v-else type="submit">Submit</button>
+          <p class="buttons" v-if="sending">
+            <button type="reset" disabled>Clear Form</button>
+            <button type="submit" disabled>Sending...</button>
+          </p>
+
+          <p class="buttons" v-else>
+            <button type="reset" v-on:click="clearForm">Clear Form</button>
+            <button type="submit">Submit</button>
           </p>
           <p v-if="message">{{message}}</p>
         </form>
@@ -225,6 +230,18 @@ export default {
         console.error("Could not post to endpoint", error)
       }
       this.sending = false
+    },
+    clearForm() {
+      this.name = ''
+      this.expansions = []
+      this.date = ''
+      this.coOp = ''
+      this.winner = ''
+      this.coOpOutcome = ''
+      this.noOfPlayers = ''
+      this.notes = ''
+      this.message = ''
+      return false
     }
   },
   async mounted() {
