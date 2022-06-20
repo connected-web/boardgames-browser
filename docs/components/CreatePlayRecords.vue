@@ -13,7 +13,7 @@
           <h3>When was the game played?</h3>
           <p class="default info">(Default: today, Format: dd/mm/yyyy)</p>
           <div class="row c3">
-            <input type="text" v-model="date" :placeholder="dateToday" class="option" />
+            <input type="text" v-model="date" :placeholder="dateToday" class="option" v-on:focus="showcalendarPicker" />
             <div :class="dateClass(dateToday)" v-on:click="selectDate(dateToday)">
               <label for="date-today">Today ({{ dayOfMonth(dateToday) }})</label>
             </div>
@@ -24,6 +24,36 @@
               <label for="date-yesterday">{{ twoDaysAgo }} ({{ dayOfMonth(dateTwoDaysAgo) }})</label>
             </div>
           </div>
+
+          <div v-if="displaycalendarPicker">
+            <p class="buttons left">
+              <span class="button" v-on:click="hidecalendarPicker">
+                <Icon icon="angle-double-up" />
+                <label>Close calendar picker</label>
+              </span>
+            </p>
+
+            <h3>Year</h3>
+            <div class="calendar options row c4">
+              <div v-for="year in years" :key="`ym_${year.code}`" :class="yearClass(year.code)" v-on:click="selectYear(year.code)">
+                <label :for="`date-${year.label}`">{{ year.label }}</label>
+              </div>
+            </div>
+
+            <h3>Month</h3>
+            <div class="calendar options row c4">
+              <div v-for="month in months" :key="`km_${month.code}`" :class="monthClass(month.code)" v-on:click="selectMonth(month.code)">
+                <label :for="`date-${month.label}`">{{ month.label }}</label>
+              </div>
+            </div>
+
+            <h3>Day</h3>
+            <div v-if="displaycalendarPicker" class="calendar options row c4">
+              <div v-for="day in daysInMonth" :key="`dm_${day.code}`" :class="dayClass(day.code)" v-on:click="selectDay(day.code)">
+                <label :for="`date-${day.label}`">{{ day.label }}</label>
+              </div>
+            </div>
+          </div> 
 
           <h3>Was this game vs. or co-operative?</h3>
           <p class="default info">(Default: vs)</p>
@@ -116,6 +146,52 @@ dayjs.extend(advancedFormat)
 
 const { boardgamesApiUrl, boardgamesSamApiUrl } = sharedModel.state
 
+const months = [{
+  label: 'Jan',
+  code: '01'
+}, {
+  label: 'Feb',
+  code: '02'
+}, {
+  label: 'Mar',
+  code: '03'
+}, {
+  label: 'Apr',
+  code: '04'
+}, {
+  label: 'May',
+  code: '05'
+}, {
+  label: 'June',
+  code: '06'
+}, {
+  label: 'July',
+  code: '07'
+}, {
+  label: 'Aug',
+  code: '08'
+}, {
+  label: 'Sept',
+  code: '09'
+}, {
+  label: 'Oct',
+  code: '10'
+}, {
+  label: 'Nov',
+  code: '11'
+}, {
+  label: 'Dec',
+  code: '12'
+}]
+
+const now = new Date()
+const currentYear = dayjs(now).year()
+const years = []
+while (years.length < 4) {
+  const code = (currentYear - years.length) + ''
+  years.push({ label: code, code })
+}
+
 export default {
   components: { vSelect },
   data() {
@@ -130,7 +206,10 @@ export default {
       notes: '',
       message: '',
       listOfGames: [],
-      sending: false
+      sending: false,
+      displaycalendarPicker: false,
+      months,
+      years
     }
   },
   computed: {
@@ -149,6 +228,18 @@ export default {
     twoDaysAgo() {
       const pastDate = dayjs().add(-2, 'day')
       return dayjs(pastDate).format('dddd')
+    },
+    daysInMonth() {
+      const date = this.date || this.dateToday
+      const [dd, mm, yyyy] = date.split('/')
+      const count = dayjs([yyyy, mm, dd].join('-')).daysInMonth()
+      const result = []
+      while (result.length < count) {
+        const n = result.length + 1
+        const code = count < 10 ? '0' + n : '' + n
+        result.push({ label: code, code })
+      }
+      return result
     },
     dataToSend() {
       const result = {
@@ -185,6 +276,24 @@ export default {
       const className = selected ? 'selected' : 'deselected'
       return ['option', className].join(' ')
     },
+    dayClass(value) {
+      const monthCode = (this.date || this.dateToday).split('/')[0]
+      const selected = value === monthCode
+      const className = selected ? 'selected' : 'deselected'
+      return ['option small', className].join(' ')
+    },
+    monthClass(value) {
+      const monthCode = (this.date || this.dateToday).split('/')[1]
+      const selected = value === monthCode
+      const className = selected ? 'selected' : 'deselected'
+      return ['option small', className].join(' ')
+    },
+    yearClass(value) {
+      const yearCode = (this.date || this.dateToday).split('/')[2]
+      const selected = value === yearCode
+      const className = selected ? 'selected' : 'deselected'
+      return ['option small', className].join(' ')
+    },
     winnerClass(value) {
       const selected = value === this.winner
       const className = selected ? 'selected' : 'deselected'
@@ -212,6 +321,27 @@ export default {
     },
     selectDate(value) {
       this.date = value
+    },
+    selectDay(value) {
+      const date = this.date || this.dateToday
+      const [dd, mm, yyyy] = date.split('/')
+      this.date = [value, mm, yyyy].join('/')
+    },
+    selectMonth(value) {
+      const date = this.date || this.dateToday
+      const [dd, mm, yyyy] = date.split('/')
+      this.date = [dd, value, yyyy].join('/')
+    },
+    selectYear(value) {
+      const date = this.date || this.dateToday
+      const [dd, mm, yyyy] = date.split('/')
+      this.date = [dd, mm, value].join('/')
+    },
+    showcalendarPicker() {
+      this.displaycalendarPicker = true
+    },
+    hidecalendarPicker() {
+      this.displaycalendarPicker = false
     },
     async handleSubmit(event) {
       this.sending = true
@@ -285,6 +415,12 @@ input {
 .buttons {
   text-align: right;
 }
+.buttons.left {
+  text-align: left;
+}
+.buttons.left > .button:first-of-type {
+  margin-left: 0;
+}
 button {
   padding: 5px;
   font-size: 1.0em;
@@ -342,7 +478,7 @@ div.option.selected {
 label > .icon {
   width: inherit;
 }
-button {
+button, .button {
   background: #ddd;
   color: #333;
   border: 2px solid #666;
@@ -353,11 +489,11 @@ button {
   text-align: center;
   transition: background 0.1s ease-out, border 0.1s ease-out;
 }
-button:hover {
+button:hover, .button:hover {
   background: rgb(187, 229, 255);
   border: 2px solid lightskyblue;
 }
-button:active {
+button:active, .button:active {
   background: lightskyblue;
   border: 2px solid navy;
 }
