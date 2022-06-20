@@ -216,18 +216,25 @@ export default {
     async handleSubmit(event) {
       this.sending = true
       event.preventDefault()
+      const { dataToSend } = this
+      const errors = this.verifyData(dataToSend)
+      if (errors && errors.length > 0) {
+        this.message = errors.join(' ')
+        this.sending = false
+        return
+      }
       console.log(`You played ${this.name} on ${this.date}. ${this.winner} was the winner!`)
       const url = `${boardgamesSamApiUrl}/playrecords/create`
       const axiosConfig = {
         headers: sharedModel.getAuthHeaders()
       }
       try {
-        await axios.post(url, this.dataToSend, axiosConfig)
+        await axios.post(url, dataToSend, axiosConfig)
         this.message = "Successfully stored the new play record."
       }
       catch (error) {
         this.message = error.message
-        console.error("Could not post to endpoint", error)
+        console.error("Could not post to endpoint:", error)
       }
       this.sending = false
     },
@@ -242,6 +249,16 @@ export default {
       this.notes = ''
       this.message = ''
       return false
+    },
+    verifyData(data) {
+      const errors = []
+      if (!data.name) {
+        errors.push('No name field set on data to send.')
+      }
+      if (/\d{2}\/\d{2}\/\d{4}/.test(data.date) === false) {
+        errors.push(`Unexpected date format: "${data.date}" - expected dd/mm/yyyy, e.g. ${this.dateToday}.`)
+      }
+      return errors
     }
   },
   async mounted() {
