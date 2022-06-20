@@ -18,7 +18,7 @@ npm run build
 
 ## Deploy
 
-Push or merge to master - this should trigger a workflow that will build and push to the `gh-pages` branch.
+Push or merge to main - this should trigger a workflow that will build and push to the `gh-pages` branch.
 
 See: `./github/workflows/deploy.yml`
 
