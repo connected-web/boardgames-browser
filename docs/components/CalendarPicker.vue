@@ -1,5 +1,5 @@
 <template>
-  <div class="row c3">
+  <div class="row c3 calendar-container">
     <input type="text" v-model.lazy.trim="date" :placeholder="dateToday" class="option" v-on:focus="showcalendarPicker" />
     <div :class="dateClass(dateToday)" v-on:click="selectDate(dateToday)">
       <label for="date-today">Today ({{ dayOfMonth(dateToday) }})</label>
@@ -11,32 +11,36 @@
       <label for="date-yesterday">{{ twoDaysAgo }} ({{ dayOfMonth(dateTwoDaysAgo) }})</label>
     </div>
 
-    <div v-if="displaycalendarPicker">
-      <p class="buttons left">
-        <span class="button" v-on:click="hidecalendarPicker">
+    <div v-if="displaycalendarPicker" class="calendar-picker">
+      <div class="buttons left">
+        <div class="button close-picker" v-on:click="hidecalendarPicker">
           <Icon icon="angle-double-up" />
           <label>Close calendar picker</label>
-        </span>
-      </p>
+        </div>
+      </div>
 
-      <h3>Year</h3>
       <div class="calendar options row c4">
         <div v-for="year in years" :key="`ym_${year.code}`" :class="yearClass(year.code)" v-on:click="selectYear(year.code)">
           <label :for="`date-${year.label}`">{{ year.label }}</label>
         </div>
       </div>
 
-      <h3>Month</h3>
+      <hr>
+
       <div class="calendar options row c4">
         <div v-for="month in months" :key="`km_${month.code}`" :class="monthClass(month.code)" v-on:click="selectMonth(month.code)">
           <label :for="`date-${month.label}`">{{ month.label }}</label>
         </div>
       </div>
 
-      <h3>Day</h3>
-      <div v-if="displaycalendarPicker" class="calendar options row c4">
+      <hr>
+
+      <div v-if="displaycalendarPicker" class="calendar options row c7">
         <div v-for="day in daysInMonth" :key="`dm_${day.code}`" :class="dayClass(day.code)" v-on:click="selectDay(day.code)">
           <label :for="`date-${day.label}`">{{ day.label }}</label>
+        </div>
+        <div v-for="day in hiddenDaysInMonth" :key="`dm_${day.code}`" class="option small day hidden-day">
+          <label>{{ day.label }}</label>
         </div>
       </div>
     </div>
@@ -141,8 +145,19 @@ export default {
       const result = []
       while (result.length < count) {
         const n = result.length + 1
-        const code = count < 10 ? '0' + n : '' + n
-        result.push({ label: code, code })
+        const code = n < 10 ? '0' + n : '' + n
+        result.push({ label: n, code })
+      }
+      return result
+    },
+    hiddenDaysInMonth() {
+      const { daysInMonth } = this
+      const result = []
+      const count = (7 - (daysInMonth.length % 7)) % 7
+      while (result.length < count) {
+        const n = result.length + 1
+        const code = n < 10 ? '0' + n : '' + n
+        result.push({ label: n, code })
       }
       return result
     }
@@ -180,7 +195,7 @@ export default {
       const monthCode = (this.date || this.dateToday).split('/')[0]
       const selected = value === monthCode
       const className = selected ? 'selected' : 'deselected'
-      return ['option small', className].join(' ')
+      return ['option small day', className].join(' ')
     },
     monthClass(value) {
       const monthCode = (this.date || this.dateToday).split('/')[1]
@@ -210,6 +225,10 @@ export default {
 </script>
 
 <style scoped>
+div.row.calendar-container {
+  position: relative;
+  overflow: visible;
+}
 pre {
   color: white
 }
@@ -250,18 +269,9 @@ div.row > input.option {
   color: #333;
   background: white;
 }
-textarea {
-  display: block;
-  width: 100%;
-  font-size: 1em;
-  font-family: inherit;
-  text-align: left;
-  padding: 1em;
-}
 .option {
   background: #ddd;
   color: #333;
-  border: 2px solid #666;
   border-radius: 0.2em;
   font-weight: bold;
   padding: 0.5em;
@@ -274,11 +284,9 @@ textarea {
 }
 div.option:hover {
   background: rgb(187, 229, 255);
-  border: 2px solid lightskyblue;
 }
 div.option.selected {
   background: lightskyblue;
-  border: 2px solid navy;
 }
 label > .icon {
   width: inherit;
@@ -301,6 +309,30 @@ button:hover, .button:hover {
 button:active, .button:active {
   background: lightskyblue;
   border: 2px solid navy;
+}
+.calendar-picker {
+  position: absolute;
+  top: 36px;
+  z-index: 40;
+  border: 2px solid #aaa;
+  padding: 0.5em 0 0.5em 0.5em;
+  margin: 0;
+  border-radius: 0 0.5em 0.5em 0.5em;
+  background: white;
+  font-size: 0.8em;
+}
+.close-picker, .close-picker:hover, .close-picker:active {
+  border: none;
+}
+.option.day {
+  min-width: 10%;
+}
+.hidden-day {
+  visibility: hidden;
+}
+hr {
+  margin: 0.4em 0.5em 0 0;
+  border: 1px solid #ddd;
 }
 @media (max-width: 719px) {
   div.row {
