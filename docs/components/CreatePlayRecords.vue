@@ -2,195 +2,103 @@
   <div>
     <p></p>
     <form v-on:submit="handleSubmit">
-          <h3>What was the name of the game?</h3>
-          <p class="default info">(Required Field!)</p>
-          <v-select taggable :options="listOfGames" v-model="name" />
-         
-          <h3>Were any expansions involved?</h3>
-          <p class="default info">(Optional: Search or type names of any expansions used)</p>
-          <v-select taggable multiple push-tags :options="listOfGames" v-model="expansions" />
+      <h3>What was the name of the game?</h3>
+      <p class="default info">(Required Field!)</p>
+      <v-select taggable :options="listOfGames" v-model="name" />
+      
+      <h3>Were any expansions involved?</h3>
+      <p class="default info">(Optional: Search or type names of any expansions used)</p>
+      <v-select taggable multiple push-tags :options="listOfGames" v-model="expansions" />
 
-          <h3>When was the game played?</h3>
-          <p class="default info">(Default: today, Format: dd/mm/yyyy)</p>
-          <div class="row c3">
-            <input type="text" v-model="date" :placeholder="dateToday" class="option" v-on:focus="showcalendarPicker" />
-            <div :class="dateClass(dateToday)" v-on:click="selectDate(dateToday)">
-              <label for="date-today">Today ({{ dayOfMonth(dateToday) }})</label>
-            </div>
-            <div :class="dateClass(dateYesterday)" v-on:click="selectDate(dateYesterday)">
-              <label for="date-yesterday">Yesterday ({{ dayOfMonth(dateYesterday) }})</label>
-            </div>
-            <div :class="dateClass(dateTwoDaysAgo)" v-on:click="selectDate(dateTwoDaysAgo)">
-              <label for="date-yesterday">{{ twoDaysAgo }} ({{ dayOfMonth(dateTwoDaysAgo) }})</label>
-            </div>
-          </div>
+      <h3>When was the game played?</h3>
+      <p class="default info">(Default: today, Format: dd/mm/yyyy)</p>
+      <calendar-picker v-model="date" />
 
-          <div v-if="displaycalendarPicker">
-            <p class="buttons left">
-              <span class="button" v-on:click="hidecalendarPicker">
-                <Icon icon="angle-double-up" />
-                <label>Close calendar picker</label>
-              </span>
-            </p>
+      <h3>Was this game vs. or co-operative?</h3>
+      <p class="default info">(Default: vs)</p>
+      <div class="row c2">
+        <div :class="coOpClass('no')" v-on:click="selectCoop('no')">
+          <label for="coOp-no">Vs</label>
+        </div>
+        <div :class="coOpClass('yes')" v-on:click="selectCoop('yes')">
+          <label for="coOp-yes">Co-op</label>
+        </div>
+      </div>
+      
+      <h3>{{ coOp === 'yes' ? 'What was the outcome?' : 'Who won?' }}</h3>
+      <p class="default info">(Default: draw)</p>
+      <div v-if="coOp === 'yes'" class="row c3">
+        <div :class="coOpOutcomeClass('win')" v-on:click="coOpOutcome = 'win'">
+          <label for="coOp-yes">Co-op Win</label>
+        </div>
+        <div :class="coOpOutcomeClass('loss')" v-on:click="coOpOutcome = 'loss'">
+          <label for="coOp-no">Co-op Loss</label>
+        </div>
+        <div :class="coOpOutcomeClass('draw')" v-on:click="coOpOutcome = 'draw'">
+          <label for="coOp-no">Co-op Draw</label>
+        </div>
+      </div>
+      <div v-else class="row c4">
+        <div :class="winnerClass('Hannah')" v-on:click="winner = 'Hannah'">
+          <label for="coOp-yes">Hannah</label>
+        </div>
+        <div :class="winnerClass('John')" v-on:click="winner = 'John'">
+          <label for="coOp-no">John</label>
+        </div>
+        <div :class="winnerClass('draw')" v-on:click="winner = 'draw'">
+          <label for="coOp-no">Draw</label>
+        </div>
+        <div :class="winnerClass('other')" v-on:click="winner = 'other'">
+          <label for="coOp-no">Other</label>
+        </div>
+      </div>
+      
+      <h3>Number of Players</h3>
+      <p class="default info">(Default: 2)</p>
+      <div class="row">
+        <input type="text" v-model="noOfPlayers" placeholder="#" class="option" />
+        <div :class="playerCountClass('2')" v-on:click="noOfPlayers = 2">
+          <label for="coOp-yes">2</label>
+        </div>
+        <div :class="playerCountClass('3')" v-on:click="noOfPlayers = 3">
+          <label for="coOp-no">3</label>
+        </div>
+        <div :class="playerCountClass('4')" v-on:click="noOfPlayers = 4">
+          <label for="coOp-no">4</label>
+        </div>
+      </div>
 
-            <h3>Year</h3>
-            <div class="calendar options row c4">
-              <div v-for="year in years" :key="`ym_${year.code}`" :class="yearClass(year.code)" v-on:click="selectYear(year.code)">
-                <label :for="`date-${year.label}`">{{ year.label }}</label>
-              </div>
-            </div>
+      <h3>Notes</h3>
+      <div style="position: relative; width: 94%;">
+        <textarea type="text" v-model="notes" placeholder="Any extra notes about the game..." rows="4" />
+      </div>
 
-            <h3>Month</h3>
-            <div class="calendar options row c4">
-              <div v-for="month in months" :key="`km_${month.code}`" :class="monthClass(month.code)" v-on:click="selectMonth(month.code)">
-                <label :for="`date-${month.label}`">{{ month.label }}</label>
-              </div>
-            </div>
+      <p class="buttons" v-if="sending">
+        <button type="reset" disabled>Clear Form</button>
+        <button type="submit" disabled>Sending...</button>
+      </p>
 
-            <h3>Day</h3>
-            <div v-if="displaycalendarPicker" class="calendar options row c4">
-              <div v-for="day in daysInMonth" :key="`dm_${day.code}`" :class="dayClass(day.code)" v-on:click="selectDay(day.code)">
-                <label :for="`date-${day.label}`">{{ day.label }}</label>
-              </div>
-            </div>
-          </div> 
-
-          <h3>Was this game vs. or co-operative?</h3>
-          <p class="default info">(Default: vs)</p>
-          <div class="row c2">
-            <div :class="coOpClass('no')" v-on:click="selectCoop('no')">
-              <label for="coOp-no">Vs</label>
-            </div>
-            <div :class="coOpClass('yes')" v-on:click="selectCoop('yes')">
-              <label for="coOp-yes">Co-op</label>
-            </div>
-          </div>
-          
-          <h3>{{ coOp === 'yes' ? 'What was the outcome?' : 'Who won?' }}</h3>
-          <p class="default info">(Default: draw)</p>
-          <div v-if="coOp === 'yes'" class="row c3">
-            <div :class="coOpOutcomeClass('win')" v-on:click="coOpOutcome = 'win'">
-              <label for="coOp-yes">Co-op Win</label>
-            </div>
-            <div :class="coOpOutcomeClass('loss')" v-on:click="coOpOutcome = 'loss'">
-              <label for="coOp-no">Co-op Loss</label>
-            </div>
-            <div :class="coOpOutcomeClass('draw')" v-on:click="coOpOutcome = 'draw'">
-              <label for="coOp-no">Co-op Draw</label>
-            </div>
-          </div>
-          <div v-else class="row c4">
-            <div :class="winnerClass('Hannah')" v-on:click="winner = 'Hannah'">
-              <label for="coOp-yes">Hannah</label>
-            </div>
-            <div :class="winnerClass('John')" v-on:click="winner = 'John'">
-              <label for="coOp-no">John</label>
-            </div>
-            <div :class="winnerClass('draw')" v-on:click="winner = 'draw'">
-              <label for="coOp-no">Draw</label>
-            </div>
-            <div :class="winnerClass('other')" v-on:click="winner = 'other'">
-              <label for="coOp-no">Other</label>
-            </div>
-          </div>
-          
-          <h3>Number of Players</h3>
-          <p class="default info">(Default: 2)</p>
-          <div class="row">
-            <input type="text" v-model="noOfPlayers" placeholder="#" class="option" />
-            <div :class="playerCountClass('2')" v-on:click="noOfPlayers = 2">
-              <label for="coOp-yes">2</label>
-            </div>
-            <div :class="playerCountClass('3')" v-on:click="noOfPlayers = 3">
-              <label for="coOp-no">3</label>
-            </div>
-            <div :class="playerCountClass('4')" v-on:click="noOfPlayers = 4">
-              <label for="coOp-no">4</label>
-            </div>
-          </div>
-
-          <h3>Notes</h3>
-          <div style="position: relative; width: 94%;">
-            <textarea type="text" v-model="notes" placeholder="Any extra notes about the game..." rows="4" />
-          </div>
-
-          <p class="buttons" v-if="sending">
-            <button type="reset" disabled>Clear Form</button>
-            <button type="submit" disabled>Sending...</button>
-          </p>
-
-          <p class="buttons" v-else>
-            <button type="reset" v-on:click="clearForm">Clear Form</button>
-            <button type="submit">Submit</button>
-          </p>
-          <p v-if="message">{{message}}</p>
-        </form>
-        <br />
-        <b>Data preview</b>
-        <pre>{{JSON.stringify({ dataToSend }, null, 2)}}</pre>
-      </div>    
+      <p class="buttons" v-else>
+        <button type="reset" v-on:click="clearForm">Clear Form</button>
+        <button type="submit">Submit</button>
+      </p>
+      <p v-if="message">{{message}}</p>
+    </form>
+    <br />
+    <b>Data preview</b>
+    <pre>{{JSON.stringify({ dataToSend }, null, 2)}}</pre>
+  </div>    
 </template>
 
 <script>
 import axios from 'axios'
-import dayjs from 'dayjs'
-import advancedFormat from 'dayjs/plugin/advancedFormat'
-
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 
 import './src/icons'
 import sharedModel from './src/sharedModel'
 
-dayjs.extend(advancedFormat)
-
 const { boardgamesApiUrl, boardgamesSamApiUrl } = sharedModel.state
-
-const months = [{
-  label: 'Jan',
-  code: '01'
-}, {
-  label: 'Feb',
-  code: '02'
-}, {
-  label: 'Mar',
-  code: '03'
-}, {
-  label: 'Apr',
-  code: '04'
-}, {
-  label: 'May',
-  code: '05'
-}, {
-  label: 'June',
-  code: '06'
-}, {
-  label: 'July',
-  code: '07'
-}, {
-  label: 'Aug',
-  code: '08'
-}, {
-  label: 'Sept',
-  code: '09'
-}, {
-  label: 'Oct',
-  code: '10'
-}, {
-  label: 'Nov',
-  code: '11'
-}, {
-  label: 'Dec',
-  code: '12'
-}]
-
-const now = new Date()
-const currentYear = dayjs(now).year()
-const years = []
-while (years.length < 4) {
-  const code = (currentYear - years.length) + ''
-  years.push({ label: code, code })
-}
 
 export default {
   components: { vSelect },
@@ -206,41 +114,10 @@ export default {
       notes: '',
       message: '',
       listOfGames: [],
-      sending: false,
-      displaycalendarPicker: false,
-      months,
-      years
+      sending: false
     }
   },
   computed: {
-    dateToday() {
-      const now = new Date()
-      return dayjs(now).format('DD/MM/YYYY')
-    },
-    dateYesterday() {
-      const yesterday = dayjs().add(-1, 'day')
-      return dayjs(yesterday).format('DD/MM/YYYY')
-    },
-    dateTwoDaysAgo() {
-      const pastDate = dayjs().add(-2, 'day')
-      return dayjs(pastDate).format('DD/MM/YYYY')
-    },
-    twoDaysAgo() {
-      const pastDate = dayjs().add(-2, 'day')
-      return dayjs(pastDate).format('dddd')
-    },
-    daysInMonth() {
-      const date = this.date || this.dateToday
-      const [dd, mm, yyyy] = date.split('/')
-      const count = dayjs([yyyy, mm, dd].join('-')).daysInMonth()
-      const result = []
-      while (result.length < count) {
-        const n = result.length + 1
-        const code = count < 10 ? '0' + n : '' + n
-        result.push({ label: code, code })
-      }
-      return result
-    },
     dataToSend() {
       const result = {
         name: this.name,
@@ -271,29 +148,6 @@ export default {
       const className = selected ? 'selected' : 'deselected'
       return ['option', className].join(' ')
     },
-    dateClass(value) {
-      const selected = value === this.date
-      const className = selected ? 'selected' : 'deselected'
-      return ['option', className].join(' ')
-    },
-    dayClass(value) {
-      const monthCode = (this.date || this.dateToday).split('/')[0]
-      const selected = value === monthCode
-      const className = selected ? 'selected' : 'deselected'
-      return ['option small', className].join(' ')
-    },
-    monthClass(value) {
-      const monthCode = (this.date || this.dateToday).split('/')[1]
-      const selected = value === monthCode
-      const className = selected ? 'selected' : 'deselected'
-      return ['option small', className].join(' ')
-    },
-    yearClass(value) {
-      const yearCode = (this.date || this.dateToday).split('/')[2]
-      const selected = value === yearCode
-      const className = selected ? 'selected' : 'deselected'
-      return ['option small', className].join(' ')
-    },
     winnerClass(value) {
       const selected = value === this.winner
       const className = selected ? 'selected' : 'deselected'
@@ -313,35 +167,6 @@ export default {
       this.coOp = value
       this.coOpOutcome = ''
       this.winner = ''
-    },
-    dayOfMonth(input) {
-      const dateParts = input.split('/')
-      const dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0])
-      return dayjs(dateObject).format('Do')
-    },
-    selectDate(value) {
-      this.date = value
-    },
-    selectDay(value) {
-      const date = this.date || this.dateToday
-      const [dd, mm, yyyy] = date.split('/')
-      this.date = [value, mm, yyyy].join('/')
-    },
-    selectMonth(value) {
-      const date = this.date || this.dateToday
-      const [dd, mm, yyyy] = date.split('/')
-      this.date = [dd, value, yyyy].join('/')
-    },
-    selectYear(value) {
-      const date = this.date || this.dateToday
-      const [dd, mm, yyyy] = date.split('/')
-      this.date = [dd, mm, value].join('/')
-    },
-    showcalendarPicker() {
-      this.displaycalendarPicker = true
-    },
-    hidecalendarPicker() {
-      this.displaycalendarPicker = false
     },
     async handleSubmit(event) {
       this.sending = true
