@@ -1,0 +1,208 @@
+<template>
+  <div class="day-grid">
+    <div class="buttons">
+      <button @click="monthView" :class="selectedOption(viewState, 'month')"><Icon icon="calendar" /><label>Month view</label></button>
+      <button @click="weekView" :class="selectedOption(viewState, 'week')"><Icon icon="calendar-week" /><label>Week view</label></button>
+      <button @click="dayView" :class="selectedOption(viewState, 'day')"><Icon icon="calendar-day" /><label>Date view</label></button>
+    </div>
+
+    <div v-if="viewState === 'day'" class="day-items">
+      <div v-for="(dayItem, dayIndex) in days" :key="`day-${dayIndex}`" class="day-item">
+        <Day :class="`val-${dayItem.count} ${dayItem.weekend ? 'weekend' : 'weekday'}`"
+          :offset="Number.parseInt(dayIndex)"
+          :date="sequenceStartDate">{{ Number.isInteger(dayItem.count) ? dayItem.count : '-' }}</Day>
+        <label class="day-of-week">{{ dayItem.date }}</label>
+      </div>
+    </div>
+
+    <div v-if="viewState === 'week'" class="week-items">
+      <div class="week-item headers">
+        <Day>M</Day>
+        <Day>T</Day>
+        <Day>W</Day>
+        <Day>T</Day>
+        <Day>F</Day>
+        <Day class="weekend">S</Day>
+        <Day class="weekend">S</Day>
+      </div>
+      <div v-for="(weekItem, weekIndex) in weeks" :key="`week-${weekIndex}`" class="week-item">
+        <Day v-for="(dayItem, dayIndex) in weekItem.days" :key="`day-${dayIndex}`"
+          :class="`val-${dayItem.count} ${dayItem.weekend ? 'weekend' : 'weekday'}`"
+          :offset="Number.parseInt(dayIndex)"
+          :date="sequenceStartDate">{{ Number.isInteger(dayItem.count) ? dayItem.count : '-' }}</Day>
+      </div>
+    </div>
+
+    <div v-if="viewState === 'month'" class="month-items">
+      <div v-for="(monthItem, monthIndex) in months" :key="`month-${monthIndex}`" class="month-item">
+        <label>{{ monthItem.label }}</label>
+        <div class="week-items">
+          <div class="week-item headers">
+            <Day>M</Day>
+            <Day>T</Day>
+            <Day>W</Day>
+            <Day>T</Day>
+            <Day>F</Day>
+            <Day class="weekend">S</Day>
+            <Day class="weekend">S</Day>
+          </div>
+          <div v-for="(weekItem, weekIndex) in monthItem.weeks" :key="`week-${weekIndex}`" class="week-item">
+            <Day v-for="(dayItem, dayIndex) in weekItem.days" :key="`day-${dayIndex}`"
+              :class="`val-${dayItem.count} ${dayItem.weekend ? 'weekend' : 'weekday'}`"
+              :offset="Number.parseInt(dayIndex)"
+              :date="sequenceStartDate">{{ Number.isInteger(dayItem.count) ? dayItem.count : '-' }}</Day>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import dayjs from 'dayjs'
+import advancedFormat from 'dayjs/plugin/advancedFormat'
+
+dayjs.extend(advancedFormat)
+
+export default {
+  props: {
+    items: {
+      type: null,
+      default: []
+    },
+    sequenceStartDate: {
+      type: Date,
+      default() {
+        return new Date()
+      }
+    }
+  },
+  data() {
+    return {
+      viewState: 'day'
+    }
+  },
+  computed: {
+    days() {
+      const { items, sequenceStartDate } = this
+      return Object.values(items).map((count, offset) => {
+        const date = dayjs(sequenceStartDate).add(offset, 'days')
+        const dayOfWeek = date.day()
+        return {
+          dayOfWeek,
+          weekend: dayOfWeek === 0 || dayOfWeek === 6,
+          date: date.format('dddd, Do MMM, YYYY'),
+          count
+        }
+      })
+    },
+    weeks() {
+      const { days, sequenceStartDate } = this
+      const weeks = []
+      let week
+      days.forEach((day, offset) => {
+        if (!week) {
+          const startDate =  dayjs(sequenceStartDate).add(offset, 'days')
+          week = { days: [], startDate }
+          weeks.push(week)
+        }
+        week.days.push(day)
+        if (day.dayOfWeek === 0) {
+          while (week.days.length < 7) {
+            week.days.unshift({})
+          }
+          week = null
+        }
+      })
+      while (week.days.length < 7) {
+        week.days.push({})
+      }
+      return weeks
+    },
+    months() {
+      const { weeks, sequenceStartDate } = this
+      const months = [] 
+      let month
+      weeks.forEach((week, offset) => {
+        if (!month) {
+          const startDate = dayjs(sequenceStartDate).add(months.length, 'months')
+          month = { weeks: [], startDate, label: dayjs(startDate).format('MMM') }
+          months.push(month)
+        }
+        month.weeks.push(week)
+        if (!dayjs(week.startDate).isSame(month.startDate, 'month')) {
+          month = null
+        }
+      })
+      return months
+    }
+  },
+  methods: {
+    monthView () {
+      this.viewState = 'month'
+    },
+    weekView() {
+      this.viewState = 'week'
+    },
+    dayView() {
+      this.viewState = 'day'
+    },
+    selectedOption(a, b) {
+      return JSON.stringify(a) === JSON.stringify(b) ? 'selected' : ''
+    }
+  }
+}
+</script>
+
+<style>
+.buttons {
+  display: flex;
+  flex-direction: horizontal;
+  justify-content: center;
+}
+
+.day-items {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: auto;
+}
+
+.week-items {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: auto;
+}
+.week-item {
+  justify-self: center;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: auto;
+}
+.week-item.headers > div.day-box {
+  background: #333;
+  color: white;
+  font-weight: bold;
+}
+.week-item.headers > div.day-box.weekend {
+  background: #464;
+}
+div.day-box.weekday {
+  border-bottom: 2px solid #ccc;
+}
+div.day-box.weekend {
+  border-bottom: 2px solid #464;
+}
+.month-item {
+  display: inline-grid;
+  margin: 5px;
+  border: 2px solid #ccc;
+}
+.month-item > label {
+  display: block;
+  text-align: center;
+  background: #ccc;
+}
+.month-item > .week-items {
+  display: inline-grid;
+}
+</style>

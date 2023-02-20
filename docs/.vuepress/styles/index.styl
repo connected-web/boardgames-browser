@@ -1,0 +1,32 @@
+button, .button {
+  display: inline-flex;
+  border: none;
+  border-radius: 0.5em;
+  justify-content: center;
+  align-items: center;
+  background: #ccc;
+  transition: background 100ms ease-out;
+  cursor: pointer;
+  padding: 0.2em 0.5em;
+  margin: 0.5em;
+}
+
+button *, .button * {
+  cursor: pointer;
+}
+
+button:hover, .button:hover {
+  background: #9C7;
+}
+
+button.selected, .button.selected {
+  background: #9C7;
+}
+
+button.selected:hover, .button.selected:hover {
+  background: #9ACA7A;
+}
+
+button:active, .button:active {
+  background: #8b6;
+}

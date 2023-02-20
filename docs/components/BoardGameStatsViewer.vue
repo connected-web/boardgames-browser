@@ -132,9 +132,7 @@
 
       <div class="stats group">
         <h3>Games played per day</h3>
-        <Day v-for="(item, index) in stats.gamesPlayedPerDay" :key="`day-${index}`"
-          :class="`val-${item}`"
-          :offset="Number.parseInt(index)" :date="new Date(stats.sequenceStartDate)">{{ item }}</Day>
+        <DayGrid :items="stats.gamesPlayedPerDay" :sequenceStartDate="new Date(stats.sequenceStartDate)" />
       </div>
 
       <pre style="display: none"><code>{{ stats }}</code></pre>
