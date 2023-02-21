@@ -17,6 +17,7 @@
 
     <div v-if="viewState === 'week'" class="week-items">
       <div class="week-item headers">
+        <label>#</label>
         <Day>M</Day>
         <Day>T</Day>
         <Day>W</Day>
@@ -26,6 +27,7 @@
         <Day class="weekend">S</Day>
       </div>
       <div v-for="(weekItem, weekIndex) in weeks" :key="`week-${weekIndex}`" class="week-item">
+        <label>Week {{ weekIndex }}</label>
         <Day v-for="(dayItem, dayIndex) in weekItem.days" :key="`day-${dayIndex}`"
           :class="`val-${dayItem.count} ${dayItem.weekend ? 'weekend' : 'weekday'}`"
           :offset="Number.parseInt(dayIndex)"
@@ -177,6 +179,13 @@ export default {
   grid-template-columns: repeat(1, 1fr);
   grid-template-rows: auto;
 }
+.day-item {
+  justify-self: center;
+}
+.day-item label {
+  display: inline-block;
+  width: 250px;
+}
 
 .week-items {
   display: grid;
@@ -186,8 +195,19 @@ export default {
 .week-item {
   justify-self: center;
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: 2fr repeat(7, 1fr);
   grid-template-rows: auto;
+}
+.week-item label {
+  display: inline-flex;
+  background: #333;
+  color: white;
+  padding: 4px;
+  font-weight: bold;
+  font-size: 0.8em;
+  margin: 2px;
+  justify-content: flex-start;
+  align-items: center;
 }
 .week-item.headers > div.day-box {
   background: #333;
@@ -214,5 +234,8 @@ export default {
 }
 .month-item > .week-items {
   display: inline-grid;
+}
+.month-item > .week-items > .week-item {
+  grid-template-columns: repeat(7, 1fr);
 }
 </style>

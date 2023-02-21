@@ -25,17 +25,29 @@ export default {
 .day-box {
   display: inline-block;
   background: #f5f5f5;
-  margin: 0.1em;
-  padding: 0.2em;
+  margin: 0;
+  padding: 3px;
   width: 1.5em;
   text-align: center;
-  transition: background 0.1s ease-in;
+  transition: background 100ms ease-in, border 150ms ease-in;
+  border: 2px solid white;
+  cursor: pointer;
 }
 .day-box:hover {
   background: #f0f0f0;
+  border: 2px solid #aaa;
 }
 .offset-0 {
   color: #666;
+}
+.val-undefined {
+  background: #ddd;
+  color: #ddd;
+  cursor: default;
+}
+.val-undefined:hover {
+  background: #ddd;
+  border: 2px solid white;
 }
 .val-0 {
   color: #999;
