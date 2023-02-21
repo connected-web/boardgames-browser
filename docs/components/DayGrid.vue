@@ -64,6 +64,31 @@ import advancedFormat from 'dayjs/plugin/advancedFormat'
 
 dayjs.extend(advancedFormat)
 
+function weeksFor(days, sequenceStartDate) {
+    const weeks = []
+    let week
+    days.forEach((day, offset) => {
+      if (!week) {
+        const startDate =  dayjs(sequenceStartDate).add(offset, 'days')
+        week = { days: [], startDate }
+        weeks.push(week)
+      }
+      week.days.push(day)
+      if (day.dayOfWeek === 0) {
+        while (week.days.length < 7) {
+          week.days.unshift({})
+        }
+        week = null
+      }
+    })
+    if (week) {
+      while (week.days.length < 7) {
+        week.days.push({})
+      }
+    }
+    return weeks
+}
+
 export default {
   props: {
     items: {
@@ -79,7 +104,7 @@ export default {
   },
   data() {
     return {
-      viewState: 'day'
+      viewState: 'month'
     }
   },
   computed: {
@@ -91,6 +116,7 @@ export default {
         return {
           dayOfWeek,
           weekend: dayOfWeek === 0 || dayOfWeek === 6,
+          startDate: date,
           date: date.format('dddd, Do MMM, YYYY'),
           count
         }
@@ -98,41 +124,26 @@ export default {
     },
     weeks() {
       const { days, sequenceStartDate } = this
-      const weeks = []
-      let week
-      days.forEach((day, offset) => {
-        if (!week) {
-          const startDate =  dayjs(sequenceStartDate).add(offset, 'days')
-          week = { days: [], startDate }
-          weeks.push(week)
-        }
-        week.days.push(day)
-        if (day.dayOfWeek === 0) {
-          while (week.days.length < 7) {
-            week.days.unshift({})
-          }
-          week = null
-        }
-      })
-      while (week.days.length < 7) {
-        week.days.push({})
-      }
-      return weeks
+      return weeksFor(days, sequenceStartDate)
     },
     months() {
-      const { weeks, sequenceStartDate } = this
+      const { days, sequenceStartDate } = this
       const months = [] 
       let month
-      weeks.forEach((week, offset) => {
+      days.forEach((day, offset) => {
         if (!month) {
           const startDate = dayjs(sequenceStartDate).add(months.length, 'months')
-          month = { weeks: [], startDate, label: dayjs(startDate).format('MMM') }
+          month = { days: [], startDate, label: dayjs(startDate).format('MMM YYYY') }
           months.push(month)
         }
-        month.weeks.push(week)
-        if (!dayjs(week.startDate).isSame(month.startDate, 'month')) {
+        month.days.push(day)
+        if (!dayjs(day.startDate).isSame(month.startDate, 'month')) {
           month = null
         }
+      })
+      console.log('Months:', { months })
+      months.forEach(month => {
+        month.weeks = weeksFor(month.days, sequenceStartDate)
       })
       return months
     }
@@ -186,21 +197,20 @@ export default {
 .week-item.headers > div.day-box.weekend {
   background: #464;
 }
-div.day-box.weekday {
-  border-bottom: 2px solid #ccc;
-}
-div.day-box.weekend {
-  border-bottom: 2px solid #464;
-}
+
 .month-item {
   display: inline-grid;
   margin: 5px;
   border: 2px solid #ccc;
+  font-size: 15px;
 }
 .month-item > label {
   display: block;
   text-align: center;
   background: #ccc;
+  font-size: 0.8em;
+  padding: 2px 0;
+  font-weight: bold;
 }
 .month-item > .week-items {
   display: inline-grid;
