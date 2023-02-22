@@ -10,7 +10,7 @@
       <div v-for="(dayItem, dayIndex) in days" :key="`day-${dayIndex}`" class="day-item">
         <Day :class="`val-${dayItem.count} ${dayItem.weekend ? 'weekend' : 'weekday'}`"
           :offset="Number.parseInt(dayIndex)"
-          :date="sequenceStartDate">{{ Number.isInteger(dayItem.count) ? dayItem.count : '-' }}</Day>
+          :date="dayItem.startDate">{{ Number.isInteger(dayItem.count) ? dayItem.count : '-' }}</Day>
         <label class="day-of-week">{{ dayItem.date }}</label>
       </div>
     </div>
@@ -31,7 +31,7 @@
         <Day v-for="(dayItem, dayIndex) in weekItem.days" :key="`day-${dayIndex}`"
           :class="`val-${dayItem.count} ${dayItem.weekend ? 'weekend' : 'weekday'}`"
           :offset="Number.parseInt(dayIndex)"
-          :date="sequenceStartDate">{{ Number.isInteger(dayItem.count) ? dayItem.count : '-' }}</Day>
+          :date="dayItem.startDate">{{ Number.isInteger(dayItem.count) ? dayItem.count : '-' }}</Day>
       </div>
     </div>
 
@@ -52,7 +52,7 @@
             <Day v-for="(dayItem, dayIndex) in weekItem.days" :key="`day-${dayIndex}`"
               :class="`val-${dayItem.count} ${dayItem.weekend ? 'weekend' : 'weekday'}`"
               :offset="Number.parseInt(dayIndex)"
-              :date="sequenceStartDate">{{ Number.isInteger(dayItem.count) ? dayItem.count : '-' }}</Day>
+              :date="dayItem.startDate">{{ Number.isInteger(dayItem.count) ? dayItem.count : '-' }}</Day>
           </div>
         </div>
       </div>
@@ -216,6 +216,10 @@ export default {
 }
 .week-item.headers > div.day-box.weekend {
   background: #464;
+}
+
+.month-items {
+  text-align: center;
 }
 
 .month-item {

@@ -1,10 +1,13 @@
 <template>
-  <div class="day-box" :title="`Day: ${offset}`">
+  <div class="day-box">
     <slot></slot>
+    <label v-if="dateLabel">{{ dateLabel }}</label>
   </div>
 </template>
 
 <script>
+import dayjs from 'dayjs'
+
 export default {
   props: {
     offset: {
@@ -13,9 +16,12 @@ export default {
     },
     date: {
       type: Date,
-      default() {
-        return new Date()
-      }
+      default: null
+    }
+  },
+  computed: {
+    dateLabel() {
+      return this.date ? dayjs(this.date).format('dddd, Do MMM, YYYY') : ''
     }
   }
 }
@@ -23,6 +29,7 @@ export default {
 
 <style scoped>
 .day-box {
+  position: relative;
   display: inline-block;
   background: #f5f5f5;
   margin: 0;
@@ -81,5 +88,24 @@ export default {
 }
 .val-10 {
   background: #5F5;
+}
+.day-box:hover label {
+  display: inline-block;
+}
+label {
+  display: none;
+  position: absolute;
+  width: 87px;
+  top: 100%;
+  left: -35px;
+  z-index: 100;
+
+  background: #333;
+  color: white;
+  padding: 4px;
+  font-weight: bold;
+  font-size: 0.8em;
+  margin: 2px;
+  text-align: center;
 }
 </style>
