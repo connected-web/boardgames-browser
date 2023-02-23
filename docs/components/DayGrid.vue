@@ -199,7 +199,6 @@ export default {
   grid-template-rows: auto;
 }
 .week-item label {
-  display: inline-flex;
   background: #333;
   color: white;
   padding: 4px;
