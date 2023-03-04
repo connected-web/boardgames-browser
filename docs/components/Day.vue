@@ -1,5 +1,5 @@
 <template>
-  <div class="day-box">
+  <div class="day-box" @click="selectDay" @keydown.space="selectDay" @keydown.enter="selectDay" :tabindex="tabIndex">
     <slot></slot>
     <label v-if="dateLabel">{{ dateLabel }}</label>
   </div>
@@ -22,6 +22,17 @@ export default {
   computed: {
     dateLabel() {
       return this.date ? dayjs(this.date).format('dddd, Do MMM, YYYY') : ''
+    },
+    tabIndex() {
+      return Boolean(this.date) ? 0 : -1
+    }
+  },
+  methods: {
+    selectDay() {
+      const { date } = this
+      if (date) {
+        this.$emit('selected', date)
+      }
     }
   }
 }

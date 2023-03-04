@@ -10,7 +10,8 @@
       <div v-for="(dayItem, dayIndex) in days" :key="`day-${dayIndex}`" class="day-item">
         <Day :class="`val-${dayItem.count} ${dayItem.weekend ? 'weekend' : 'weekday'}`"
           :offset="Number.parseInt(dayIndex)"
-          :date="dayItem.startDate">{{ Number.isInteger(dayItem.count) ? dayItem.count : '-' }}</Day>
+          :date="dayItem.startDate"
+          @selected="selectDay(dayItem)">{{ Number.isInteger(dayItem.count) ? dayItem.count : '-' }}</Day>
         <label class="day-of-week">{{ dayItem.date }}</label>
       </div>
     </div>
@@ -31,7 +32,8 @@
         <Day v-for="(dayItem, dayIndex) in weekItem.days" :key="`day-${dayIndex}`"
           :class="`val-${dayItem.count} ${dayItem.weekend ? 'weekend' : 'weekday'}`"
           :offset="Number.parseInt(dayIndex)"
-          :date="dayItem.startDate">{{ Number.isInteger(dayItem.count) ? dayItem.count : '-' }}</Day>
+          :date="dayItem.startDate"
+          @selected="selectDay(dayItem)">{{ Number.isInteger(dayItem.count) ? dayItem.count : '-' }}</Day>
       </div>
     </div>
 
@@ -52,7 +54,8 @@
             <Day v-for="(dayItem, dayIndex) in weekItem.days" :key="`day-${dayIndex}`"
               :class="`val-${dayItem.count} ${dayItem.weekend ? 'weekend' : 'weekday'}`"
               :offset="Number.parseInt(dayIndex)"
-              :date="dayItem.startDate">{{ Number.isInteger(dayItem.count) ? dayItem.count : '-' }}</Day>
+              :date="dayItem.startDate"
+              @selected="selectDay(dayItem)">{{ Number.isInteger(dayItem.count) ? dayItem.count : '-' }}</Day>
           </div>
         </div>
       </div>
@@ -162,6 +165,9 @@ export default {
     },
     selectedOption(a, b) {
       return JSON.stringify(a) === JSON.stringify(b) ? 'selected' : ''
+    },
+    selectDay(day) {
+      this.$emit('selected', day)
     }
   }
 }

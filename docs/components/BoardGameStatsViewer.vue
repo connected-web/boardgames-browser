@@ -132,7 +132,12 @@
 
       <div class="stats group">
         <h3>Games played per day</h3>
-        <DayGrid :items="stats.gamesPlayedPerDay" :sequenceStartDate="new Date(stats.sequenceStartDate)" />
+        <DayGrid :items="stats.gamesPlayedPerDay" :sequenceStartDate="new Date(stats.sequenceStartDate)" @selected="handleSelectedDay" />
+      </div>
+
+      <div v-if="selectedDay" class="stats group">
+        <h3>Selected Day</h3>
+        <pre><code>{{ selectedDay }}</code></pre>
       </div>
 
       <pre style="display: none"><code>{{ stats }}</code></pre>
@@ -154,7 +159,8 @@ export default {
   data() {
     return {
       response: null,
-      error: ''
+      error: '',
+      selectedDay: null
     }
   },
   computed: {
@@ -174,6 +180,9 @@ export default {
   methods: {
     pc(val) {
       return (val * 100).toFixed(1) + '%'
+    },
+    handleSelectedDay(day) {
+      this.selectedDay = day
     }
   },
   async mounted() {
