@@ -137,7 +137,22 @@
 
       <div v-if="selectedDay" class="stats group">
         <h3>Selected Day</h3>
-        <pre><code>{{ selectedDay }}</code></pre>
+        
+        <stat-value label="Date">{{ selectedDay.date }}</stat-value>
+        <stat-value label="Day of Week">{{ selectedDay.dayOfWeek }}</stat-value>
+        <stat-value label="Weekend">{{ selectedDay.weekend ? 'Yes' : 'No' }}</stat-value>
+        <stat-value label="Games Played">{{ selectedDay.count }}</stat-value>
+
+        <div v-for="(playRecord, index) in selectedDayPlayRecords" :key="`playRecord_${playRecord.date}_${playRecord.name}_${index}`">
+          <h4>{{ playRecord.name }}</h4>
+          <stat-value label="Date" v-if="playRecord.date">{{ playRecord.date }}</stat-value>
+          <stat-value label="Outcome">
+            <span>{{ (playRecord.coOp + '').toLowerCase() === 'yes' ? 'Co-op' : 'Won by' }} {{ playRecord.winner || playRecord.coOpOutcome || 'Unknown' }}</span>
+            <game-stat-box :game="playRecord" :name="playRecord.name" />
+          </stat-value>
+          <stat-value label="Notes" v-if="playRecord.notes">{{ playRecord.notes }}</stat-value>
+          <!-- <pre><code>{{ JSON.stringify(playRecord, null, 2) }}</code></pre> -->
+        </div>
       </div>
 
       <pre style="display: none"><code>{{ stats }}</code></pre>
@@ -148,6 +163,8 @@
 
 <script>
 import modelCache from './src/modelCache'
+
+import dayjs from 'dayjs'
 
 export default {
   props: {
@@ -175,6 +192,14 @@ export default {
         return db - da
       })
       return sortedPlayRecords
+    },
+    selectedDayPlayRecords() {
+      const { selectedDay, sortedPlayRecords } = this
+      console.log('Selected day', { selectedDay, sortedPlayRecords })
+      if (selectedDay?.startDate) {
+        return sortedPlayRecords.filter(item => dayjs(item.date).isSame(selectedDay.startDate, 'day'))
+      }
+      return []
     }
   },
   methods: {

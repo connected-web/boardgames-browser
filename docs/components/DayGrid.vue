@@ -146,7 +146,6 @@ export default {
           month = null
         }
       })
-      console.log('Months:', { months })
       months.forEach(month => {
         month.weeks = weeksFor(month.days, sequenceStartDate)
       })

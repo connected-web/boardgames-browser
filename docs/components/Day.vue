@@ -15,7 +15,7 @@ export default {
       default: 0
     },
     date: {
-      type: Date,
+      type: null,
       default: null
     }
   },
