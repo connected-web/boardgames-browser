@@ -63,6 +63,12 @@ h1 {
   letter-spacing: 4px;
   font-weight: 600;
   color: #333;
+
+  margin: 0 0 0.5em 0;
+}
+
+p {
+  margin: 1em 0;
 }
 
 button, .button {
@@ -74,8 +80,9 @@ button, .button {
   background: #ccc;
   transition: background 100ms ease-out;
   cursor: pointer;
-  padding: 0.2em 0.5em;
+  padding: 0.5em 1.0em;
   margin: 0.5em;
+  font-size: 18px;
 }
 
 button *, .button * {

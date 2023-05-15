@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import SideNavigation from './components/SideNavigation.vue'
-import SiteHeader from './components/SiteHeader.vue'
+import SideNavigation from './site/SideNavigation.vue'
+import SiteHeader from './site/SiteHeader.vue'
 
 export default {
   components: { SiteHeader, SideNavigation }
@@ -34,5 +34,6 @@ export default {
 .page {
   margin: 0;
   padding: 1em 2em;
+  flex: 1 1;
 }
 </style>

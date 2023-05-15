@@ -2,16 +2,21 @@
 import * as VueRouter from 'vue-router'
 
 import Home from './pages/Home.vue'
+
 import ByName from './pages/ByName.vue'
 import ByTag from './pages/ByTag.vue'
+
 import Grids from './pages/Grids.vue'
 import ByMonth from './pages/ByMonth.vue'
 import MonthToDate from './pages/MonthToDate.vue'
 import ByYear from './pages/ByYear.vue'
 import YearToDate from './pages/YearToDate.vue'
+
 import Track from './pages/ApiTrack.vue'
 import Review from './pages/ApiReview.vue'
 import Authenticate from './pages/ApiAuthenticate.vue'
+
+import Icons from './pages/Icons.vue'
 
 const routes = [
   { path: '/', component: Home },
@@ -24,7 +29,8 @@ const routes = [
   { path: '/stats/year-to-date', component: YearToDate },
   { path: '/api/track', component: Track },
   { path: '/api/review', component: Review },
-  { path: '/api/authenticate', component: Authenticate }
+  { path: '/api/authenticate', component: Authenticate },
+  { path: '/extras/icons', component: Icons }
 ]
 
 const router = VueRouter.createRouter({
