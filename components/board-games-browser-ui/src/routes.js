@@ -23,6 +23,7 @@ const routes = [
   { path: '/games/by-name', component: ByName },
   { path: '/games/by-tag', component: ByTag },
   { path: '/stats/grids', component: Grids },
+  { path: '/stats/grids/:dateCode', component: Grids, props: true },
   { path: '/stats/by-month', component: ByMonth },
   { path: '/stats/by-month/:dateCode', component: ByMonth, props: true },
   { path: '/stats/month-to-date', component: MonthToDate },

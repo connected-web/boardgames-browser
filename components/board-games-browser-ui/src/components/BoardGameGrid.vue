@@ -1,5 +1,7 @@
 <template>
 <div class="boardgame-list">
+  <router-link to="/stats/grids">&larr; Grids</router-link>
+  <LoadingSpinner v-if="loading">Loading board game grid...</LoadingSpinner>
   <p v-if="message">{{ message }}</p>
   <div v-if="$props.dateCode">
     <h2>{{challengeGrid.title}}</h2>
@@ -35,6 +37,7 @@
         </div>
         <div v-if="entry.gameStats.length > challengeGrid.challenge.gamesToPlayCountPerFamily"
           class="overplayed" :title="`${entry.gameStats.length} ${entry.gameFamily} games played!`">+</div>
+        <div v-else class="overplayed hidden"></div>
       </div>
       <game-stat-key />
     </div>
@@ -50,52 +53,68 @@
 </template>
 
 <script>
-import modelCache from './src/modelCache'
-import sharedModel from './src/sharedModel'
+import modelCache from '../helpers/modelCache'
+import sharedModel from '../helpers/sharedModel'
+import LoadingSpinner from './LoadingSpinner.vue'
+
+import GameStatKey from './GameStatKey.vue'
 
 const { boardgamesApiUrl } = sharedModel.state
 
 export default {
-  props: ['dateCode'],
-  data: function () {
-    return {
-      message: `Loading data from ${boardgamesApiUrl}`,
-      challengeGrid: {
-        challenge: {},
-        overview: {},
-        sequence: {}
-      }
-    }
-  },
-  async beforeMount() {
-    this.challengeGrid = await loadBoardGameGrid(this.dateCode)
-    this.message = false
-  },
-  computed: {
-    gamesToPlayCountPerFamily() {
-      try {
-        return this.challengeGrid.challenge.gamesToPlayCountPerFamily
-      } catch (ex) {
-        return 1
-      }
-    }
-  },
-  methods: {
-    limit(list, count) {
-      return list.slice(0, count)
+    props: ["dateCode"],
+    data: function () {
+        return {
+            message: `Loading data from ${boardgamesApiUrl}`,
+            challengeGrid: {
+                challenge: {},
+                overview: {},
+                sequence: {}
+            }
+        };
     },
-    fmp(number) {
-      const maxed = Math.min(number, 1.0)
-      return (maxed * 100).toFixed(0) + '%'
+    async beforeMount() {
+        this.refreshGrid();
+        this.message = false;
     },
-    countWinner(entry, firstChar) {
-      const { gameStats } = entry
-      const winners = gameStats
-        .map(stat => stat.winner || stat.coOpOutcome || '?')
-        .filter(w => w.charAt(0).toLowerCase() === firstChar)
-      return Math.min(1.0, winners.length / this.gamesToPlayCountPerFamily)
-    }
-  }
+    computed: {
+        gamesToPlayCountPerFamily() {
+            try {
+                return this.challengeGrid.challenge.gamesToPlayCountPerFamily;
+            }
+            catch (ex) {
+                return 1;
+            }
+        }
+    },
+    methods: {
+        limit(list, count) {
+            return list.slice(0, count);
+        },
+        fmp(number) {
+            const maxed = Math.min(number, 1);
+            return (maxed * 100).toFixed(0) + "%";
+        },
+        countWinner(entry, firstChar) {
+            const { gameStats } = entry;
+            const winners = gameStats
+                .map(stat => stat.winner || stat.coOpOutcome || "?")
+                .filter(w => w.charAt(0).toLowerCase() === firstChar);
+            return Math.min(1, winners.length / this.gamesToPlayCountPerFamily);
+        },
+        async refreshGrid() {
+            this.loading = true
+            this.message = false
+            this.challengeGrid = await loadBoardGameGrid(this.dateCode);
+            this.loading = false
+        }
+    },
+    watch: {
+        dateCode() {
+          this.refreshGrid()
+        }
+    },
+    components: { LoadingSpinner, GameStatKey }
 }
 
 async function loadBoardGameGrid(dateCode) {
@@ -132,8 +151,8 @@ async function loadBoardGameGrid(dateCode) {
   margin: 2px;
   padding: 2px;
   font-size: 0.8em;
-  width: 80px;
   background: #ccc;
+  flex: 1 1;
 }
 .progress.bar {
   display: inline-flex;
@@ -147,8 +166,15 @@ async function loadBoardGameGrid(dateCode) {
   display: inline-block;
   position: relative;
   height: 100%;
+  opacity: 1.0;
+  transition: opacity 150ms ease-in-out;
+}
+.progress.bar > .bar:hover {
+  opacity: 0.6;
+  transition: opacity 150ms ease-in-out;
 }
 .play.count.label {
+  display: inline-block;
   position: relative;
   z-index: 2;
   font-weight: bold;
@@ -194,10 +220,17 @@ async function loadBoardGameGrid(dateCode) {
 }
 .overplayed {
   display: inline-block;
-  padding: 2px 6px;
+  padding: 2px 0;
   margin-left: 3px;
   height: 100%;
   font-size: 0.8em;
   font-weight: bold;
+  width: 20px;
+  overflow: hidden;
+  text-align: center;
+  cursor: help;
+}
+.overplayed.hidden {
+  visibility: hidden;
 }
 </style>

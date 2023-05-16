@@ -2,7 +2,9 @@
 <div class="boardgame-list">
   <p v-if="message">{{ message }}</p>
   <ul>
-    <li v-for="dateCode in gridDateCodes" :key="dateCode"><a :href="gridLink(dateCode)">{{ dateCode }}</a></li>
+    <li v-for="dateCode in gridDateCodes" :key="dateCode">
+      <router-link :to="gridLink(dateCode)">{{ dateCode }}</router-link>
+    </li>
   </ul>
 </div>
 </template>
@@ -20,7 +22,7 @@ export default {
   },
   methods: {
     gridLink(dateCode) {
-      return `/boardgames-browser/grids/?dateCode=${dateCode}`
+      return `/stats/grids/${dateCode}`
     }
   }
 }

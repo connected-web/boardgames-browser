@@ -4,18 +4,21 @@
 </template>
 
 <script>
-import sharedModel from './src/sharedModel'
+import sharedModel from '../helpers/sharedModel'
+
+import BoardGameGrid from './BoardGameGrid.vue'
+import BoardGameGridList from './BoardGameGridList.vue'
 
 export default {
-  data() {
-    return {
-      dateCode: false,
+  components: { BoardGameGrid, BoardGameGridList },
+  props: {
+    dateCode: {
+      type: String,
+      default: null
     }
   },
   async beforeMount() { 
     sharedModel.update()
-    const { dateCode } = sharedModel.state.params
-    this.dateCode = dateCode
   }
 }
 </script>

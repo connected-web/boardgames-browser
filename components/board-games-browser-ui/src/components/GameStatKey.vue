@@ -12,6 +12,14 @@
   </div>
 </template>
 
+<script>
+import GameStatKeyBox from './GameStatKeyBox.vue';
+
+export default {
+  components: { GameStatKeyBox }
+}
+</script>
+
 <style scoped>
 .grid.key {
   display: block;

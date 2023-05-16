@@ -39,6 +39,7 @@ export default {
   min-width: 1.5em;
   justify-content: center;
   align-items: center;
+  text-transform: uppercase;
 }
 .coop.won, .coop.win {
   color: black;
