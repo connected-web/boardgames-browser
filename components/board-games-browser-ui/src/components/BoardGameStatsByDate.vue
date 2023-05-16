@@ -5,13 +5,17 @@
 </template>
 
 <script>
-import sharedModel from './src/sharedModel'
+import sharedModel from '../helpers/sharedModel'
 const { boardgamesApiUrl } = sharedModel.state
 
+import BoardGameStatsViewer from './BoardGameStatsViewer.vue'
+
 export default {
-  data() {
-    return {
-      dateCode: false,
+  components: { BoardGameStatsViewer },
+  props: {
+    dateCode: {
+      type: String,
+      default: null
     }
   },
   computed: {
@@ -23,8 +27,6 @@ export default {
   },
   async beforeMount() { 
     sharedModel.update()
-    const dateCode = sharedModel.state?.params?.dateCode || sharedModel.state?.lastDateCode
-    this.dateCode = dateCode
   }
 }
 </script>

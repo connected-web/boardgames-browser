@@ -19,12 +19,14 @@ div.stat {
   display: flex;
   flex-wrap: wrap;
   margin: 0.2em 0;
+  padding: 8px 8px;
   background: #f5f5f5;
 }
 div.stat > label {
   flex: 2 4;
   white-space: nowrap;
-  padding: 0.3em 0.3em;
+  display: flex;
+  align-items: center;
 }
 div.stat > span.value {
   flex: 2 4;

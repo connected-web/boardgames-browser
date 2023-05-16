@@ -1,6 +1,7 @@
 <template>
   <div>
     <code style="display: none;">{{ datasourceUrl }}</code>
+    <LoadingSpinner v-if="loading">Loading stats...</LoadingSpinner>
     <div v-if="stats">
       <p>Board game stats for <b>{{ stats.totalGamesPlayed }}</b>
         games played by <i>Hannah and John</i> over <b>{{ stats.daysInSequence }}</b> days
@@ -172,8 +173,10 @@ import GameStatBox from './GameStatBox.vue'
 import StatValue from './StatValue.vue'
 import DayGrid from './DayGrid.vue'
 
+import LoadingSpinner from './LoadingSpinner.vue'
+
 export default {
-  components: { PaginatedItems, Collapsed, GameStatBox, StatValue, DayGrid },
+  components: { PaginatedItems, Collapsed, GameStatBox, StatValue, DayGrid, LoadingSpinner },
   props: {
     datasourceUrl: {
       type: String,
@@ -184,7 +187,8 @@ export default {
     return {
       response: null,
       error: '',
-      selectedDay: null
+      selectedDay: null,
+      loading: false
     }
   },
   computed: {
@@ -215,16 +219,26 @@ export default {
     },
     handleSelectedDay(day) {
       this.selectedDay = day
+    },
+    async loadStats() {
+      const { datasourceUrl } = this
+      this.loading = true
+      try {
+        const data = await modelCache.get(datasourceUrl)
+        this.response = { data }
+      } catch (ex) {
+        this.response = ex.response
+        this.error = `Unable to load ${datasourceUrl} : ${ex.message}`
+      }
+      this.loading = false
     }
   },
   async mounted() {
-    const { datasourceUrl } = this
-    try {
-      const data = await modelCache.get(datasourceUrl)
-      this.response = { data }
-    } catch (ex) {
-      this.response = ex.response
-      this.error = `Unable to load ${datasourceUrl} : ${ex.message}`
+    this.loadStats()
+  },
+  watch: {
+    datasourceUrl(newVal) {
+      this.loadStats()
     }
   }
 }
