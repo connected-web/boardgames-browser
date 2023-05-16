@@ -107,7 +107,7 @@ function dateToday() {
 
 export default {
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: dateToday()
     }
@@ -125,6 +125,9 @@ export default {
     this.date = this.value
   },
   computed: {
+    value() {
+      return this.modelValue
+    },
     dateToday,
     dateYesterday() {
       const yesterday = dayjs().add(-1, 'day')
@@ -218,7 +221,7 @@ export default {
   },
   watch: {
     date (newVal, oldVal) {
-      this.$emit('input', newVal)
+      this.$emit('update:modelValue', newVal)
     }
   }
 }
@@ -251,7 +254,6 @@ button {
 }
 .default.info {
   color: #99A;
-  margin: -1.5em 0 0.5em 0;
 }
 div.row {
   display: flex;

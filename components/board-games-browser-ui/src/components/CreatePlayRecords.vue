@@ -85,8 +85,8 @@
       <p v-if="message">{{message}}</p>
     </form>
     <br />
-    <b>Data preview</b>
-    <pre>{{JSON.stringify({ dataToSend }, null, 2)}}</pre>
+    <h3>Data preview</h3>
+    <pre><code>{{JSON.stringify({ dataToSend }, null, 2)}}</code></pre>
   </div>    
 </template>
 
@@ -95,13 +95,14 @@ import axios from 'axios'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 
-import './src/icons'
-import sharedModel from './src/sharedModel'
+import sharedModel from '../helpers/sharedModel'
+
+import CalendarPicker from './CalendarPicker.vue'
 
 const { boardgamesApiUrl, boardgamesSamApiUrl } = sharedModel.state
 
 export default {
-  components: { vSelect },
+  components: { vSelect, CalendarPicker },
   data() {
     return {
       name: '',
@@ -230,9 +231,6 @@ export default {
 </script>
 
 <style scoped>
-pre {
-  color: white
-}
 input {
   padding: 0.5em;
   font-size: 1em;
@@ -252,7 +250,6 @@ button {
 }
 .default.info {
   color: #99A;
-  margin: -1.5em 0 0.5em 0;
 }
 div.row {
   display: flex;

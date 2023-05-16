@@ -1,6 +1,8 @@
 <template>
   <div>
-    <p v-if="message">{{ message }}</p>
+    <p v-if="message">
+      <span>{{ message }}</span>
+    </p>
     <div v-if="playRecordToBeRemoved" class="remove-play-record">
       <p class="warn">Are you sure you want to remove this play record?</p>
       <div class="play record">
@@ -27,9 +29,10 @@
             <label>Remove Play Record</label>
           </button>
         </div>
-        <pre v-if="status.playRecords.length === 0"><code>No play records found</code></pre>
+        <pre v-if="playRecords?.length === 0"><code>No play records found</code></pre>
       </div>
-      <pre v-else><code>{{ status }}</code></pre>
+      <LoadingSpinner v-if="loading">{{ status }}</LoadingSpinner>
+      <p v-else-if="status">{{ status }}</p>
     </div>
   </div>
 </template>
@@ -37,6 +40,8 @@
 <script>
 import axios from 'axios'
 import sharedModel from '../helpers/sharedModel'
+
+import LoadingSpinner from './LoadingSpinner.vue'
 
 const { boardgamesSamApiUrl } = sharedModel.state
 
@@ -52,9 +57,11 @@ function sortPlayRecordsByDate(a, b) {
 }
 
 export default {
+  components: { LoadingSpinner },
   data() {
     return {
       sharedModel,
+      loading: false,
       status: 'Loading data...',
       playRecords: [],
       playRecordToBeRemoved: false,
@@ -66,19 +73,21 @@ export default {
   },
   methods: {
     async listPlayRecords() {
+      this.loading = true
       try {
         const url = `${boardgamesSamApiUrl}/playrecords/list`
         const axiosConfig = {
           headers: sharedModel.getAuthHeaders()
         }
         const { data } = await axios.get(url, axiosConfig)
-        this.status = data
+        this.status = 'Loaded'
         this.playRecords = (data?.playRecords || []).sort(sortPlayRecordsByDate)
       } catch (ex) {
         const { data } = ex.response || {}
         this.message = data.message || `Unable to load status: ${ex.message}`
-        this.status = data
+        this.status = 'Error'
       }
+      this.loading = false
     },
     askToRemovePlayRecord(playRecord) {
       this.message = ''
@@ -125,5 +134,6 @@ button.trash {
 }
 pre {
   overflow-x: hidden;
+  white-space: pre-wrap;
 }
 </style>
