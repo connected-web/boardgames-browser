@@ -93,6 +93,14 @@ p {
   line-height: 1.5em;
 }
 
+b {
+  font-weight: 600;
+}
+
+i {
+  font-style: italic;
+}
+
 button, .button {
   display: inline-flex;
   border: none;
