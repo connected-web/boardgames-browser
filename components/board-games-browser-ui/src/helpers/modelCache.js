@@ -1,7 +1,8 @@
 
-const axios = require('axios')
-const md5 = require('md5')
-const localStorage = require('./localStorage')
+import axios from 'axios'
+import md5 from 'md5'
+import localStorage from './localStorage'
+
 const cache = {}
 
 async function getDataFrom (url) {
@@ -42,4 +43,4 @@ const modelCache = {
   }
 }
 
-module.exports = modelCache
+export default modelCache

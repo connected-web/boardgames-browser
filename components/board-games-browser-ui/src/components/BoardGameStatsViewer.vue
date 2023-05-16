@@ -166,7 +166,11 @@ import modelCache from '../helpers/modelCache'
 
 import dayjs from 'dayjs'
 
+import PaginatedItems from './PaginatedItems.vue'
+import Collapsed from './Collapsed.vue'
+
 export default {
+  components: { PaginatedItems, Collapsed },
   props: {
     datasourceUrl: {
       type: String,

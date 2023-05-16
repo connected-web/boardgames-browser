@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import './Icon'
 
 export default {
   data() {
