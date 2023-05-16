@@ -67,6 +67,8 @@
 import dayjs from 'dayjs'
 import advancedFormat from 'dayjs/plugin/advancedFormat'
 
+import Day from './Day.vue'
+
 dayjs.extend(advancedFormat)
 
 function weeksFor(days, sequenceStartDate) {
@@ -95,6 +97,7 @@ function weeksFor(days, sequenceStartDate) {
 }
 
 export default {
+  components: { Day },
   props: {
     items: {
       type: null,
@@ -188,8 +191,13 @@ export default {
   justify-self: center;
 }
 .day-item label {
-  display: inline-block;
   width: 250px;
+  display: inline-block;
+  margin-left: 5px;
+}
+
+.day-items .day-item label.date-label {
+  display: none;
 }
 
 .week-items {

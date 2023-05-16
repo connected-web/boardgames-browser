@@ -28,13 +28,17 @@ export default {
   font-size: 0.8em;
 }
 .game.stat.box {
-  display: inline-block;
+  display: inline-flex;
   width: 20px;
   text-align: center;
   margin: 2px;
   padding: 2px;
   font-size: 0.8em;
-  text-transform: uppercase;
+  cursor: help;
+  min-height: 1.5em;
+  min-width: 1.5em;
+  justify-content: center;
+  align-items: center;
 }
 .coop.won, .coop.win {
   color: black;

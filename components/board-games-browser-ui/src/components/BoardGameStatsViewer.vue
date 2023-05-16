@@ -168,9 +168,12 @@ import dayjs from 'dayjs'
 
 import PaginatedItems from './PaginatedItems.vue'
 import Collapsed from './Collapsed.vue'
+import GameStatBox from './GameStatBox.vue'
+import StatValue from './StatValue.vue'
+import DayGrid from './DayGrid.vue'
 
 export default {
-  components: { PaginatedItems, Collapsed },
+  components: { PaginatedItems, Collapsed, GameStatBox, StatValue, DayGrid },
   props: {
     datasourceUrl: {
       type: String,
@@ -245,5 +248,15 @@ export default {
 .percentage.bar > .game.stat.box.slim > span {
   display: inline-block;
   transform: rotate(90deg);
+}
+
+ul {
+  margin: 0;
+  padding: 0
+}
+
+ul > li {
+  margin: 0.5em 0 0.5em 1em;
+  list-style-type: disc;
 }
 </style>

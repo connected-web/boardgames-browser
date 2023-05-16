@@ -1,7 +1,7 @@
 <template>
   <div class="day-box" @click="selectDay" @keydown.space="selectDay" @keydown.enter="selectDay" :tabindex="tabIndex">
     <slot></slot>
-    <label v-if="dateLabel">{{ dateLabel }}</label>
+    <label v-if="dateLabel" class="date-label">{{ dateLabel }}</label>
   </div>
 </template>
 

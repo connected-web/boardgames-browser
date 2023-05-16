@@ -29,7 +29,10 @@ div.stat > label {
 div.stat > span.value {
   flex: 2 4;
   text-align: right;
-  padding: 0.3em 0.3em;
   font-weight: bold;
+  display: flex;
+  gap: 5px;
+  justify-content: flex-end;
+  align-items: center;
 }
 </style>
