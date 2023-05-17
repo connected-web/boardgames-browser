@@ -1,40 +1,42 @@
 <template>
   <div class="boardgame-list">
-    <p v-if="message">{{message}}</p>
-    <ul>
-      <li v-for="(item, key) in tags" :key="`li_tag_${key}`"><a :href="`#${key}`">{{ key }}</a></li>
-    </ul>
+    <LoadingSpinner v-if="loading">Loading tag list...</LoadingSpinner>
     <div v-for="(tagGroup, tagKey) in tags" :key="`div_tag_${tagKey}`">
       <h2 :id="`${tagKey}`">By {{ tagKey }}</h2>
       <ul>
-        <li v-for="value in tagGroup" :key="`li_value_${value}`"><a :href="boardgameTagLink(tagKey, value)">{{ value }}</a></li>
+        <li v-for="value in tagGroup" :key="`li_value_${value}`">
+          <router-link :to="boardgameTagLink(tagKey, value)">{{ value }}</router-link>
+        </li>
       </ul>
     </div>
   </div>
 </template>
 
 <script>
-import modelCache from './src/modelCache'
-import sharedModel from './src/sharedModel'
+import modelCache from '../helpers/modelCache'
+import sharedModel from '../helpers/sharedModel'
+
+import LoadingSpinner from './LoadingSpinner.vue'
 
 const { boardgamesApiUrl } = sharedModel.state 
 
 export default {
-  data: function () {
+  components: { LoadingSpinner },
+  data () {
     return {
-      message: `Loading data from ${boardgamesApiUrl}`,
       games: [],
       tags: [],
-      messasge: ''
+      loading: false
     }
   },
-  async beforeMount() { 
+  async beforeMount() {
+    this.loading = true
     this.tags = await loadBoardGameTagsList(this)
-    this.message = `${Object.keys(this.tags).length} tags in list:`
+    this.loading = false
   },
   methods: {
     boardgameTagLink(tag, value) {
-      return `/boardgames-browser/tags/?tag=${tag}&value=${value}`
+      return `/games/by-tag/${tag}/${value}`
     }
   }
 }

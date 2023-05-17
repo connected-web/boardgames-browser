@@ -1,12 +1,26 @@
 <template>
-  <BoardGameTagSummary v-if="tag && value" :tag="tag" :value="value" />
+  <BoardGameTagSummary v-if="tag && tagValue" :tag="tag" :value="tagValue" />
   <BoardGameTagList v-else />
 </template>
 
 <script>
-import sharedModel from './src/sharedModel'
+import sharedModel from '../helpers/sharedModel'
+
+import BoardGameTagSummary from './BoardGameTagSummary.vue'
+import BoardGameTagList from './BoardGameTagList.vue'
 
 export default {
+  components: { BoardGameTagSummary, BoardGameTagList },
+  props: {
+    tag: {
+      type: String,
+      default: null
+    },
+    tagValue: {
+      type: String,
+      default: null
+    }
+  },
   data() {
     return {
       dateCode: false,
@@ -14,9 +28,6 @@ export default {
   },
   async beforeMount() { 
     sharedModel.update()
-    const { tag, value } = sharedModel.state.params
-    this.tag = tag
-    this.value = value
   }
 }
 </script>

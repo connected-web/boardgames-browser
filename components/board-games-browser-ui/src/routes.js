@@ -22,6 +22,7 @@ const routes = [
   { path: '/', component: Home },
   { path: '/games/by-name', component: ByName },
   { path: '/games/by-tag', component: ByTag },
+  { path: '/games/by-tag/:tag/:tagValue', component: ByTag, props: true },
   { path: '/stats/grids', component: Grids },
   { path: '/stats/grids/:dateCode', component: Grids, props: true },
   { path: '/stats/by-month', component: ByMonth },

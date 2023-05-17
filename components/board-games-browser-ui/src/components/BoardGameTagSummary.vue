@@ -1,5 +1,7 @@
 <template>
 <div class="boardgame-list">
+  <router-link to="/games/by-tag">&larr; Game Tags</router-link>
+  <LoadingSpinner v-if="loading">Loading game stats by tag...</LoadingSpinner>
   <p v-if="message">{{ message }}</p>
   <div v-if="summary.name">
     <h2>{{summary.name}}</h2>
@@ -76,23 +78,32 @@
 </template>
 
 <script>
-import modelCache from './src/modelCache'
-import sharedModel from './src/sharedModel'
+import modelCache from '../helpers/modelCache'
+import sharedModel from '../helpers/sharedModel'
+
+import StatValue from './StatValue.vue'
+import GameStatBox from './GameStatBox.vue'
+import GameStatKey from './GameStatKey.vue'
+import LoadingSpinner from './LoadingSpinner.vue'
 
 const { boardgamesApiUrl } = sharedModel.state
 
 export default {
+  components: { StatValue, GameStatBox, GameStatKey, LoadingSpinner },
   props: ['tag', 'value'],
   data: function () {
     return {
       activeYear: false,
       message: `Loading data from ${boardgamesApiUrl}`,
-      summary: {}
+      summary: {},
+      loading: false
     }
   },
   async beforeMount() {
+    this.loading = true
     this.summary = await loadBoardGameSummaryByTag(this.tag, this.value)
     this.message = false
+    this.loading = false
   },
   computed: {
     filteredPlayRecords() {
