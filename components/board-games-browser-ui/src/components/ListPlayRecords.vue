@@ -118,9 +118,6 @@ export default {
 <style scoped>
 .play.record {
   position: relative;
-  background: #aaa;
-  border-radius: 1em;
-  padding: 1em;
   margin: 1em 0;
 }
 .button-row {
@@ -131,6 +128,7 @@ button.trash {
   position: absolute;
   top: 0.2em;
   right: 0.2em;
+  font-size: 0.85em;
 }
 pre {
   overflow-x: hidden;

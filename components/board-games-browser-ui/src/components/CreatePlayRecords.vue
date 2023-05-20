@@ -244,10 +244,6 @@ input {
 .buttons.left > .button:first-of-type {
   margin-left: 0;
 }
-button {
-  padding: 5px;
-  font-size: 1.0em;
-}
 .default.info {
   color: #99A;
 }
@@ -276,9 +272,11 @@ textarea {
   padding: 1em;
 }
 .option {
+  display: flex;
+  place-content: center;
+  place-items: center;
   background: #ddd;
   color: #333;
-  border: 2px solid #666;
   border-radius: 0.2em;
   font-weight: bold;
   padding: 0.5em;
@@ -288,36 +286,19 @@ textarea {
   min-width: 20%;
   max-width: 50%;
   overflow: hidden;
+  cursor: pointer;
+}
+.option > * {
+  cursor: pointer;
 }
 div.option:hover {
   background: rgb(187, 229, 255);
-  border: 2px solid lightskyblue;
 }
 div.option.selected {
   background: lightskyblue;
-  border: 2px solid navy;
 }
 label > .icon {
   width: inherit;
-}
-button, .button {
-  background: #ddd;
-  color: #333;
-  border: 2px solid #666;
-  border-radius: 0.2em;
-  margin: 0 0.5em;
-  font-weight: bold;
-  padding: 0.5em;
-  text-align: center;
-  transition: background 0.1s ease-out, border 0.1s ease-out;
-}
-button:hover, .button:hover {
-  background: rgb(187, 229, 255);
-  border: 2px solid lightskyblue;
-}
-button:active, .button:active {
-  background: lightskyblue;
-  border: 2px solid navy;
 }
 @media (max-width: 719px) {
   div.row {

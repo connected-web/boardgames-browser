@@ -1,6 +1,6 @@
 <template>
 <div class="boardgame-list">
-  <router-link to="/stats/grids">&larr; Grids</router-link>
+  <p><router-link to="/stats/grids">&larr; Grids</router-link></p>
   <LoadingSpinner v-if="loading">Loading board game grid...</LoadingSpinner>
   <p v-if="message">{{ message }}</p>
   <div v-if="$props.dateCode">

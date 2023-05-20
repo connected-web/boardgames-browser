@@ -4,7 +4,9 @@
   <PaginatedItems :items="games">
     <template v-slot="{ paginatedItems }">
       <ul>
-        <li v-for="game in paginatedItems" :key="`game_${game.boardGameApiId}`"><a :href="boardgameLink(game)">{{ game.name }}</a></li>
+        <li v-for="game in paginatedItems" :key="`game_${game.boardGameApiId}`">
+          <router-link :to="boardgameLink(game)">{{ game.name }}</router-link>
+        </li>
       </ul>
     </template>
   </PaginatedItems>
@@ -12,12 +14,15 @@
 </template>
 
 <script>
-import modelCache from './src/modelCache'
-import sharedModel from './src/sharedModel'
+import modelCache from '../helpers/modelCache'
+import sharedModel from '../helpers/sharedModel'
+
+import PaginatedItems from './PaginatedItems.vue'
 
 const { boardgamesApiUrl } = sharedModel.state
 
 export default {
+  components: { PaginatedItems },
   data() {
     return {
       message: `Loading data from ${boardgamesApiUrl}`,
@@ -31,7 +36,7 @@ export default {
   },
   methods: {
     boardgameLink(game) {
-      return `/boardgames-browser/browser/?game=${game.boardGameApiId}`
+      return `/games/by-name/${game.boardGameApiId}`
     }
   }
 }

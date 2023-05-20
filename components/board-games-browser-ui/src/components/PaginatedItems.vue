@@ -183,10 +183,12 @@ button {
   border: none;
   margin: 0 0.5em;
   padding: 0.5em 0.5em;
+  font-size: 0.8em;
   font-family: inherit;
   font-weight: bold;
   background: #ccc;
   color: black;
+  cursor: pointer;
 }
 button:hover {
   background: #ddd;

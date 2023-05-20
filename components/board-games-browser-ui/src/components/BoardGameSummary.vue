@@ -1,5 +1,7 @@
 <template>
 <div class="boardgame-list">
+  <p><router-link to="/games/by-name">&larr; Games by Name</router-link></p>
+  <LoadingSpinner v-if="loading">Loading info on <b>{{ gameId }}</b></LoadingSpinner>
   <p v-if="message">{{ message }}</p>
   <div v-if="game.name">
     <h2>{{game.name}}</h2>
@@ -73,23 +75,27 @@
 </template>
 
 <script>
-import modelCache from './src/modelCache'
-import sharedModel from './src/sharedModel'
+import modelCache from '../helpers/modelCache'
+import sharedModel from '../helpers/sharedModel'
+
+import StatValue from './StatValue.vue'
+import GameStatBox from './GameStatBox.vue'
+import GameStatKey from './GameStatKey.vue'
+import LoadingSpinner from './LoadingSpinner.vue'
 
 const { boardgamesApiUrl } = sharedModel.state
 
 export default {
+  components: { StatValue, GameStatBox, GameStatKey, LoadingSpinner },
   props: ['gameId'],
-  data: function () {
+  data () {
     return {
-      message: `Loading data from ${boardgamesApiUrl}`,
       activeYear: false,
       game: {}
     }
   },
   async beforeMount() {
-    this.game = await loadBoardGame(this.gameId)
-    this.message = false
+    this.loadBoardGame(this.gameId)
   },
   computed: {
     filteredPlayRecords() {
@@ -119,13 +125,19 @@ export default {
     },
     selectYear(year) {
       this.activeYear = year
+    },
+    async loadBoardGame(gameId) {
+      this.loading = true
+      const data = await modelCache.get(`${boardgamesApiUrl}/api/boardgame/by/${gameId}`)
+      this.loading = false
+      this.game = data?.game
+    }
+  },
+  watch: {
+    gameId(newVal) {
+      this.loadBoardGame(newVal)
     }
   }
-}
-
-async function loadBoardGame(gameId) {
-  const data = await modelCache.get(`${boardgamesApiUrl}/api/boardgame/by/${gameId}`)
-  return data?.game
 }
 
 </script>

@@ -1,12 +1,16 @@
 import getParamsFromUrl from './getParamsFromUrl'
 import localStorage from './localStorage'
 
-const state = {
-  boardgamesApiUrl: 'https://boardgames-api.calisaurus.net',
-  boardgamesSamApiUrl: 'https://nn58gn0krl.execute-api.eu-west-2.amazonaws.com/Prod',
-  params: {},
-  lastDateCode: false
+function defaultState() {
+  return {
+    boardgamesApiUrl: 'https://boardgames-api.calisaurus.net',
+    boardgamesSamApiUrl: 'https://nn58gn0krl.execute-api.eu-west-2.amazonaws.com/Prod',
+    params: {},
+    lastDateCode: false
+  }
 }
+
+const state = defaultState()
 
 state.boardgamesApiUrlStatus = `${state.boardgamesApiUrl}/api/status`
 state.boardgamesSamApiUrlStatus = `${state.boardgamesSamApiUrl}/status`
@@ -46,6 +50,21 @@ function getAuthHeaders () {
   }
 }
 
+function clearData() {
+  const ls = (typeof localStorage !== 'undefined') ? localStorage : { getItem () { return 'Local' } }
+  const apiUserName = ls.getItem('api-user-name')
+  const apiUserKey = ls.getItem('api-user-key')
+  localStorage.clear()
+
+  localStorage.setItem('api-user-name', apiUserName)
+  localStorage.setItem('api-user-key', apiUserKey)
+  localStorage.setItem('sharedModel', JSON.stringify(defaultState()))
+
+  if (typeof window !== 'undefined') {
+    window.location.reload()
+  }
+}
+
 update()
 
-export default { update, state, getAuthHeaders }
+export default { update, state, getAuthHeaders, clearData }

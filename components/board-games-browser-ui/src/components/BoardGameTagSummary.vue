@@ -1,6 +1,6 @@
 <template>
 <div class="boardgame-list">
-  <router-link to="/games/by-tag">&larr; Game Tags</router-link>
+  <p><router-link to="/games/by-tag">&larr; Game Tags</router-link></p>
   <LoadingSpinner v-if="loading">Loading game stats by tag...</LoadingSpinner>
   <p v-if="message">{{ message }}</p>
   <div v-if="summary.name">

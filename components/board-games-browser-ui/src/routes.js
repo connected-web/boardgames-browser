@@ -21,6 +21,7 @@ import Icons from './pages/Icons.vue'
 const routes = [
   { path: '/', component: Home },
   { path: '/games/by-name', component: ByName },
+  { path: '/games/by-name/:gameId', component: ByName, props: true },
   { path: '/games/by-tag', component: ByTag },
   { path: '/games/by-tag/:tag/:tagValue', component: ByTag, props: true },
   { path: '/stats/grids', component: Grids },
