@@ -29,10 +29,15 @@
   flex-direction: column;
   gap: 1px;
   justify-content: flex-start;
-  width: 300px;
+  min-width: 200px;
+  width: 200px;
+  max-width: 200px;
   overflow-x: hidden;
   overflow-y: auto;
   border-right: 2px solid #eee;
+}
+.sidenav > * {
+  white-space: nowrap;
 }
 
 .sidenav > label {
@@ -47,5 +52,32 @@
 .sidenav > a {
   padding: 10px 20px;
   border-bottom: 1px solid #eee;
+}
+
+@media only screen and (max-width: 768px) {
+  .sidenav {
+    min-width: 2em;
+    width: 2em;
+    max-width: 2em;
+    overflow: hidden;
+    background: #aca;
+    transition: min-width 200ms ease-in-out, max-width 200ms ease-in-out, width 200ms ease-in-out, background-color 200ms ease-in-out;
+  }
+  .sidenav > * {
+    display: none;
+    white-space: nowrap;
+  }
+
+  .sidenav:hover {
+    min-width: 200px;
+    width: 200px;
+    max-width: 200px;
+    background: white;
+    transition: min-width 200ms ease-in-out, max-width 200ms ease-in-out, width 200ms ease-in-out, background-color 200ms ease-in-out;
+  }
+  .sidenav:hover > * {
+    display: inherit;
+  }
+  
 }
 </style>
