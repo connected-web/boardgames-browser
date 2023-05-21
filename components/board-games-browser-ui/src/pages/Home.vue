@@ -14,7 +14,7 @@
     <ul>
       <li><router-link to="/api/track">Track board game</router-link></li>
       <li><router-link to="/api/review">Review play records</router-link></li>
-      <li><a href="https://github.com/connected-web/boardgames-browser/actions">Rebuild the stats &rarr;</a></li>
+      <li><a href="https://github.com/connected-web/boardgames-api/actions">Rebuild the stats &rarr;</a></li>
     </ul>
 
     <h2>About</h2>
