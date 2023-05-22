@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import { shallowRef } from 'vue'
+
 import Chart from 'chart.js/auto'
 
 function defaultLineChartData() {
@@ -36,24 +38,44 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      chart: null
+    }
+  },
   mounted() {
-    // Get the canvas element reference
-    const ctx = this.$refs.chartCanvas.getContext('2d');
+    this.createChart()
+  },
+  methods: {
+    createChart() {
+      // Get the canvas element reference
+      const ctx = this.$refs.chartCanvas.getContext('2d');
 
-    // Create the chart
-    new Chart(ctx, {
-      type: 'line',
-      data: this.chartData ?? defaultLineChartData(),
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        elements: {
-          line: {
-            cubicInterpolationMode: 'monotone'
+      if (this.chart) {
+        this.chart.destroy()
+      }
+
+      // Create the chart
+      const chart = new Chart(ctx, {
+        type: 'line',
+        data: this.chartData ?? defaultLineChartData(),
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          elements: {
+            line: {
+              cubicInterpolationMode: 'monotone'
+            }
           }
         }
-      }
-    })
+      })
+      this.chart = shallowRef(chart)
+    }
+  },
+  watch: {
+    chartData() {
+      this.createChart()
+    }
   }
-};
+}
 </script>

@@ -28,7 +28,7 @@ const statsUrl = `${boardgamesApiUrl}/api/boardgame/stats`
 
 const expectedFields = [{
   label: 'Average Games Played per Day',
-  field: 'averageGamesPlayerPerDay',
+  field: 'averageGamesPlayedPerDay',
   color: '#4CAF50'
 }, {
   label: 'Co-op Game Loses',
@@ -145,31 +145,23 @@ export default {
     },
     chartDataFor(yearGroup) {
       const yearGroupCopy =  JSON.parse(JSON.stringify(yearGroup))
-      console.log('Year group:', yearGroupCopy)
+      const fieldsInUse = expectedFields.filter(item => this.filterList.includes(item.field))
       yearGroupCopy.sort((a, b) => {
         const da = new Date(a.dateCode)
         const db = new Date(b.dateCode)
         return da.getTime() > db.getTime() ? 1 : -1
       })
+      const fieldsToUse = fieldsInUse.length > 0 ? fieldsInUse : expectedFields.filter(item => item.field === 'winnableGamesTotal')
+      const datasets = fieldsToUse.map(item => {
+        return {
+          label: item.label,
+          data: yearGroupCopy.map(month => month[item.field]),
+          borderColor: item.color
+        }
+      })
       return {
         labels: yearGroupCopy.map(month => month.title.substring(0, 3)),
-        datasets: [{
-          label: 'Average Games Played per Day',
-          data: yearGroupCopy.map(month => month.averageGamesPlayedPerDay),
-          borderColor: '#999'
-        }, {
-          label: 'Hannah win Count',
-          data: yearGroupCopy.map(month => month.winCountHannah),
-          borderColor: 'purple'
-        }, {
-          label: 'John win Count',
-          data: yearGroupCopy.map(month => month.winCountJohn),
-          borderColor: 'red'
-        }, {
-          label: 'Unique Games Played',
-          data: yearGroupCopy.map(month => month.uniqueGamesPlayedCount),
-          borderColor: 'orange'
-        }]
+        datasets
       }
     },
     toggleFilter(field) {
