@@ -7,6 +7,7 @@ import ByName from './pages/ByName.vue'
 import ByTag from './pages/ByTag.vue'
 
 import Grids from './pages/Grids.vue'
+import GraphsByMonth from './pages/GraphsByMonth.vue'
 import ByMonth from './pages/ByMonth.vue'
 import MonthToDate from './pages/MonthToDate.vue'
 import ByYear from './pages/ByYear.vue'
@@ -26,6 +27,8 @@ const routes = [
   { path: '/games/by-tag/:tag/:tagValue', component: ByTag, props: true },
   { path: '/stats/grids', component: Grids },
   { path: '/stats/grids/:dateCode', component: Grids, props: true },
+  { path: '/graphs/by-month', component: GraphsByMonth, props: true },
+  { path: '/graphs/by-month/:filters', component: GraphsByMonth, props: true },
   { path: '/stats/by-month', component: ByMonth },
   { path: '/stats/by-month/:dateCode', component: ByMonth, props: true },
   { path: '/stats/month-to-date', component: MonthToDate },

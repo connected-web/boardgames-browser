@@ -8,6 +8,7 @@
 
     <label>Stats</label>
     <router-link to="/stats/grids">Grids</router-link>
+    <router-link to="/graphs/by-month">Graphs</router-link>
     <router-link to="/stats/by-month">By Month</router-link>
     <router-link to="/stats/month-to-date">Month to Date</router-link>
     <router-link to="/stats/by-year">By Year</router-link>
