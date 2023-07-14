@@ -20,9 +20,9 @@ const prodIdentityDetails = {
 const makeOAuthClient = memoizee(function (identityConfig) {
   const authClient = createOAuthClient({
     ...identityConfig,
-    redirectUri: `${window.location.origin}/`, // Return to execute auth handler code
+    redirectUri: `${window.location.origin}/boardgames-browser/`, // Return to execute auth handler code
     useLocalLoginRedirectUrl: true, // Return users back to the page they were viewing before auth
-    postLogoutRedirectUri: `${window.location.origin}/`
+    postLogoutRedirectUri: `${window.location.origin}/boardgames-browser/`
   })
   authClient.initialize() // Deliberate side-effect, process auth conditions in current browser context
   return authClient
