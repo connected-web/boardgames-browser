@@ -1,19 +1,28 @@
 <template>
   <div class="user-details">
     <h1>User Details</h1>
-    <p>Information about you!</p>
 
-    <StatValue label="Name" style="text-transform: capitalize;">{{ userName }}</StatValue>
-    <StatValue label="Initials">{{ (userInitials + '').toUpperCase() }}</StatValue>
-    <StatValue label="Email Address">{{ userInfo?.email }}</StatValue>
-    <StatValue label="Logged in for"><RelativeDate v-if="$vueAuth.expiryTime?.value" :date="$vueAuth.expiryTime?.value" /></StatValue>
-    <StatValue label="Access expiry">{{ $vueAuth.expiryTime.value }}</StatValue>
-    <StatValue label="Groups">{{ userGroups.join(', ') }}</StatValue>
-    
-    <pre v-if="false"><code>{{ $vueAuth.decodedIdToken?.value }}</code></pre>
-    
-    <div class="row right">
-      <button v-if="loggedIn" @click="logout">Logout</button>
+    <div v-if="loggedIn">
+      <p>Information about you!</p>
+
+      <StatValue label="Name" style="text-transform: capitalize;">{{ userName }}</StatValue>
+      <StatValue label="Initials">{{ (userInitials + '').toUpperCase() }}</StatValue>
+      <StatValue label="Email Address">{{ userInfo?.email }}</StatValue>
+      <StatValue label="Logged in for"><RelativeDate v-if="$vueAuth.expiryTime?.value" :date="$vueAuth.expiryTime?.value" /></StatValue>
+      <StatValue label="Access expiry">{{ $vueAuth.expiryTime.value }}</StatValue>
+      <StatValue label="Groups">{{ userGroups.join(', ') }}</StatValue>
+      
+      <pre v-if="false"><code>{{ $vueAuth.decodedIdToken?.value }}</code></pre>
+      
+      <div class="row right">
+        <button @click="logout">Logout</button>
+      </div>
+    </div>
+
+    <div v-else>
+      <p>You are not logged in!</p>
+      <p>You could be anyone... that doesn't stop you from browsing the board game stats though!</p>
+      <p>Have fun :)</p>
     </div>
   </div>
 </template>

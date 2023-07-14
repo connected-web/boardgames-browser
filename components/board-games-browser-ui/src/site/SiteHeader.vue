@@ -1,7 +1,10 @@
 <template>
   <div class="header">
     <div class="site-logo"></div>
-    <label class="site-title">Board Games Browser</label>
+    <label class="site-title">
+      <span class="fulltext">Board Games Browser</span>
+      <span class="initials">BGB</span>
+    </label>
     <span class="spacer"></span>
     <div class="row p10">
       <button @click="clearData">
@@ -49,6 +52,7 @@ export default {
   background-size: contain;
   width: 2em;
   height: 2em;
+  min-width: 2em;
 }
 .site-title {
   font-size: 1.4em;
@@ -59,9 +63,31 @@ export default {
 }
 
 button {
-  font-size: 0.85em;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  white-space: nowrap;
+  font-size: 12px;
+}
+
+.fulltext {
+  display: inline;
+}
+.initials {
+  display: none;
+}
+
+@media only screen and (max-width: 640px) {
+  button > span {
+    display: none;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .site-title {
+    font-size: 1.4em;
+    font-weight: 600;
+  }
+  .fulltext {
+    display: none;
+  }
+  .initials {
+    display: inline;
+  }
 }
 </style>

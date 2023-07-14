@@ -101,10 +101,10 @@ label.user-initials {
   color: black;
 }
 div.auth-status button {
-  font-size: 0.85em;
   text-transform: uppercase;
   letter-spacing: 2px;
   white-space: nowrap;
+  font-size: 12px;
 }
 div.auth-status:hover button {
   background: #9ACA7A;
@@ -119,4 +119,9 @@ div.auth-status:hover button {
   }
 }
 
+@media only screen and (max-width: 640px) {
+  button > span {
+    display: none;
+  }
+}
 </style>
