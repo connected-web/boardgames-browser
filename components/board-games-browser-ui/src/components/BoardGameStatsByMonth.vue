@@ -9,7 +9,9 @@
         </li>
       </ul>
     </div>
-    <LoadingSpinner v-if="loading">Loading months in use from API...</LoadingSpinner>
+    <p v-if="loading">
+      <LoadingSpinner>Loading months in use from API...</LoadingSpinner>
+    </p>
   </div>
 </template>
 

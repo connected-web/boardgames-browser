@@ -8,7 +8,9 @@
         </li>
       </ul>
     </div>
-    <LoadingSpinner v-if="loading">Loading years in use from API...</LoadingSpinner>
+    <p v-if="loading">
+      <LoadingSpinner>Loading years in use from API...</LoadingSpinner>
+    </p>
   </div>
 </template>
 

@@ -11,7 +11,9 @@
       <h3>{{ yearGroup?.[0]?.dateCode?.substring(0, 4) }}</h3>
       <line-chart :chart-data="chartDataFor(yearGroup)" />
     </div>
-    <LoadingSpinner v-if="loading">Loading months in use from API...</LoadingSpinner>
+    <p v-if="loading">
+      <LoadingSpinner>Loading months in use from API...</LoadingSpinner>
+    </p>
   </div>
 </template>
 

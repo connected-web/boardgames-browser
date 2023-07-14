@@ -73,12 +73,12 @@
         <textarea type="text" v-model="notes" placeholder="Any extra notes about the game..." rows="4" />
       </div>
 
-      <p class="buttons" v-if="sending">
+      <p class="buttons row p10" v-if="sending">
         <button type="reset" disabled>Clear Form</button>
         <button type="submit" disabled>Sending...</button>
       </p>
 
-      <p class="buttons" v-else>
+      <p class="buttons row p10" v-else>
         <button type="reset" v-on:click="clearForm">Clear Form</button>
         <button type="submit">Submit</button>
       </p>

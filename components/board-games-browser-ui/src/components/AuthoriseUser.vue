@@ -6,9 +6,13 @@
       <input v-model="apiKey" placeholder="Type your API key">
     </div>
     <p class="message">{{ message }}</p>
-    <p class="buttons">
+    <p class="buttons row p10">
       <button v-on:click="handleSubmit">Store Credentials</button>
       <button v-on:click="clearCredentials">Clear Credentials from this Device</button>
+    </p>
+    <p class="info row p5">
+      <Icon icon="info-circle" />
+      <span style="text-align: center;">Update as of 2023-07-14! This form works for now and is necessary for the Track and Review feature; but is being replaced with SSO login</span>
     </p>
   </div>
 </template>
@@ -24,8 +28,8 @@ export default {
   },
   methods: {
     handleSubmit() {
-      localStorage.setItem('api-user-name', this.apiUsername)
-      localStorage.setItem('api-user-key', this.apiKey)
+      localStorage.setItem('api-user-name', this.apiUsername ?? '')
+      localStorage.setItem('api-user-key', this.apiKey ?? '')
       this.message = 'API Key for ' + this.apiUsername + ' stored on this device.'
     },
     clearCredentials() {
@@ -37,8 +41,8 @@ export default {
     }
   },
   mounted() {
-    this.apiUsername = localStorage.getItem('api-user-name')
-    this.apiKey = localStorage.getItem('api-user-key')
+    this.apiUsername = localStorage.getItem('api-user-name').replace('null', '') ?? ''
+    this.apiKey = localStorage.getItem('api-user-key').replace('null', '') ?? ''
     if (this.apiUsername) {
       this.message = 'Found user credentials for ' + this.apiUsername + ' on this device.'
     }

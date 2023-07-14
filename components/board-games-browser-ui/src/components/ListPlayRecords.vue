@@ -1,8 +1,5 @@
 <template>
   <div>
-    <p v-if="message">
-      <span>{{ message }}</span>
-    </p>
     <div v-if="playRecordToBeRemoved" class="remove-play-record">
       <p class="warn">Are you sure you want to remove this play record?</p>
       <div class="play record">
@@ -20,8 +17,8 @@
       </div>
     </div>
     <div v-else class="list-of-play-records">
-      <p>Here is the full list of play records available on the Board Games SAM API:</p>
       <div v-if="playRecords.length">
+        <p>Here is the full list of play records available on the Board Games SAM API:</p>
         <div v-for="record in playRecords" :key="record.key" class="play record">
           <pre><code>{{ record }}</code></pre>
           <button class="trash" v-on:click="askToRemovePlayRecord(record)">
@@ -31,8 +28,13 @@
         </div>
         <pre v-if="playRecords?.length === 0"><code>No play records found</code></pre>
       </div>
-      <LoadingSpinner v-if="loading">{{ status }}</LoadingSpinner>
-      <p v-else-if="status">{{ status }}</p>
+      <p v-if="loading">
+        <LoadingSpinner>{{ status }}</LoadingSpinner>
+      </p>
+      <h3 v-else-if="status" class="status">{{ status }}</h3>
+      <p v-if="message">
+        <span>{{ message }}</span>
+      </p>
     </div>
   </div>
 </template>

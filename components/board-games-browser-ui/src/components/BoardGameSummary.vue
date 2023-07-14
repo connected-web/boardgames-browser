@@ -1,7 +1,9 @@
 <template>
 <div class="boardgame-list">
   <p><router-link to="/games/by-name">&larr; Games by Name</router-link></p>
-  <LoadingSpinner v-if="loading">Loading info on <b>{{ gameId }}</b></LoadingSpinner>
+  <p v-if="loading">
+    <LoadingSpinner>Loading info on <b>{{ gameId }}</b></LoadingSpinner>
+  </p>
   <p v-if="message">{{ message }}</p>
   <div v-if="game.name">
     <h2>{{game.name}}</h2>

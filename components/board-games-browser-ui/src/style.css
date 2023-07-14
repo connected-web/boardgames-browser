@@ -111,8 +111,10 @@ button, .button {
   transition: background 100ms ease-out;
   cursor: pointer;
   padding: 0.5em 1.0em;
-  margin: 0.5em;
-  font-size: 18px;
+  margin: 0;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 pre {
@@ -157,4 +159,49 @@ a:active, a.selected {
 }
 a.selected:hover {
   color: #9ACA7A;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  justify-content: center;
+}
+
+.row.left {
+  justify-content: flex-start;
+}
+.row.center {
+  justify-content: center;
+}
+.row.right {
+  justify-content: flex-end;
+}
+.row.p5 {
+  gap: 5px;
+}
+.row.p10 {
+  gap: 10px;
+}
+
+div.circle-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  min-width: 2.0em;
+  width: 2.0em;
+  height: 2.0em;
+  overflow: hidden;
+  transition: background-color 150ms ease-in-out;
+}
+*:hover > div.circle-icon {
+  background: rgba(255,255,255,0.2);
+}
+
+.logged-in div.circle-icon {
+  background: rgb(37, 70, 60);
+}
+.logged-in div.circle-icon:hover {
+  background: rgb(53, 121, 104);
 }

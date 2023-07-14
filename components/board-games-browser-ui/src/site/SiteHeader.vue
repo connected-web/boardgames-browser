@@ -3,14 +3,25 @@
     <div class="site-logo"></div>
     <label class="site-title">Board Games Browser</label>
     <span class="spacer"></span>
-    <button @click="clearData">Reload Data</button>
+    <div class="row p10">
+      <button @click="clearData">
+        <span>Reload Data</span>
+        <div class="circle-icon">
+          <Icon icon="recycle" />
+        </div>
+      </button>
+      <AuthButton />
+    </div>
   </div>
 </template>
 
 <script>
 import sharedModel from '../helpers/sharedModel'
 
+import AuthButton from '../login/AuthButton.vue'
+
 export default {
+  components: { AuthButton },
   methods: {
     clearData() {
       sharedModel.clearData()
@@ -49,5 +60,8 @@ export default {
 
 button {
   font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  white-space: nowrap;
 }
 </style>

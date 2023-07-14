@@ -1,7 +1,9 @@
 <template>
   <div>
     <code style="display: none;">{{ datasourceUrl }}</code>
-    <LoadingSpinner v-if="loading">Loading stats...</LoadingSpinner>
+    <p v-if="loading">
+      <LoadingSpinner>Loading stats...</LoadingSpinner>
+    </p>
     <div v-if="stats">
       <p>Board game stats for <b>{{ stats.totalGamesPlayed }}</b>
         games played by <i>Hannah and John</i> over <b>{{ stats.daysInSequence }}</b> days

@@ -1,6 +1,8 @@
 <template>
   <div class="boardgame-list">
-    <LoadingSpinner v-if="loading">Loading tag list...</LoadingSpinner>
+    <p v-if="loading">
+      <LoadingSpinner>Loading tag list...</LoadingSpinner>
+    </p>
     <div v-for="(tagGroup, tagKey) in tags" :key="`div_tag_${tagKey}`">
       <h2 :id="`${tagKey}`">By {{ tagKey }}</h2>
       <ul>

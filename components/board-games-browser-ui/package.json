@@ -14,8 +14,12 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/vue-fontawesome": "^3.0.3",
     "chart.js": "^4.3.0",
+    "crypto-js": "^4.1.1",
     "dayjs": "^1.10.7",
     "md5": "^2.3.0",
+    "memoizee": "^0.4.15",
+    "oauth4webapi": "^2.3.0",
+    "time-until": "^1.0.0",
     "vue": "^3.2.47",
     "vue-router": "^4.2.0",
     "vue-select": "^4.0.0-beta.6"
