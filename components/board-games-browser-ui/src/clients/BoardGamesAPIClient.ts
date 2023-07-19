@@ -32,7 +32,7 @@ export default class BoardGamesApiClient {
     const serverInfo = await getServerInfo()
     const local = window.location.origin
     const client = new OpenAPIClientAxios({
-      definition: `${local}/boardgames-api-services.json`,
+      definition: `${local}/boardgames-browser/boardgames-api-services.json`,
       axiosConfigDefaults: { headers: serverInfo.headers }
     })
 
