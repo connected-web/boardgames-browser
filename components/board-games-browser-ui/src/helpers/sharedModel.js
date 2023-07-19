@@ -54,7 +54,8 @@ function clearData() {
   const ls = (typeof localStorage !== 'undefined') ? localStorage : { getItem () { return 'Local' } }
   const apiUserName = ls.getItem('api-user-name')
   const apiUserKey = ls.getItem('api-user-key')
-  localStorage.clear()
+  
+  localStorage.removeItem('sharedModel')
 
   localStorage.setItem('api-user-name', apiUserName)
   localStorage.setItem('api-user-key', apiUserKey)

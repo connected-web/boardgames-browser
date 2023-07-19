@@ -173,6 +173,7 @@ a.selected:hover {
 }
 .row.center {
   justify-content: center;
+  align-items: center;
 }
 .row.right {
   justify-content: flex-end;
@@ -200,8 +201,8 @@ div.circle-icon {
 }
 
 .logged-in div.circle-icon {
-  background: rgb(37, 70, 60);
+  background: #8b6;
 }
 .logged-in div.circle-icon:hover {
-  background: rgb(53, 121, 104);
+  background: #9ACA7A;
 }

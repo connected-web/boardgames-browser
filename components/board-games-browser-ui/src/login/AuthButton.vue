@@ -1,10 +1,8 @@
 <template>
   <div :class="{ 'auth-status': true, 'logged-in': loggedIn }">
-    <router-link to="/user/details">
-      <label v-if="loggedIn" class="user-name">{{ userName }}</label>
-      <label v-if="loggedIn" class="user-initials">{{ userInitials }}</label>
-    </router-link>
-    <router-link v-if="loggedIn" to="/user/details">
+    <router-link v-if="loggedIn" to="/user/details" class="row center p5">
+      <label class="user-name">{{ userName }}</label>
+      <label class="user-initials">{{ userInitials }}</label>
       <div class="circle-icon" title="View User Details">
         <Icon :icon="loggedIn ? 'user-shield' : 'user-slash'" />
       </div>
