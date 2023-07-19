@@ -19,6 +19,9 @@
     <router-link to="/api/review">Review</router-link>
     <router-link to="/api/authenticate">Authenticate</router-link>
 
+    <label>Testing</label>
+    <router-link to="/api/api-testing">Services API</router-link>
+
     <label>Extras</label>
     <router-link to="/extras/icons">Icon Browser</router-link>
   </div>

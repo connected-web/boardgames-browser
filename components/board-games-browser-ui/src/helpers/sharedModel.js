@@ -1,10 +1,11 @@
 import getParamsFromUrl from './getParamsFromUrl'
 import localStorage from './localStorage'
 
-function defaultState() {
+function defaultState () {
   return {
     boardgamesApiUrl: 'https://boardgames-api.calisaurus.net',
     boardgamesSamApiUrl: 'https://nn58gn0krl.execute-api.eu-west-2.amazonaws.com/Prod',
+    boardgamesApiServicesUrl: 'https://boardgames-api.dev.connected-web.services',
     params: {},
     lastDateCode: false
   }
@@ -22,7 +23,7 @@ function getStoredState () {
   } catch (ex) {
     console.log('Invalid stored state found:', ex.message)
   }
-  return storedState || {}
+  return Object.assign(defaultState(), storedState ?? {})
 }
 
 function saveStoredState () {
@@ -50,11 +51,11 @@ function getAuthHeaders () {
   }
 }
 
-function clearData() {
+function clearData () {
   const ls = (typeof localStorage !== 'undefined') ? localStorage : { getItem () { return 'Local' } }
   const apiUserName = ls.getItem('api-user-name')
   const apiUserKey = ls.getItem('api-user-key')
-  
+
   localStorage.removeItem('sharedModel')
 
   localStorage.setItem('api-user-name', apiUserName)

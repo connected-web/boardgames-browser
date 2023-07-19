@@ -1,5 +1,6 @@
 import memoizee from 'memoizee'
-import { OAuthClientPlugin, createOAuthClient } from '../login/VueAuthPlugin' // use ./login/OAuthClient.ts directly for non-vue apps
+import { OAuthClientPlugin, createOAuthClient } from './VueAuthPlugin'
+import { OAuthClientOptions } from './OAuthClient'
 
 const uatIdentityDetails = {
   name: 'Connected Web (UAT)',
@@ -17,25 +18,35 @@ const prodIdentityDetails = {
   scopes: 'openid email profile'
 }
 
-const makeOAuthClient = memoizee(function (identityConfig) {
+const makeOAuthClient = memoizee(function (identityConfig: OAuthClientOptions) {
   const authClient = createOAuthClient({
     ...identityConfig,
-    redirectUri: `${window.location.origin}/boardgames-browser/`, // Return to execute auth handler code
+    redirectUri: `${window.location.origin}/`, // Return to execute auth handler code
     useLocalLoginRedirectUrl: true, // Return users back to the page they were viewing before auth
-    postLogoutRedirectUri: `${window.location.origin}/boardgames-browser/`
+    postLogoutRedirectUri: `${window.location.origin}/`
   })
-  authClient.initialize() // Deliberate side-effect, process auth conditions in current browser context
+  authClient.initialize()
+    .catch((err) => {
+      console.error('Unable to initialize the OAuthClient:', err)
+    }) // Deliberate side-effect, process auth conditions in current browser context
   return authClient
 })
 
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class Auth {
-  static getOAuthClient():OAuthClientPlugin {
-    // See also: 'this.$vueAuth' for bindable vue properties in VueAuthPlugin.ts
+  static getOAuthClient (): OAuthClientPlugin {
+    // See also: "this.$vueAuth" for bindable vue properties in VueAuthPlugin.ts
     const identityConfig = Auth.getIdentityDetails()
     return makeOAuthClient(identityConfig)
   }
 
-  static getIdentityDetails() {
+  static async getLatestAccessToken (): Promise<string | boolean> {
+    const authClient = this.getOAuthClient()
+    const accessToken = await authClient.initialize()
+    return accessToken ?? false
+  }
+
+  static getIdentityDetails (): OAuthClientOptions {
     const uatMode = false
     return uatMode ? uatIdentityDetails : prodIdentityDetails
   }

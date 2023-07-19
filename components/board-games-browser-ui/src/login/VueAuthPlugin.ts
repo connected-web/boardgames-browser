@@ -1,70 +1,68 @@
-import { getCurrentInstance, inject, type App, type InjectionKey } from 'vue'
-import { computed, readonly, ref, watch, type Ref } from 'vue'
+import { getCurrentInstance, inject, type App, type InjectionKey, computed, ComputedRef } from 'vue'
 import { OAuthClient, type OAuthClientOptions } from './OAuthClient'
 export { OAuthClient }
 export { Storage } from './Storage'
 export { LocalStorage } from './LocalStorage'
 
-export const authClientInjectionKey = Symbol() as InjectionKey<OAuthClient>
+export const authClientInjectionKey = Symbol('Injection key for OAuthClient') as InjectionKey<OAuthClient>
 
 export class OAuthClientPlugin {
+  private readonly _oauthClient: OAuthClient
 
-	private _oauthClient:OAuthClient
+  constructor (options: OAuthClientOptions) {
+    this._oauthClient = new OAuthClient(options)
+  }
 
-	constructor(options:OAuthClientOptions) {
-		this._oauthClient = new OAuthClient(options)
-	}
+  public install (app: App, { global = false } = {}): void {
+    if (global) {
+      app.config.globalProperties.$vueAuth = this
+    }
+    app.provide(authClientInjectionKey, this._oauthClient)
+  }
 
-	public install(app: App, { global = false } = {}) {
-		if (global) {
-			app.config.globalProperties.$vueAuth = this
-		}
-		app.provide(authClientInjectionKey, this._oauthClient)
-	}
+  get client (): OAuthClient {
+    return this._oauthClient
+  }
 
-	get client():OAuthClient {
-		return this._oauthClient
-	}
+  get loggedIn (): ComputedRef<boolean> {
+    return computed<boolean>(() => this._oauthClient.loggedIn)
+  }
 
-	get loggedIn() {
-		return computed<Boolean>(() => !!this._oauthClient.accessToken)
-	}
+  get accessToken (): ComputedRef<string | undefined | null> {
+    return computed<string | undefined | null>(() => this._oauthClient.accessToken)
+  }
 
-	get accessToken() {
-		return computed<string | undefined | null>(() => this._oauthClient.accessToken)
-	}
+  get refreshToken (): ComputedRef<string | undefined | null> {
+    return computed<string | undefined | null>(() => this._oauthClient.refreshToken)
+  }
 
-	get refreshToken() {
-		return computed<string | undefined | null>(() => this._oauthClient.refreshToken)
-	}
+  get idToken (): ComputedRef<string | undefined | null> {
+    return computed<string | undefined | null>(() => this._oauthClient.idToken)
+  }
 
-	get idToken() {
-		return computed<string | undefined | null>(() => this._oauthClient.idToken)
-	}
+  get decodedIdToken (): ComputedRef<any> {
+    return computed<Object>(() => this._oauthClient.decodedIdToken)
+  }
 
-	get decodedIdToken() {
-		return computed<Object>(() => this._oauthClient.decodedIdToken)
-	}
+  get expiryTime (): ComputedRef<Date | undefined | null> {
+    return computed<Date | undefined | null>(() => this._oauthClient.expiryTime)
+  }
 
-	get expiryTime() {
-		return computed<Date | undefined | null>(() => this._oauthClient.expiryTime)
-	}
+  async initialize (): Promise<string | boolean> {
+    return await this._oauthClient.initialize()
+  }
 
-	async initialize() {
-		return this._oauthClient.initialize()
-	}
+  async authorize (): Promise<void> {
+    return await this._oauthClient.authorize()
+  }
 
-	async authorize() {
-		return this._oauthClient.authorize()
-	}
+  async userInfo (): Promise<any> {
+    return await this._oauthClient.userInfo()
+  }
 
-	async userInfo() {
-		return this._oauthClient.userInfo()
-	}
-
-	async logout(logoutHint?: string, local?: boolean) {
-		return this._oauthClient.logout(logoutHint, local)
-	}
+  async logout (logoutHint?: string, local?: boolean): Promise<void> {
+    return this._oauthClient.logout(logoutHint, local)
+  }
 }
 
 /**
@@ -79,15 +77,15 @@ export class OAuthClientPlugin {
  *
  * const app = createApp(App)
  * const authClient = createOAuthClient({
- * 	url: 'https://example.com',
- * 	clientId: 'my-client-id',
+ *   url: 'https://example.com',
+ *   clientId: 'my-client-id',
  * })
  *
  * app.use(authClient, { global: true })
  * ```
  */
-export function createOAuthClient (options: OAuthClientOptions) {
-	return new OAuthClientPlugin(options)
+export function createOAuthClient (options: OAuthClientOptions): OAuthClientPlugin {
+  return new OAuthClientPlugin(options)
 }
 
 /**
@@ -105,23 +103,23 @@ export function createOAuthClient (options: OAuthClientOptions) {
  * </template>
  *
  * <script setup>
- * 	import { useOAuthClient } from './login/VueAuthPlugin'
- * 	const authClient = useOAuthClient()
- * 	const authorize = () => authClient.authorize()
+ *   import { useOAuthClient } from './login/VueAuthPlugin'
+ *   const authClient = useOAuthClient()
+ *   const authorize = () => authClient.authorize()
  * </script>
  * ```
  */
-export function useOAuthClient (options?: OAuthClientOptions) {
-	const client = inject(authClientInjectionKey)
-	const instance = getCurrentInstance()
-	if (!instance) {
-		throw new Error('useOAuthClient must be called in the setup function')
-	}
-	if (!client) {
-		throw new Error('OAuthClient is not installed')
-	}
-	if (options) {
-		client.extend(options)
-	}
-	return client
+export function useOAuthClient (options?: OAuthClientOptions): OAuthClient {
+  const client = inject(authClientInjectionKey)
+  const instance = getCurrentInstance()
+  if (instance == null) {
+    throw new Error('useOAuthClient must be called in the setup function')
+  }
+  if (client == null) {
+    throw new Error('OAuthClient is not installed')
+  }
+  if (options != null) {
+    client.extend(options)
+  }
+  return client
 }

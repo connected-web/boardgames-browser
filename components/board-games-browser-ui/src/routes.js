@@ -1,4 +1,3 @@
-
 import * as VueRouter from 'vue-router'
 
 import Home from './pages/Home.vue'
@@ -16,6 +15,8 @@ import YearToDate from './pages/YearToDate.vue'
 import Track from './pages/ApiTrack.vue'
 import Review from './pages/ApiReview.vue'
 import Authenticate from './pages/ApiAuthenticate.vue'
+
+import ApiTesting from './pages/ApiTesting.vue'
 
 import Icons from './pages/Icons.vue'
 import UserDetails from './pages/UserDetails.vue'
@@ -39,6 +40,7 @@ const routes = [
   { path: '/api/track', component: Track },
   { path: '/api/review', component: Review },
   { path: '/api/authenticate', component: Authenticate },
+  { path: '/api/api-testing', component: ApiTesting },
   { path: '/extras/icons', component: Icons },
   { path: '/user/details', component: UserDetails }
 ]
