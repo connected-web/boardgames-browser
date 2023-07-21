@@ -8,6 +8,9 @@
 
     <h3>Hello</h3>
     <pre><code>{{ hello }}</code></pre>
+
+    <h3>List Play Records</h3>
+    <pre><code>{{ playRecords }}</code></pre>
   </div>
 </template>
 
@@ -24,16 +27,19 @@ export default {
     return {
       client: BoardGamesAPIClient.getSingleton(),
       status: 'Loading status...',
-      hello: 'Anybody there?'
+      hello: 'Anybody there?',
+      playRecords: { playRecords: [{ message: 'Loading...' }] }
     }
   },
   mounted() {
     this.loadStatus()
     this.loadHello()
+    this.listPlayrecords()
   },
   computed: {
     userName(): string {
-      const userInfo = this.$vueAuth?.decodedIdToken?.value
+      const { $vueAuth } = this as any
+      const userInfo = $vueAuth?.decodedIdToken?.value
       if (userInfo) {
         const { name, email } = userInfo
         if (name) {
@@ -73,6 +79,16 @@ export default {
       } catch (ex) {
         console.error('Error:', { ex })
         this.hello = `Error: ${(ex as Error)?.message}`
+      }
+    },
+    async listPlayrecords() {
+      try {
+        const client = await this.client.getInstance()
+        const response = await client.listPlayRecords()
+        this.playRecords = response?.data ?? ['Sad noises']
+      } catch (ex) {
+        console.error('Error:', { ex })
+        this.playRecords = [`Error: ${(ex as Error)?.message}`]
       }
     }
   }
