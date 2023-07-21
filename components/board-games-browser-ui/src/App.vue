@@ -30,6 +30,7 @@ export default {
   flex-direction: row;
   align-items: stretch;
   flex: 1 1;
+  overflow-x: hidden;
 }
 .page {
   margin: 0;
