@@ -88,7 +88,7 @@ export default {
         this.playRecords = response?.data ?? ['Sad noises']
       } catch (ex) {
         console.error('Error:', { ex })
-        this.playRecords = [`Error: ${(ex as Error)?.message}`]
+        this.playRecords = { playRecords: [{ message: `Error: ${(ex as Error)?.message}` }] }
       }
     }
   }

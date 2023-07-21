@@ -1,4 +1,5 @@
-import OpenAPIClientAxios from 'openapi-client-axios'
+import OpenAPIClientAxios, { OpenAPIV3 } from 'openapi-client-axios'
+import BoardgamesAPIDocument from './boardgames-api-services.json'
 import Auth from '../login/Auth'
 import { Client } from './BoardGamesAPIClientTypes'
 
@@ -30,9 +31,8 @@ export default class BoardGamesApiClient {
 
   async getInstance (): Promise<Client> {
     const serverInfo = await getServerInfo()
-    const local = window.location.origin
     const client = new OpenAPIClientAxios({
-      definition: `${local}/boardgames-browser/boardgames-api-services.json`,
+      definition: BoardgamesAPIDocument as OpenAPIV3.Document,
       axiosConfigDefaults: { headers: serverInfo.headers }
     })
 
