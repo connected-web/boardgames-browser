@@ -1,5 +1,7 @@
 <template>
   <div>
+    <p>{{ serviceSelection?.message }}</p>
+    
     <div v-if="playRecordToBeRemoved" class="remove-play-record">
       <p class="warn">Are you sure you want to remove this play record?</p>
       <div class="play record">
@@ -18,7 +20,7 @@
     </div>
     <div v-else class="list-of-play-records">
       <div v-if="playRecords.length">
-        <p>Here is the full list of play records available on the Board Games SAM API:</p>
+        <p>Here is the full list of play records available on the {{ serviceSelection?.name }}:</p>
         <div v-for="record in playRecords" :key="record.key" class="play record">
           <pre><code>{{ record }}</code></pre>
           <button class="trash" v-on:click="askToRemovePlayRecord(record)">
@@ -42,10 +44,13 @@
 <script>
 import axios from 'axios'
 import sharedModel from '../helpers/sharedModel'
+import checkServiceSelection from './helpers/checkServiceSelection'
 
 import LoadingSpinner from './LoadingSpinner.vue'
 
 const { boardgamesSamApiUrl } = sharedModel.state
+
+import BoardGamesAPIClient from '../clients/BoardGamesAPIClient'
 
 function convertDate(date) {
   const [dd, mm, yyyy] = date.split('/')
@@ -67,29 +72,45 @@ export default {
       status: 'Loading data...',
       playRecords: [],
       playRecordToBeRemoved: false,
-      message: ''
+      message: '',
+      serviceSelection: 'Not sure...'
     }
   },
   async mounted() {
-    return this.listPlayRecords()
+    this.serviceSelection = await this.checkServiceSelection(this.$vueAuth)
+    this.listPlayRecords()
   },
   methods: {
+    checkServiceSelection,
     async listPlayRecords() {
       this.loading = true
+      if (this.serviceSelection?.service === 'None') {
+        this.playRecords = []
+        return
+      }
+
       try {
-        const url = `${boardgamesSamApiUrl}/playrecords/list`
-        const axiosConfig = {
-          headers: sharedModel.getAuthHeaders()
-        }
-        const { data } = await axios.get(url, axiosConfig)
+        this.playRecords = await (this.serviceSelection?.service === 'OAuth' ? this.listPlayRecordsFromCDKAPI() : this.listPlayRecordsFromSAMAPI())
         this.status = 'Loaded'
-        this.playRecords = (data?.playRecords || []).sort(sortPlayRecordsByDate)
       } catch (ex) {
         const { data } = ex.response || {}
-        this.message = data.message || `Unable to load status: ${ex.message}`
+        this.message = data?.message || `Unable to load status: ${ex?.message}`
         this.status = 'Error'
       }
       this.loading = false
+    },
+    async listPlayRecordsFromSAMAPI() {
+      const url = `${boardgamesSamApiUrl}/playrecords/list`
+      const axiosConfig = {
+        headers: sharedModel.getAuthHeaders()
+      }
+      const { data } = await axios.get(url, axiosConfig)
+      return (data?.playRecords ?? []).sort(sortPlayRecordsByDate)
+    },
+    async listPlayRecordsFromCDKAPI() {
+      const client = await BoardGamesAPIClient.getSingleton().getInstance()
+      const { data } = await client.listPlayRecords()
+      return (data?.playRecords ?? []).sort(sortPlayRecordsByDate)
     },
     askToRemovePlayRecord(playRecord) {
       this.message = ''
@@ -110,7 +131,7 @@ export default {
         this.message = `Play record ${key} removed!`
         return this.listPlayRecords()
       } catch (ex) {
-        this.message = data.message || `Unable to remove play record: ${ex.message}`
+        this.message = data?.message || `Unable to remove play record: ${ex?.message}`
       }
     }
   }

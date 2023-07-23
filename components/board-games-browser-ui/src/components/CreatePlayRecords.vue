@@ -1,6 +1,7 @@
 <template>
   <div>
-    <p></p>
+    <p>{{ serviceSelection?.message }}</p>
+
     <form v-on:submit="handleSubmit">
       <h3>What was the name of the game?</h3>
       <p class="default info">(Required Field!)</p>
@@ -96,6 +97,7 @@ import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 
 import sharedModel from '../helpers/sharedModel'
+import checkServiceSelection from './helpers/checkServiceSelection'
 
 import CalendarPicker from './CalendarPicker.vue'
 
@@ -115,7 +117,8 @@ export default {
       notes: '',
       message: '',
       listOfGames: [],
-      sending: false
+      sending: false,
+      serviceSelection: 'Not sure...'
     }
   },
   computed: {
@@ -144,6 +147,7 @@ export default {
     }
   },
   methods: {
+    checkServiceSelection,
     coOpClass(value) {
       const selected = value === this.coOp
       const className = selected ? 'selected' : 'deselected'
@@ -215,17 +219,21 @@ export default {
         errors.push(`Unexpected date format: "${data.date}" - expected dd/mm/yyyy, e.g. ${this.dateToday}.`)
       }
       return errors
+    },
+    async loadBoardGamesList() {
+      const url = `${boardgamesApiUrl}/api/boardgame/list`
+      try {
+        const { data } = await axios.get(url)
+        const { games } = data || []
+        this.listOfGames = games.map(entry => entry.name)
+      } catch (error) {
+        console.log('Unable to load board game list from', url, 'Error:', error.message)
+      }
     }
   },
   async mounted() {
-    const url = `${boardgamesApiUrl}/api/boardgame/list`
-    try {
-      const { data } = await axios.get(url)
-      const { games } = data || []
-      this.listOfGames = games.map(entry => entry.name)
-    } catch (error) {
-      console.log('Unable to load board game list from', url, 'Error:', error.message)
-    }
+    this.serviceSelection = await this.checkServiceSelection(this.$vueAuth)
+    this.loadBoardGamesList()
   }
 }
 </script>
