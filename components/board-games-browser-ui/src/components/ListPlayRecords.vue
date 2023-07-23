@@ -7,7 +7,7 @@
       <div class="play record">
         <pre><code>{{ playRecordToBeRemoved }}</code></pre>
       </div>
-      <div class="button-row">
+      <div class="button-row row p10">
         <button v-on:click="playRecordToBeRemoved = false">
           <icon icon="backspace" />
           <label>No leave it alone...</label>
@@ -33,10 +33,12 @@
       <p v-if="loading">
         <LoadingSpinner>{{ status }}</LoadingSpinner>
       </p>
-      <h3 v-else-if="status" class="status">{{ status }}</h3>
-      <p v-if="message">
-        <span>{{ message }}</span>
-      </p>
+      <div v-else-if="status" >
+        <h3 class="status">Status: {{ status }}</h3>
+        <p>
+          <span>{{ message ? message : 'No messages.' }}</span>
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -92,6 +94,7 @@ export default {
       try {
         this.playRecords = await (this.serviceSelection?.service === 'OAuth' ? this.listPlayRecordsFromCDKAPI() : this.listPlayRecordsFromSAMAPI())
         this.status = 'Loaded'
+        this.message = `Found ${this.playRecords?.length ?? 0} play records.`
       } catch (ex) {
         const { data } = ex.response || {}
         this.message = data?.message || `Unable to load status: ${ex?.message}`
@@ -109,7 +112,11 @@ export default {
     },
     async listPlayRecordsFromCDKAPI() {
       const client = await BoardGamesAPIClient.getSingleton().getInstance()
-      const { data } = await client.listPlayRecords()
+      const now = new Date()
+      const currentMonth = now.getMonth() + 1
+      const monthCode = currentMonth >= 10 ? currentMonth + '' : '0' + currentMonth
+      const dateCode = [now.getFullYear(), monthCode].join('-')
+      const { data } = await client.listPlayRecordsByDate({ dateCode })
       return (data?.playRecords ?? []).sort(sortPlayRecordsByDate)
     },
     askToRemovePlayRecord(playRecord) {
@@ -118,14 +125,7 @@ export default {
     },
     async removePlayRecord(key) {
       try {
-        const url = `${boardgamesSamApiUrl}/playrecords/delete`
-        const axiosConfig = {
-          headers: sharedModel.getAuthHeaders(),
-          data: {
-            keypath: key
-          }
-        }
-        const { data } = await axios.delete(url, axiosConfig)
+        await (this.serviceSelection?.service === 'OAuth' ? this.removePlayRecordFromCDKAPI(key) : this.removePlayRecordFromSAMAPI(key))
         console.log('Delete', key, data)
         this.playRecordToBeRemoved = false
         this.message = `Play record ${key} removed!`
@@ -133,6 +133,20 @@ export default {
       } catch (ex) {
         this.message = data?.message || `Unable to remove play record: ${ex?.message}`
       }
+    },
+    async removePlayRecordFromSAMAPI(key) {
+      const url = `${boardgamesSamApiUrl}/playrecords/delete`
+      const axiosConfig = {
+        headers: sharedModel.getAuthHeaders(),
+        data: {
+          keypath: key
+        }
+      }
+      return axios.delete(url, axiosConfig)
+    },
+    async removePlayRecordFromCDKAPI(key) {
+      const client = await BoardGamesAPIClient.getSingleton().getInstance()
+      return client.deletePlayRecord(null, { keypath: key })
     }
   }
 }
