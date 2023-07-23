@@ -9,13 +9,18 @@
     <h3>Hello</h3>
     <pre><code>{{ hello }}</code></pre>
 
+    <h3>List Play Records by Current Month</h3>
+    <p v-if="currentMonthPlayRecords?.playRecords?.length">Found {{ currentMonthPlayRecords?.playRecords?.length }} play records for {{ currentMonthDateCode }}.</p>
+    <pre><code>{{ currentMonthPlayRecords }}</code></pre>
+
     <h3>List Play Records</h3>
+    <p v-if="playRecords?.playRecords?.length">Found {{ playRecords?.playRecords?.length }} play records in total.</p>
     <pre><code>{{ playRecords }}</code></pre>
   </div>
 </template>
 
 <script lang="ts">
-import BoardGamesAPIClient from '../clients/BoardGamesAPIClient'
+import BoardGamesAPIClient, { BoardGamesApiClientType } from '../clients/BoardGamesAPIClient'
 
 function upperCaseFirst(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1)
@@ -28,15 +33,25 @@ export default {
       client: BoardGamesAPIClient.getSingleton(),
       status: 'Loading status...',
       hello: 'Anybody there?',
-      playRecords: { playRecords: [{ message: 'Loading...' }] }
+      currentMonthPlayRecords: { playRecords: [{ message: 'Loading play records for this month...' }] },
+      playRecords: { playRecords: [{ message: 'Loading play records for all time...' }] }
     }
   },
   mounted() {
     this.loadStatus()
     this.loadHello()
     this.listPlayrecords()
+    this.listPlayrecordsForMonth(this.currentMonthDateCode)
   },
   computed: {
+    currentMonthDateCode(): string {
+      const now = new Date()
+      const yearCode = now.getFullYear() + ''
+      const month = (now.getMonth() + 1)
+      const monthCode = month >= 10 ? month + '' : '0' + month
+      const dateCode = [yearCode, monthCode].join('-')
+      return dateCode
+    },
     userName(): string {
       const { $vueAuth } = this as any
       const userInfo = $vueAuth?.decodedIdToken?.value
@@ -89,6 +104,16 @@ export default {
       } catch (ex) {
         console.error('Error:', { ex })
         this.playRecords = { playRecords: [{ message: `Error: ${(ex as Error)?.message}` }] }
+      }
+    },
+    async listPlayrecordsForMonth(dateCode:string) {
+      try {
+        const client:BoardGamesApiClientType = await this.client.getInstance()
+        const response = await client.listPlayRecordsByDate({ dateCode }, {})
+        this.currentMonthPlayRecords = response?.data ?? ['Sad noises']
+      } catch (ex) {
+        console.error('Error:', { ex })
+        this.currentMonthPlayRecords = { playRecords: [{ message: `Error: ${(ex as Error)?.message}` }] }
       }
     }
   }

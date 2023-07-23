@@ -3,7 +3,7 @@
   "info": {
     "title": "Board Games API",
     "description": "Board Games API - https://github.com/connected-web/boardgames-api/",
-    "version": "2023-07-21T22:53:20Z"
+    "version": "2023-07-23T02:14:25Z"
   },
   "servers": [
     {
@@ -37,7 +37,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BasicObjectModel"
+                  "$ref": "#/components/schemas/StatusResponseModel"
                 }
               }
             }
@@ -106,7 +106,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BasicArrayModel"
+                  "$ref": "#/components/schemas/PlayRecordsModel"
                 }
               }
             }
@@ -309,6 +309,95 @@
         ]
       },
       "options": {
+        "responses": {
+          "204": {
+            "description": "204 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Methods": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Headers": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {}
+          }
+        }
+      }
+    },
+    "/playrecords/list/{dateCode}": {
+      "get": {
+        "operationId": "listPlayRecordsByDate",
+        "parameters": [
+          {
+            "name": "dateCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Access-Control-Allow-Credentials": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayRecordsModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BoardgamesAPIBoardGamesAPIPrivateApiRequestAuthorizerB54985A8": []
+          }
+        ]
+      },
+      "options": {
+        "parameters": [
+          {
+            "name": "dateCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "204": {
             "description": "204 response",
@@ -544,6 +633,19 @@
   },
   "components": {
     "schemas": {
+      "StatusResponseModel": {
+        "title": "Status",
+        "required": [
+          "deploymentTime"
+        ],
+        "type": "object",
+        "properties": {
+          "deploymentTime": {
+            "type": "string",
+            "description": "The UTC timestamp representing the last time the server was updated"
+          }
+        }
+      },
       "BasicObjectModel": {
         "title": "Basic Object",
         "type": "object",
@@ -564,13 +666,50 @@
           }
         }
       },
-      "BasicArrayModel": {
-        "title": "Basic Array of Objects",
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {},
-          "additionalProperties": true
+      "PlayRecordModel": {
+        "title": "Play Record",
+        "required": [
+          "coOp",
+          "date",
+          "name",
+          "noOfPlayers"
+        ],
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "coOp": {
+            "type": "string"
+          },
+          "winner": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "noOfPlayers": {
+            "type": "number"
+          },
+          "key": {
+            "type": "string"
+          }
+        }
+      },
+      "PlayRecordsModel": {
+        "title": "Play Records",
+        "required": [
+          "playRecords"
+        ],
+        "type": "object",
+        "properties": {
+          "playRecords": {
+            "type": "array",
+            "description": "An array of play records",
+            "items": {
+              "$ref": "#/components/schemas/PlayRecordModel"
+            }
+          }
         }
       }
     },

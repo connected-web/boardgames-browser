@@ -22,6 +22,8 @@ async function getServerInfo (): Promise<ServerInfo> {
   return server
 }
 
+export type BoardGamesApiClientType = Client
+
 export default class BoardGamesApiClient {
   static readonly singleton: BoardGamesApiClient = new BoardGamesApiClient()
 
