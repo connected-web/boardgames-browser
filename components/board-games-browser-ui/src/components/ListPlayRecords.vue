@@ -55,7 +55,7 @@ const { boardgamesSamApiUrl } = sharedModel.state
 import BoardGamesAPIClient from '../clients/BoardGamesAPIClient'
 
 function convertDate(date) {
-  const [dd, mm, yyyy] = date.split('/')
+  const [dd, mm, yyyy] = (date ?? '').split('/')
   return new Date([yyyy, mm, dd].join('-'))
 }
 
@@ -124,13 +124,15 @@ export default {
       this.playRecordToBeRemoved = playRecord
     },
     async removePlayRecord(key) {
+      const { playRecordToBeRemoved } = this
       try {
-        await (this.serviceSelection?.service === 'OAuth' ? this.removePlayRecordFromCDKAPI(key) : this.removePlayRecordFromSAMAPI(key))
-        console.log('Delete', key, data)
+        const response = await (this.serviceSelection?.service === 'OAuth' ? this.removePlayRecordFromCDKAPI(key) : this.removePlayRecordFromSAMAPI(key))
+        console.log('Delete', key, playRecordToBeRemoved)
         this.playRecordToBeRemoved = false
         this.message = `Play record ${key} removed!`
         return this.listPlayRecords()
       } catch (ex) {
+        console.warn('Unable to remove play record:', { message: ex.message })
         this.message = `Unable to remove play record: ${ex?.message}`
       }
     },
