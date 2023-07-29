@@ -131,7 +131,7 @@ export default {
         this.message = `Play record ${key} removed!`
         return this.listPlayRecords()
       } catch (ex) {
-        this.message = data?.message || `Unable to remove play record: ${ex?.message}`
+        this.message = `Unable to remove play record: ${ex?.message}`
       }
     },
     async removePlayRecordFromSAMAPI(key) {

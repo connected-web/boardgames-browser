@@ -1,7 +1,7 @@
 const validUserAccessToken = {
   payload: {
     sub: 'de1bfdc2-3c11-4eb2-aed0-74c29ed1338f',
-    'cognito:groups': [ 'BoardGamesBrowserAdmins' ],
+    'cognito:groups': ['BoardGamesBrowserAdmins'],
     iss: 'https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_VBRbzaly6',
     version: 2,
     client_id: '5rgdg0eeeeu043fbfvl12ehrmg',
@@ -33,3 +33,6 @@ const validAppAccessToken = {
   },
   groups: ''
 }
+
+console.log('Valid user access token:', { validUserAccessToken })
+console.log('Valid app access token: ', { validAppAccessToken })

@@ -99,6 +99,8 @@ import 'vue-select/dist/vue-select.css'
 import sharedModel from '../helpers/sharedModel'
 import checkServiceSelection from './helpers/checkServiceSelection'
 
+import BoardGamesAPIClient from '../clients/BoardGamesAPIClient'
+
 import CalendarPicker from './CalendarPicker.vue'
 
 const { boardgamesApiUrl, boardgamesSamApiUrl } = sharedModel.state
@@ -184,19 +186,26 @@ export default {
         return
       }
       console.log(`You played ${this.name} on ${this.date}. ${this.winner} was the winner!`)
+      try {
+        const response = await (this.serviceSelection?.service === 'OAuth' ? this.createPlayRecordOnCDKAPI() : this.createPlayRecordOnSAMAPI())
+        const fileKey = createPlayRecordResponse?.data?.keypath
+        this.message = `Successfully stored the new play record: ${fileKey}`
+      } catch (error) {
+        this.message = `Could not save playrecord: ${error.message}`
+        console.error("Could not save playrecord:", error)
+      }
+      this.sending = false
+    },
+    async createPlayRecordOnSAMAPI(dataToSend) {
       const url = `${boardgamesSamApiUrl}/playrecords/create`
       const axiosConfig = {
         headers: sharedModel.getAuthHeaders()
       }
-      try {
-        await axios.post(url, dataToSend, axiosConfig)
-        this.message = "Successfully stored the new play record."
-      }
-      catch (error) {
-        this.message = error.message
-        console.error("Could not post to endpoint:", error)
-      }
-      this.sending = false
+      return await axios.post(url, dataToSend, axiosConfig)
+    },
+    async createPlayRecordOnCDKAPI(dataToSend) {
+      const client = await BoardGamesAPIClient.getSingleton().getInstance()
+      return await client.createPlayRecord(null, { dataToSend })
     },
     clearForm() {
       this.name = ''
