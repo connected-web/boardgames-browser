@@ -187,7 +187,7 @@ export default {
       }
       console.log(`You played ${this.name} on ${this.date}. ${this.winner} was the winner!`)
       try {
-        const response = await (this.serviceSelection?.service === 'OAuth' ? this.createPlayRecordOnCDKAPI() : this.createPlayRecordOnSAMAPI())
+        const response = await (this.serviceSelection?.service === 'OAuth' ? this.createPlayRecordOnCDKAPI(dataToSend) : this.createPlayRecordOnSAMAPI(dataToSend))
         const fileKey = response?.data?.keypath
         this.message = `Successfully stored the new play record: ${fileKey}`
       } catch (error) {
