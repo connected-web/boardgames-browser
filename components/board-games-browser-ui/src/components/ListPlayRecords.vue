@@ -20,7 +20,7 @@
     </div>
     <div v-else class="list-of-play-records">
       <div v-if="playRecords.length">
-        <p>Here is the full list of play records available on the {{ serviceSelection?.name }}:</p>
+        <p>Here is the list of the most recent raw play records available on the {{ serviceSelection?.name }} for {{ dateCode }}:</p>
         <div v-for="record in playRecords" :key="record.key" class="play record">
           <pre><code>{{ record }}</code></pre>
           <button class="trash" v-on:click="askToRemovePlayRecord(record)">
@@ -82,6 +82,15 @@ export default {
     this.serviceSelection = await this.checkServiceSelection(this.$vueAuth)
     this.listPlayRecords()
   },
+  computed: {
+    dateCode() {
+      const now = new Date()
+      const currentMonth = now.getMonth() + 1
+      const monthCode = currentMonth >= 10 ? currentMonth + '' : '0' + currentMonth
+      const dateCode = [now.getFullYear(), monthCode].join('-')
+      return dateCode
+    }
+  },
   methods: {
     checkServiceSelection,
     async listPlayRecords() {
@@ -112,10 +121,7 @@ export default {
     },
     async listPlayRecordsFromCDKAPI() {
       const client = await BoardGamesAPIClient.getSingleton().getInstance()
-      const now = new Date()
-      const currentMonth = now.getMonth() + 1
-      const monthCode = currentMonth >= 10 ? currentMonth + '' : '0' + currentMonth
-      const dateCode = [now.getFullYear(), monthCode].join('-')
+      const { dateCode } = this
       const { data } = await client.listPlayRecordsByDate({ dateCode })
       return (data?.playRecords ?? []).sort(sortPlayRecordsByDate)
     },
