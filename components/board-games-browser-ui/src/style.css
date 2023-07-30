@@ -179,10 +179,10 @@ a.selected:hover {
 .row.right {
   justify-content: flex-end;
 }
-.row.p5 {
+.row.p5, .buttons.p5 {
   gap: 5px;
 }
-.row.p10 {
+.row.p10, .buttons.p10 {
   gap: 10px;
 }
 
@@ -206,4 +206,29 @@ div.circle-icon {
 }
 .logged-in div.circle-icon:hover {
   background: #9ACA7A;
+}
+
+.breadcrumbs {
+  padding-bottom: 5px;
+  border-bottom: 1px solid #eee;
+}
+
+.continuations {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+  margin-top: 1em;
+}
+
+.continuations > .previous {
+  display: flex;
+  flex: 1 1;
+  justify-content: flex-start;
+}
+
+.continuations > .next {
+  display: flex;
+  flex: 1 1;
+  justify-content: flex-end;
 }

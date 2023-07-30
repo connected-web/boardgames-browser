@@ -1,6 +1,6 @@
 <template>
   <div class="day-grid">
-    <div class="buttons">
+    <div class="buttons p5">
       <button @click="monthView" :class="selectedOption(viewState, 'month')"><Icon icon="calendar" /><label>Month view</label></button>
       <button @click="weekView" :class="selectedOption(viewState, 'week')"><Icon icon="calendar-week" /><label>Week view</label></button>
       <button @click="dayView" :class="selectedOption(viewState, 'day')"><Icon icon="calendar-day" /><label>Date view</label></button>

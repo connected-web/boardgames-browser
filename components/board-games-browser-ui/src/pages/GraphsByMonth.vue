@@ -1,6 +1,6 @@
 <template>
   <div class="by-month">
-    <h1>Graphs by Month</h1>
+    <h1>Graph Explorer</h1>
 
     <BoardGameGraphsByMonth :filters="filters" />
   </div>

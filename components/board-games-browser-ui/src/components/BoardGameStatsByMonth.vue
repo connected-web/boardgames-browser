@@ -56,6 +56,7 @@ export default {
       return `/stats/by-month/${item.dateCode}`
     },
     chartDataFor(yearGroup) {
+      const yearGroupAscending = [...yearGroup].sort((a, b) => a?.dateCode?.localeCompare(b?.dateCode))
       console.log('Year group:', JSON.parse(JSON.stringify(yearGroup)))
       const example = {
         labels: ['January', 'February', 'March', /* ... */],
@@ -75,10 +76,10 @@ export default {
         ]
       }
       return {
-        labels: yearGroup.map(month => month.title.substring(0, 3)),
+        labels: yearGroupAscending.map(month => month.title.substring(0, 3)),
         datasets: [{
           label: 'Average Games Played per Day',
-          data: yearGroup.map(month => month.averageGamesPlayedPerDay),
+          data: yearGroupAscending.map(month => month.averageGamesPlayedPerDay),
           borderColor: '#999'
         }]
       }

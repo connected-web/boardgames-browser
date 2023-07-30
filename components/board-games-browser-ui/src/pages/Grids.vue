@@ -1,6 +1,6 @@
 <template>
   <div class="grids">
-    <h1>Grids</h1>
+    <h1>Stats by Grid</h1>
     <p>Board game challenge grids track multiple plays for a set of games.</p>
 
     <BoardGameGridBrowser :dateCode="dateCode" />

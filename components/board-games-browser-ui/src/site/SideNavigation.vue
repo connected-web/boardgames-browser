@@ -8,19 +8,15 @@
 
     <label>Stats</label>
     <router-link to="/stats/grids">Grids</router-link>
-    <router-link to="/graphs/by-month">Graphs</router-link>
+    <router-link to="/graphs/by-month">Graph Explorer</router-link>
     <router-link to="/stats/by-month">By Month</router-link>
     <router-link to="/stats/month-to-date">Month to Date</router-link>
     <router-link to="/stats/by-year">By Year</router-link>
     <router-link to="/stats/year-to-date">Year to Date</router-link>
 
-    <label>API</label>
+    <label>Play Records</label>
     <router-link to="/api/track">Track</router-link>
     <router-link to="/api/review">Review</router-link>
-    <router-link to="/api/authenticate">Authenticate</router-link>
-
-    <label>Testing</label>
-    <router-link to="/api/api-testing">Services API</router-link>
 
     <label>Extras</label>
     <router-link to="/extras/icons">Icon Browser</router-link>

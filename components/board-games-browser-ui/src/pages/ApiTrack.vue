@@ -1,6 +1,6 @@
 <template>
   <div class="track">
-    <h1>Track Game Records</h1>
+    <h1>Track Play Records</h1>
     <CreatePlayRecords />
   </div>
 </template>
