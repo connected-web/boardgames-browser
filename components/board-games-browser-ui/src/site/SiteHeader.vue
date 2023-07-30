@@ -1,5 +1,10 @@
 <template>
   <div class="header">
+    <div v-if="screenSize?.value === 'small'" class="burger" @click="$emit('toggleNav')">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
     <div class="site-logo"></div>
     <label class="site-title">
       <span class="fulltext">Board Games Browser</span>
@@ -19,12 +24,19 @@
 </template>
 
 <script>
+import { inject } from 'vue'
 import sharedModel from '../helpers/sharedModel'
-
 import AuthButton from '../login/AuthButton.vue'
 
 export default {
   components: { AuthButton },
+  emits: ['toggleNav'],
+  setup() {
+    const screenSize = inject('screenSize')
+    return {
+      screenSize
+    }
+  },
   methods: {
     clearData() {
       sharedModel.clearData()
@@ -44,6 +56,20 @@ export default {
   height: 4em;
   border-bottom: 2px solid #ddd;
   overflow: hidden;
+}
+
+.burger {
+  display: block;
+  width: 24px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.burger span {
+  display: block;
+  height: 2px;
+  background-color: #aaa;
+  margin-bottom: 6px;
 }
 .site-logo {
   display: inline-block;

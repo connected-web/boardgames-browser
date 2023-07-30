@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "start": "vite",
+    "start": "vite --host",
     "test": "standard --env mocha && ts-standard --env mocha",
     "lint": "standard --env mocha --fix && ts-standard --env mocha --fix",
     "build": "vite build",
