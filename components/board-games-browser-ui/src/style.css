@@ -232,3 +232,13 @@ div.circle-icon {
   flex: 1 1;
   justify-content: flex-end;
 }
+
+
+.auth-info {
+  border-radius: 5px;
+  background: #bbb;
+  padding: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+}

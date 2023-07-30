@@ -1,8 +1,11 @@
 <template>
   <div>
-    <p>{{ serviceSelection?.message }}</p>
+    <p class="auth-info">{{ serviceSelection?.message }}</p>
     
-    <div v-if="playRecordToBeRemoved" class="remove-play-record">
+    <div v-if="serviceSelection?.authed === false">
+      <p>This page requires user credentials to access and manipulate the latest play records.</p>
+    </div>
+    <div v-else-if="playRecordToBeRemoved" class="remove-play-record">
       <p class="warn">Are you sure you want to remove this play record?</p>
       <div class="play record">
         <pre><code>{{ playRecordToBeRemoved }}</code></pre>

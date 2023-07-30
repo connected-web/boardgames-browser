@@ -1,8 +1,9 @@
 <template>
   <div>
-    <p>{{ serviceSelection?.message }}</p>
+    <p class="auth-info">{{ serviceSelection?.message }}</p>
 
-    <form v-on:submit="handleSubmit">
+    <p v-if="serviceSelection.authed === false">To track play records, you need to be logged in.</p>
+    <form v-else-if="serviceSelection.authed" v-on:submit="handleSubmit">
       <h3>What was the name of the game?</h3>
       <p class="default info">(Required Field!)</p>
       <v-select taggable :options="listOfGames" v-model="name" />
@@ -84,10 +85,11 @@
         <button type="submit">Submit</button>
       </p>
       <p v-if="message">{{message}}</p>
+      
+      <br />
+      <h3>Data preview</h3>
+      <pre><code>{{JSON.stringify({ dataToSend }, null, 2)}}</code></pre>
     </form>
-    <br />
-    <h3>Data preview</h3>
-    <pre><code>{{JSON.stringify({ dataToSend }, null, 2)}}</code></pre>
   </div>    
 </template>
 
