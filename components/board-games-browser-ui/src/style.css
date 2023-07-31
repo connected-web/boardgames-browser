@@ -233,7 +233,6 @@ div.circle-icon {
   justify-content: flex-end;
 }
 
-
 .auth-info {
   border-radius: 5px;
   background: #bbb;
@@ -241,4 +240,24 @@ div.circle-icon {
   font-size: 12px;
   font-weight: bold;
   text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+}
+
+.fulltext {
+  display: inline;
+}
+.initials {
+  display: none;
+}
+
+@media only screen and (max-width: 480px) {
+  .site-title {
+    font-size: 1.4em;
+    font-weight: 600;
+  }
+  .fulltext {
+    display: none;
+  }
+  .initials {
+    display: inline;
+  }
 }

@@ -92,28 +92,10 @@ button {
   font-size: 12px;
 }
 
-.fulltext {
-  display: inline;
-}
-.initials {
-  display: none;
-}
-
 @media only screen and (max-width: 640px) {
   button > span {
     display: none;
   }
 }
-@media only screen and (max-width: 480px) {
-  .site-title {
-    font-size: 1.4em;
-    font-weight: 600;
-  }
-  .fulltext {
-    display: none;
-  }
-  .initials {
-    display: inline;
-  }
-}
+
 </style>

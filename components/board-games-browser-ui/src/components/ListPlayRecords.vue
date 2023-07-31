@@ -28,7 +28,7 @@
           <pre><code>{{ record }}</code></pre>
           <button class="trash" v-on:click="askToRemovePlayRecord(record)">
             <icon icon="trash" />
-            <label>Remove Play Record</label>
+            <label class="fulltext">Remove</label>
           </button>
         </div>
         <pre v-if="playRecords?.length === 0"><code>No play records found</code></pre>
