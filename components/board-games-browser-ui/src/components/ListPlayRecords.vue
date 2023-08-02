@@ -23,7 +23,7 @@
     </div>
     <div v-else class="list-of-play-records">
       <div v-if="playRecords.length">
-        <p>Here is the list of the most recent raw play records available on the {{ serviceSelection?.name }} for {{ dateCode }}:</p>
+        <p>Here is the list of the most recent raw play records available on the {{ serviceSelection?.name }} for {{ currentMonth }} and {{ previousMonth }}:</p>
         <div v-for="record in playRecords" :key="record.key" class="play record">
           <pre><code>{{ record }}</code></pre>
           <button class="trash" v-on:click="askToRemovePlayRecord(record)">
@@ -50,6 +50,7 @@
 import axios from 'axios'
 import sharedModel from '../helpers/sharedModel'
 import checkServiceSelection from './helpers/checkServiceSelection'
+import dayjs from 'dayjs'
 
 import LoadingSpinner from './LoadingSpinner.vue'
 
@@ -86,12 +87,12 @@ export default {
     this.listPlayRecords()
   },
   computed: {
-    dateCode() {
-      const now = new Date()
-      const currentMonth = now.getMonth() + 1
-      const monthCode = currentMonth >= 10 ? currentMonth + '' : '0' + currentMonth
-      const dateCode = [now.getFullYear(), monthCode].join('-')
-      return dateCode
+    currentMonth() {
+      return dayjs().format('YYYY-MM')
+    },
+    previousMonth() {
+      const lastMonth = dayjs().subtract(1, 'month')
+      return dayjs(lastMonth).format('YYYY-MM')
     }
   },
   methods: {
@@ -123,10 +124,14 @@ export default {
       return (data?.playRecords ?? []).sort(sortPlayRecordsByDate)
     },
     async listPlayRecordsFromCDKAPI() {
+      const { currentMonth, previousMonth } = this
       const client = await BoardGamesAPIClient.getSingleton().getInstance()
-      const { dateCode } = this
-      const { data } = await client.listPlayRecordsByDate({ dateCode })
-      return (data?.playRecords ?? []).sort(sortPlayRecordsByDate)
+      const dataSets = await Promise.all([
+        client.listPlayRecordsByDate({ dateCode: currentMonth }),
+        client.listPlayRecordsByDate({ dateCode: previousMonth })
+      ])
+      const playRecords = dataSets.map(response => response?.data?.playRecords ?? []).flat()
+      return playRecords.sort(sortPlayRecordsByDate)
     },
     askToRemovePlayRecord(playRecord) {
       this.message = ''
