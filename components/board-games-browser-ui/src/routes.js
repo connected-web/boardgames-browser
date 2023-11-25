@@ -11,6 +11,7 @@ import ByMonth from './pages/ByMonth.vue'
 import MonthToDate from './pages/MonthToDate.vue'
 import ByYear from './pages/ByYear.vue'
 import YearToDate from './pages/YearToDate.vue'
+import ByAllTime from './pages/ByAllTime.vue'
 
 import Track from './pages/ApiTrack.vue'
 import Review from './pages/ApiReview.vue'
@@ -34,6 +35,7 @@ const routes = [
   { path: '/stats/by-year', component: ByYear },
   { path: '/stats/by-year/:dateCode', component: ByYear, props: true },
   { path: '/stats/year-to-date', component: YearToDate },
+  { path: '/stats/by-all-time', component: ByAllTime },
   { path: '/api/track', component: Track },
   { path: '/api/review', component: Review },
   { path: '/extras/icons', component: Icons },

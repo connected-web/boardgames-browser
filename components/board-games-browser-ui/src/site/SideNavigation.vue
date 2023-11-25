@@ -13,6 +13,7 @@
     <router-link to="/stats/month-to-date">Month to Date</router-link>
     <router-link to="/stats/by-year">By Year</router-link>
     <router-link to="/stats/year-to-date">Year to Date</router-link>
+    <router-link to="/stats/by-all-time">By All Time</router-link>
 
     <label>Play Records</label>
     <router-link to="/api/track">Track</router-link>
