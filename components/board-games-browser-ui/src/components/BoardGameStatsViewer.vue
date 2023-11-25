@@ -5,10 +5,21 @@
       <LoadingSpinner>Loading stats...</LoadingSpinner>
     </p>
     <div v-if="stats">
-      <p>Board game stats for <b>{{ stats.totalGamesPlayed }}</b>
-        games played by <i>Hannah and John</i> over <b>{{ stats.daysInSequence }}</b> days
+      <p>Board game stats played by <i>Hannah and John</i> over <b>{{ stats.daysInSequence }}</b> days
         between <b>{{ stats.sequenceStartDate }}</b>
         and <b>{{ stats.sequenceEndDate }}</b>.</p>
+
+      <div class="stats group">
+        <stat-value label="Total Games Played">{{ stats.totalGamesPlayed }}</stat-value>
+        <stat-value label="Competitive Games">{{ stats.winnableGamesTotal }}</stat-value>
+        <stat-value label="Co-operative Games">{{ stats.totalGamesPlayed - stats.winnableGamesTotal }}</stat-value>
+        <div class="percentage bar">
+          <GameStatBox :game="{ coOp: 'No', winner: 'Other', name: `Competitive Games Played` }"
+            :style="`width: ${pc(stats.winnableGamesTotal / stats.totalGamesPlayed)};`"><span>Competitive<br />{{ pc(stats.winnableGamesTotal / stats.totalGamesPlayed) }}<br />{{ stats.winnableGamesTotal }} games</span></GameStatBox>
+          <GameStatBox :game="{ coOp: 'Yes', coOpOutcome: 'Win', name: `Co-operative Games Played` }"
+            :style="`width: ${pc((stats.totalGamesPlayed - stats.winnableGamesTotal) / stats.totalGamesPlayed)};`"><span>Co-operative<br />{{ pc((stats.totalGamesPlayed - stats.winnableGamesTotal) / stats.totalGamesPlayed) }}<br />{{ stats.totalGamesPlayed - stats.winnableGamesTotal }} games</span></GameStatBox>
+        </div>
+      </div>
 
       <div class="stats group">
         <h3>Who won the most games in this period?</h3>
@@ -21,12 +32,12 @@
 
         <div class="percentage bar">
           <GameStatBox :game="{ coOp: 'No', winner: 'Hannah', name: `Hannah's total win percentage` }"
-            :style="`width: ${pc(stats.winPercentageHannah)};`"><span>Hannah<br />{{ pc(stats.winPercentageHannah) }}</span></GameStatBox>
+            :style="`width: ${pc(stats.winPercentageHannah)};`"><span>Hannah<br />{{ pc(stats.winPercentageHannah) }}<br />{{ stats.winCountHannah }} games</span></GameStatBox>
           <GameStatBox :game="{ coOp: 'No', winner: 'John', name: `John's total win percentage` }"
-            :style="`width: ${pc(stats.winPercentageJohn)};`"><span>John<br />{{ pc(stats.winPercentageJohn) }}</span></GameStatBox>
+            :style="`width: ${pc(stats.winPercentageJohn)};`"><span>John<br />{{ pc(stats.winPercentageJohn) }}<br />{{ stats.winCountJohn }} games</span></GameStatBox>
           <GameStatBox :game="{ coOp: 'No', winner: 'Other', name: 'Other winners percentage' }"
             :style="`width: ${pc(stats.winPercentageOther)};`" class="slim"><span>Other</span></GameStatBox>
-          <GameStatBox :game="{ coOp: 'No', winner: 'Draw', name: 'Draw percentage' }"
+          <GameStatBox v-if="stats.winCountDraw > 0" :game="{ coOp: 'No', winner: 'Draw', name: 'Draw percentage' }"
             :style="`width: ${pc(stats.winPercentageDraw)};`" class="slim"><span>Draw</span></GameStatBox>
         </div>
       </div>
