@@ -15,6 +15,7 @@ import ByAllTime from './pages/ByAllTime.vue'
 
 import Track from './pages/ApiTrack.vue'
 import Review from './pages/ApiReview.vue'
+import Tag from './pages/ApiTag.vue'
 
 import Icons from './pages/Icons.vue'
 import UserDetails from './pages/UserDetails.vue'
@@ -38,6 +39,8 @@ const routes = [
   { path: '/stats/by-all-time', component: ByAllTime },
   { path: '/api/track', component: Track },
   { path: '/api/review', component: Review },
+  { path: '/api/tag', component: Tag },
+  { path: '/api/tag/:gameId', component: Tag },
   { path: '/extras/icons', component: Icons },
   { path: '/user/details', component: UserDetails }
 ]
