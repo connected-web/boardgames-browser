@@ -42,7 +42,7 @@
         <game-stat-key />
       </div>
 
-      <h3>Game Family</h3>
+      <h3>Game Family Analysis</h3>
       <div>
         <p>Based on play records:</p>
         <stat-value v-for="(count, gameFamily) in gameFamilies" :key="gameFamily" :label="gameFamily || 'None'">
@@ -51,6 +51,10 @@
             <Icon :icon="game.gameFamily === gameFamily ? 'check' : 'minus'" />
           </button>
         </stat-value>
+      </div>
+
+      <h3>Game record properties</h3>
+      <div>
         <stat-value label="Game Family">
           <input type="text" v-model="game.gameFamily" class="right" />
           <button class="button" v-on:click="updateGameRecord">Update</button>
@@ -99,6 +103,7 @@ export default {
   data() {
     return {
       message: '',
+      name: '',
       game: {},
       gameRecordNotFound: false,
       games: [],
