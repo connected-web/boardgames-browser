@@ -29,8 +29,6 @@
         <router-link :to="`/api/tag/${gameId}`">{{ gameName }}</router-link>
       </p>
       <h2>{{ gameName }}</h2>
-
-      
       <stat-value label="Board Game Geek Name">{{ game.boardGameGeekName }}</stat-value>
       <stat-value label="Board Game API ID">{{ game.boardGameApiId }}</stat-value>
       <hr />
@@ -42,6 +40,21 @@
           <game-stat-box v-for="(playRecord, index) in game.playRecords" :game="playRecord" :name="game.name" :key="`gameStat_${playRecord.date}_${index}`" />
         </p>
         <game-stat-key />
+      </div>
+
+      <h3>Game Family</h3>
+      <div>
+        <p>Based on play records:</p>
+        <stat-value v-for="(count, gameFamily) in gameFamilies" :key="gameFamily" :label="gameFamily || 'None'">
+          <span>{{ count }}</span>
+          <button class="button" v-on:click="game.gameFamily = gameFamily">
+            <Icon :icon="game.gameFamily === gameFamily ? 'check' : 'minus'" />
+          </button>
+        </stat-value>
+        <stat-value label="Game Family">
+          <input type="text" v-model="game.gameFamily" class="right" />
+          <button class="button" v-on:click="updateGameRecord">Update</button>
+        </stat-value>
       </div>
 
       <p v-if="serviceSelection.authed === false">To modify game records, you need to be logged in.</p>
@@ -69,13 +82,14 @@ import BoardGamesAPIClient from '../clients/BoardGamesAPIClient'
 
 import CalendarPicker from './CalendarPicker.vue'
 import GameStatBox from './GameStatBox.vue'
+import GameStatKey from './GameStatKey.vue'
 import StatValue from './StatValue.vue'
 import clone from '../helpers/clone'
 
 const { boardgamesApiUrl, boardgamesSamApiUrl } = sharedModel.state
 
 export default {
-  components: { vSelect, CalendarPicker, GameStatBox, StatValue },
+  components: { vSelect, CalendarPicker, GameStatBox, GameStatKey, StatValue },
   props: {
     gameId: {
       type: String,
@@ -84,7 +98,6 @@ export default {
   },
   data() {
     return {
-      name: '',
       message: '',
       game: {},
       gameRecordNotFound: false,
@@ -99,11 +112,24 @@ export default {
       return this.games?.find(game => game.boardGameApiId === this.gameId)?.name ?? this.gameId
     },
     dataToSend() {
+      const { game, gameId } = this
       const result = {
-        name: this.name
+        boardGameApiId: game.boardGameApiId ?? gameId,
+        name: game.name ?? '',
+        gameFamily: game.gameFamily ?? ''
       }
 
       return result
+    },
+    gameFamilies() {
+      const { game } = this
+      const playRecords = game?.playRecords ?? []
+      const gameFamilies = playRecords.reduce((result, playRecord) => {
+        const gameFamily = playRecord?.gameFamily ?? ''
+        result[gameFamily] = (result[gameFamily] || 0) + 1
+        return result
+      }, {})
+      return gameFamilies
     }
   },
   methods: {
@@ -129,9 +155,10 @@ export default {
       }
       this.sending = false
     },
-    async updateGameRecord(dataToSend) {
+    async updateGameRecord() {
       const client = await BoardGamesAPIClient.getSingleton().getInstance()
-      return await client.updateGameRecord(null, dataToSend)
+      const { dataToSend } = this
+      return await client.updateGameRecord({ gameId }, clone(dataToSend))
     },
     clearForm() {
       return false
@@ -156,6 +183,7 @@ export default {
       }
     },
     async loadBoardGameInfo() {
+      this.game = {}
       const url = `${boardgamesApiUrl}/api/boardgame/by/${this.gameId}`
       try {
         const { data } = await axios.get(url)
@@ -199,6 +227,12 @@ input {
   padding: 0.5em;
   font-size: 1em;
 }
+input.right {
+  text-align: right;
+}
+span.value > input {
+  flex: 1 1;
+}
 .buttons {
   text-align: right;
 }
@@ -218,7 +252,6 @@ div.row {
   overflow: hidden;
 }
 div.row > * {
-  text-align: center;
   margin: 0.5em 0.5em 0 0;
   flex: 5 5;
 }
