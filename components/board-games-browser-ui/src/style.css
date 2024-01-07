@@ -170,6 +170,12 @@ a.selected:hover {
   justify-content: center;
 }
 
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
 .row.left {
   justify-content: flex-start;
 }
@@ -180,10 +186,10 @@ a.selected:hover {
 .row.right {
   justify-content: flex-end;
 }
-.row.p5, .buttons.p5 {
+.p5, .buttons.p5 {
   gap: 5px;
 }
-.row.p10, .buttons.p10 {
+.p10, .p10 {
   gap: 10px;
 }
 

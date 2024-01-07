@@ -207,7 +207,7 @@ export default {
     },
     async createPlayRecordOnCDKAPI(dataToSend) {
       const client = await BoardGamesAPIClient.getSingleton().getInstance()
-      return await client.createPlayRecord(null, dataToSend)
+      return await client.postPlayrecordsCreate(null, dataToSend)
     },
     clearForm() {
       this.name = ''

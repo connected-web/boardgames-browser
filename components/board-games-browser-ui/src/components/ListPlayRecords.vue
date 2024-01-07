@@ -29,14 +29,10 @@
         <div v-for="record in playRecords" :key="record.key" class="play record">
           <pre><code>{{ record }}</code></pre>
           <div class="row p5 record-buttons">
-            <router-link :to="`/api/playrecord/edit/${encodeURIComponent(record.key)}`" class="button">
-              <icon icon="pen" />
-              <label class="fulltext">Edit</label>
+            <router-link :to="`/api/playrecord/view/${encodeURIComponent(record.key)}`" class="button">
+              <label class="fulltext">Details</label>
+              <icon icon="clipboard-list" />
             </router-link>
-            <button v-on:click="askToRemovePlayRecord(record)">
-              <icon icon="trash" />
-              <label class="fulltext">Remove</label>
-            </button>
           </div>
         </div>
         <pre v-if="playRecords?.length === 0"><code>No play records found</code></pre>
@@ -135,8 +131,8 @@ export default {
       const { currentMonth, previousMonth } = this
       const client = await BoardGamesAPIClient.getSingleton().getInstance()
       const dataSets = await Promise.all([
-        client.listPlayRecordsByDate({ dateCode: currentMonth }),
-        client.listPlayRecordsByDate({ dateCode: previousMonth })
+        client.getPlayrecordsListDateCode({ dateCode: currentMonth }),
+        client.getPlayrecordsListDateCode({ dateCode: previousMonth })
       ])
       const playRecords = dataSets.map(response => response?.data?.playRecords ?? []).flat()
       return playRecords.sort(sortPlayRecordsByDate)
@@ -152,7 +148,7 @@ export default {
         console.log('Delete', key, playRecordToBeRemoved)
         this.playRecordToBeRemoved = false
         this.message = `Play record ${key} removed!`
-        return this.listPlayRecords()
+        return this.getPlayrecordsList()
       } catch (ex) {
         console.warn('Unable to remove play record:', { message: ex.message })
         this.message = `Unable to remove play record: ${ex?.message}`
@@ -170,7 +166,7 @@ export default {
     },
     async removePlayRecordFromCDKAPI(key) {
       const client = await BoardGamesAPIClient.getSingleton().getInstance()
-      return client.deletePlayRecord(null, { keypath: key })
+      return client.deletePlayrecordsDelete(null, { keypath: key })
     }
   }
 }
