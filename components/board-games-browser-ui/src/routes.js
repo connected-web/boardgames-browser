@@ -15,8 +15,9 @@ import ByAllTime from './pages/ByAllTime.vue'
 
 import Track from './pages/ApiTrack.vue'
 import ReviewPlayRecords from './pages/ReviewPlayRecords.vue'
-import EditPlayRecord from './pages/EditPlayRecord.vue'
 import ViewPlayRecord from './pages/ViewPlayRecord.vue'
+import EditPlayRecord from './pages/EditPlayRecord.vue'
+import DeletePlayRecord from './pages/DeletePlayRecord.vue'
 import Tag from './pages/ApiTag.vue'
 
 import Icons from './pages/Icons.vue'
@@ -43,6 +44,7 @@ const routes = [
   { path: '/api/review', component: ReviewPlayRecords },
   { path: '/api/playrecord/view/:playRecordKey', component: ViewPlayRecord, props: true },
   { path: '/api/playrecord/edit/:playRecordKey', component: EditPlayRecord, props: true },
+  { path: '/api/playrecord/delete/:playRecordKey', component: DeletePlayRecord, props: true },
   { path: '/api/tag', component: Tag },
   { path: '/api/tag/:gameId', component: Tag },
   { path: '/extras/icons', component: Icons },
