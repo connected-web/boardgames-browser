@@ -14,7 +14,9 @@ import YearToDate from './pages/YearToDate.vue'
 import ByAllTime from './pages/ByAllTime.vue'
 
 import Track from './pages/ApiTrack.vue'
-import Review from './pages/ApiReview.vue'
+import ReviewPlayRecords from './pages/ReviewPlayRecords.vue'
+import EditPlayRecord from './pages/EditPlayRecord.vue'
+import ViewPlayRecord from './pages/ViewPlayRecord.vue'
 import Tag from './pages/ApiTag.vue'
 
 import Icons from './pages/Icons.vue'
@@ -38,7 +40,9 @@ const routes = [
   { path: '/stats/year-to-date', component: YearToDate },
   { path: '/stats/by-all-time', component: ByAllTime },
   { path: '/api/track', component: Track },
-  { path: '/api/review', component: Review },
+  { path: '/api/review', component: ReviewPlayRecords },
+  { path: '/api/playrecord/view/:playRecordKey', component: ViewPlayRecord, props: true },
+  { path: '/api/playrecord/edit/:playRecordKey', component: EditPlayRecord, props: true },
   { path: '/api/tag', component: Tag },
   { path: '/api/tag/:gameId', component: Tag },
   { path: '/extras/icons', component: Icons },

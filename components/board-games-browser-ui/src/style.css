@@ -130,6 +130,7 @@ pre {
 
 button *, .button * {
   cursor: pointer;
+  color: black;
 }
 
 button:hover, .button:hover {

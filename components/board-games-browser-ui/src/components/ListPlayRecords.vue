@@ -5,31 +5,39 @@
     <div v-if="serviceSelection?.authed === false">
       <p>This page requires user credentials to access and manipulate the latest play records.</p>
     </div>
-    <div v-else-if="playRecordToBeRemoved" class="remove-play-record">
-      <p class="warn">Are you sure you want to remove this play record?</p>
-      <div class="play record">
-        <pre><code>{{ playRecordToBeRemoved }}</code></pre>
-      </div>
-      <div class="button-row row p10">
-        <button v-on:click="playRecordToBeRemoved = false">
-          <icon icon="backspace" />
-          <label>No leave it alone...</label>
-        </button>
-        <button v-on:click="removePlayRecord(playRecordToBeRemoved.key)">
-          <icon icon="trash" />
-          <label>Yes Remove Play Record</label>
-        </button>
-      </div>
+    <div v-else-if="playRecordToBeRemoved" class="remove-play-record backdrop">
+      <dialog open>
+        <p class="warn">Are you sure you want to remove this play record?</p>
+        <div class="play record">
+          <pre><code>{{ playRecordToBeRemoved }}</code></pre>
+        </div>
+        <div class="button-row row p10">
+          <button v-on:click="playRecordToBeRemoved = false" autofocus>
+            <icon icon="backspace" />
+            <label>No leave it alone...</label>
+          </button>
+          <button v-on:click="removePlayRecord(playRecordToBeRemoved.key)">
+            <icon icon="trash" />
+            <label>Yes Remove Play Record</label>
+          </button>
+        </div>
+      </dialog>
     </div>
     <div v-else class="list-of-play-records">
       <div v-if="playRecords.length">
         <p>Here is the list of the most recent raw play records available on the {{ serviceSelection?.name }} for {{ currentMonth }} and {{ previousMonth }}:</p>
         <div v-for="record in playRecords" :key="record.key" class="play record">
           <pre><code>{{ record }}</code></pre>
-          <button class="trash" v-on:click="askToRemovePlayRecord(record)">
-            <icon icon="trash" />
-            <label class="fulltext">Remove</label>
-          </button>
+          <div class="row p5 record-buttons">
+            <router-link :to="`/api/playrecord/edit/${encodeURIComponent(record.key)}`" class="button">
+              <icon icon="pen" />
+              <label class="fulltext">Edit</label>
+            </router-link>
+            <button v-on:click="askToRemovePlayRecord(record)">
+              <icon icon="trash" />
+              <label class="fulltext">Remove</label>
+            </button>
+          </div>
         </div>
         <pre v-if="playRecords?.length === 0"><code>No play records found</code></pre>
       </div>
@@ -177,7 +185,7 @@ export default {
   display: flex;
   justify-content: flex-end;
 }
-button.trash {
+.record-buttons {
   position: absolute;
   top: 0.2em;
   right: 0.2em;
@@ -187,4 +195,26 @@ pre {
   overflow-x: hidden;
   white-space: pre-wrap;
 }
+
+dialog {
+  position: fixed;
+  top: 10vh;
+  left: 0;
+  overflow: auto;
+  z-index: 200;
+  border: 0;
+  background: white;
+  border-radius: 10px;
+}
+
+.backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 199;
+  background: rgba(0, 0, 0, 0.5);
+}
+
 </style>
