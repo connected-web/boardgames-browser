@@ -13,7 +13,7 @@ interface ServerInfo {
 async function getServerInfo (): Promise<ServerInfo> {
   const authToken = await Auth.getLatestAccessToken()
   const server: ServerInfo = {
-    baseUrl: 'https://boardgames-api.prod.connected-web.services',
+    baseUrl: 'https://boardgames-api.dev.connected-web.services',
     headers: {
       Authorization: `Bearer ${authToken as string}`
     }

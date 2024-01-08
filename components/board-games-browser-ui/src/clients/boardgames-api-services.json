@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://boardgames-api.prod.connected-web.services"
+      "url": "https://boardgames-api.dev.connected-web.services"
     }
   ],
   "paths": {

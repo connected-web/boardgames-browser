@@ -5,7 +5,7 @@ function defaultState () {
   return {
     boardgamesApiUrl: 'https://boardgames-api.calisaurus.net',
     boardgamesSamApiUrl: 'https://nn58gn0krl.execute-api.eu-west-2.amazonaws.com/Prod',
-    boardgamesApiServicesUrl: 'https://boardgames-api.prod.connected-web.services',
+    boardgamesApiServicesUrl: 'https://boardgames-api.dev.connected-web.services',
     params: {},
     lastDateCode: false
   }
