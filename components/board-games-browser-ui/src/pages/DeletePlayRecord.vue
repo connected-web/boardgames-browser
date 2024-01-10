@@ -12,10 +12,11 @@
           <icon icon="backspace" />
           <label>Cancel</label>
         </router-link>
-        <router-link :to="`/api/playrecord/delete/${encodeURIComponent(playRecordKey)}`" class="button">
-          <icon icon="trash" />
-          <label>Confirm Delete</label>
-        </router-link>
+        <button @click="removePlayRecord">
+          <LoadingSpinner v-if="deletingPlayrecord">🚧 Deleting...</LoadingSpinner>
+          <icon v-if="!deletingPlayrecord" icon="trash" />
+          <label v-if="!deletingPlayrecord">Confirm Delete</label>
+        </button>
       </div>
   </div>
     <p v-else>No play record found with the key <code>{{ playRecordKey }}</code></p>
@@ -39,6 +40,7 @@ export default {
     return {
       playRecord: null as null | PlayRecordModel,
       loadingPlayrecord: false,
+      deletingPlayrecord: false,
       message: ''
     }
   },
@@ -55,16 +57,21 @@ export default {
       this.playRecord = playRecord
       this.loadingPlayrecord = false
     },
-    async removePlayRecord(playRecordKey: string) {
+    async removePlayRecord() {
+      const { playRecordKey } = this
       try {
+        this.deletingPlayrecord = true
         const client = await BoardGamesAPIClient.getSingleton().getInstance()
         await client.deletePlayrecordsDelete(null, { keypath: playRecordKey })
+        const $router = (this as any).$router
+        $router.push(`/api/playrecord/view/${encodeURIComponent(playRecordKey)}`)
       } catch (ex) {
         const body = (ex as AxiosError)?.response?.data
         const message = (body as any)?.message ?? (ex as Error)?.message
         console.warn('Unable to remove play record:', { message })
         this.message = `Unable to remove play record: ${message}`
       }
+      this.deletingPlayrecord = false
     }
   }
 }

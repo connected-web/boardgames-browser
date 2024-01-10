@@ -47,10 +47,19 @@ export default {
     async loadPlayRecord() {
       this.loadingPlayrecord = true
       const client = await BoardGamesAPIClient.getSingleton().getInstance()
-      const response = await client.getPlayrecordsViewPlayRecordKey({ playRecordKey: this.playRecordKey })
-      const playRecord = response.data
-      console.log('Loaded play record', { playRecord })
-      this.playRecord = playRecord
+      try {
+        const response = await client.getPlayrecordsViewPlayRecordKey({ playRecordKey: this.playRecordKey })
+        const playRecord = response.data
+        console.log('Loaded play record', { playRecord })
+        this.playRecord = playRecord
+      } catch (err) {
+        const error = err as AxiosError
+        if (error.response?.status === 404) {
+          console.log('Play record not found', { error })
+        } else {
+          console.error('Failed to load play record', { error })
+        }
+      }
       this.loadingPlayrecord = false
     }
   }
