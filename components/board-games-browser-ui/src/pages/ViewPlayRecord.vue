@@ -28,7 +28,7 @@
       </div>
       <div v-else>
         <h3>History</h3>
-        <p>This play record has no history of being since it was created.</p>
+        <p>This play record has no history of being edited since it was created.</p>
       </div>
   </div>
     <p v-else>No play record found with the key <code>{{ playRecordKey }}</code></p>
