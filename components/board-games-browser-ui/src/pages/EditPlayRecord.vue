@@ -4,17 +4,16 @@
     <p v-if="loadingPlayrecord"><LoadingSpinner>🚧 Loading play record to edit... 
       <code>{{ playRecordKey }}</code>
     </LoadingSpinner></p>
-    <div v-else-if="playRecord?.error">
+    <div v-else-if="message">
       <div class="error">
         <h3>Error</h3>
-        <p>{{ playRecord.error }}</p>
+        <p>{{ message }}</p>
       </div>
     </div>
     <div v-else-if="playRecord">
       <p>Editing play record <code>{{ playRecordKey }}</code></p>
       <div class="p5 expand">
         <textarea v-model="playRecordJson" class="raw-playrecord"></textarea>
-        <p v-if="message">{{ message }}</p>
         <div class="row p5">
           <router-link :to="`/api/playrecord/view/${encodeURIComponent(playRecordKey)}`" class="button">
             <icon icon="backspace" />
@@ -34,7 +33,7 @@
 
 <script lang="ts">
 import LoadingSpinner from '../components/LoadingSpinner.vue'
-import BoardGamesAPIClient from '../clients/BoardGamesAPIClient'
+import BoardGamesAPIClient, { PlayRecordModel } from '../clients/BoardGamesAPIClient'
 
 export default {
   components: { LoadingSpinner },
@@ -63,8 +62,11 @@ export default {
       const response = await client.getPlayrecordsViewPlayRecordKey({ playRecordKey: this.playRecordKey })
       const playRecord = response.data
       console.log('Loaded play record', { playRecord })
-      this.playRecord = playRecord
-      this.playRecordJson = JSON.stringify(playRecord, null, 2)
+      this.playRecord = (playRecord as unknown) as PlayRecordModel
+      const clonedPlayRecord = JSON.parse(JSON.stringify(playRecord))
+      delete clonedPlayRecord.history
+      delete clonedPlayRecord.key
+      this.playRecordJson = JSON.stringify(clonedPlayRecord, null, 2)
       this.loadingPlayrecord = false
     },
     async savePlayRecord(playRecordKey: string, playRecordJson: string) {
@@ -77,6 +79,9 @@ export default {
         console.log('Saved play record', { playRecord, response: response?.data })
         this.playRecord = playRecord
         this.playRecordJson = JSON.stringify(playRecord, null, 2)
+        const updatedPlayrecordKey = (response?.data as any)?.keypath
+        const $router = (this as any).$router
+        $router.push(`/api/playrecord/view/${encodeURIComponent(updatedPlayrecordKey)}`)
       } catch (ex) {
         const error = (ex as Error)?.message ?? (ex as any)?.response?.data?.message ?? ex
         console.warn('Unable to save play record:', { error })

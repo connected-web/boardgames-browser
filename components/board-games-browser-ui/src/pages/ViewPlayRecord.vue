@@ -6,7 +6,7 @@
     </LoadingSpinner></p>
     <div v-else-if="playRecord" class="column p5">
       <p>Viewing play record <code>{{ playRecordKey }}</code></p>
-      <pre><code>{{ playRecord }}</code></pre>
+      <pre><code>{{ playRecordData }}</code></pre>
       <div class="row p5">
         <router-link :to="`/api/playrecord/edit/${encodeURIComponent(playRecordKey)}`" class="button">
           <icon icon="pen" />
@@ -16,6 +16,19 @@
           <icon icon="trash" />
           <label>Delete</label>
         </router-link>
+      </div>
+      <div v-if="playRecord?.history?.length > 0">
+        <h3>History</h3>
+        <p>This play record has had <b>{{ playRecord.history.length }}</b> previous edits.</p>
+        <div class="column p5">
+          <div v-for="(historyItem, index) in playRecord.history" :key="index">
+            <pre><code>{{ historyItem }}</code></pre>
+          </div>
+        </div>
+      </div>
+      <div v-else>
+        <h3>History</h3>
+        <p>This play record has no history of being since it was created.</p>
       </div>
   </div>
     <p v-else>No play record found with the key <code>{{ playRecordKey }}</code></p>
@@ -38,6 +51,17 @@ export default {
     return {
       playRecord: null as null | PlayRecordModel,
       loadingPlayrecord: false
+    }
+  },
+  computed: {
+    playRecordData() {
+      if (!this.playRecord) {
+        return null
+      }
+      const clonedPlayRecord = JSON.parse(JSON.stringify(this.playRecord))
+      delete clonedPlayRecord.history
+      delete clonedPlayRecord.key
+      return clonedPlayRecord
     }
   },
   mounted() {

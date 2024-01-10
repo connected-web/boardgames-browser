@@ -6,7 +6,7 @@ import type {
   AxiosRequestConfig
 } from 'openapi-client-axios'
 
-declare namespace Components {
+export declare namespace Components {
   namespace Schemas {
     /**
          * Message
