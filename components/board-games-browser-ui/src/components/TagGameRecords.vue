@@ -109,7 +109,8 @@ export default {
       games: [],
       listOfGames: [],
       sending: false,
-      serviceSelection: 'Not sure...'
+      serviceSelection: 'Not sure...',
+      refreshTimer: 0
     }
   },
   computed: {
@@ -209,6 +210,14 @@ export default {
     if (gameId) {
       this.loadBoardGameInfo(gameId)
     }
+    clearInterval(this.refreshTimer)
+    this.refreshTimer = setInterval(async () => {
+      this.serviceSelection = await this.checkServiceSelection(this.$vueAuth)
+    }, 10000)
+  },
+  async unmounted() {
+    clearInterval(this.refreshTimer)
+    this.serviceSelection = null
   },
   watch: {
     name: function (newName) {

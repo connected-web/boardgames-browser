@@ -70,12 +70,14 @@ export default {
   min-height: 100vh;
 }
 .middle {
-  position: relative;
   display: flex;
   flex-direction: row;
   align-items: stretch;
   flex: 1 1;
   overflow-x: hidden;
+}
+.middle.relative {
+  position: relative;
 }
 .page {
   margin: 0;

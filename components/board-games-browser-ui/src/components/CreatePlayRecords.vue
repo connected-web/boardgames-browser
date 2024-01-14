@@ -84,7 +84,11 @@
         <button type="reset" v-on:click="clearForm">Clear Form</button>
         <button type="submit">Submit</button>
       </p>
-      <p v-if="message">{{message}}</p>
+      <p v-if="newFileKey" class="row p5">
+        <span>{{ message }}</span>
+        <router-link :to="`/api/playrecord/view/${encodeURIComponent(newFileKey)}`">{{ newFileKey }}</router-link>
+      </p>
+      <p v-else-if="message">{{ message }}</p>
       
       <br />
       <h3>Data preview</h3>
@@ -120,9 +124,11 @@ export default {
       noOfPlayers: '',
       notes: '',
       message: '',
+      newFileKey: '',
       listOfGames: [],
       sending: false,
-      serviceSelection: 'Not sure...'
+      serviceSelection: 'Not sure...',
+      refreshTimer: 0,
     }
   },
   computed: {
@@ -191,7 +197,8 @@ export default {
       try {
         const response = await (this.serviceSelection?.service === 'OAuth' ? this.createPlayRecordOnCDKAPI(dataToSend) : this.createPlayRecordOnSAMAPI(dataToSend))
         const fileKey = response?.data?.keypath
-        this.message = `Successfully stored the new play record: ${fileKey}`
+        this.message = `Successfully stored new play record.`
+        this.newFileKey = fileKey
       } catch (error) {
         this.message = `Could not save playrecord: ${error.message}`
         console.error("Could not save playrecord:", error)
@@ -207,7 +214,7 @@ export default {
     },
     async createPlayRecordOnCDKAPI(dataToSend) {
       const client = await BoardGamesAPIClient.getSingleton().getInstance()
-      return await client.createPlayRecord(null, dataToSend)
+      return await client.postPlayrecordsCreate(null, dataToSend)
     },
     clearForm() {
       this.name = ''
@@ -245,6 +252,15 @@ export default {
   async mounted() {
     this.serviceSelection = await this.checkServiceSelection(this.$vueAuth)
     this.loadBoardGamesList()
+    clearInterval(this.refreshTimer)
+    this.refreshTimer = setInterval(async () => {
+      this.serviceSelection = await this.checkServiceSelection(this.$vueAuth)
+      this.dateToday = new Date().toISOString().substring(0, 10)
+    }, 10000)
+  },
+  async unmounted() {
+    clearInterval(this.refreshTimer)
+    this.serviceSelection = null
   }
 }
 </script>

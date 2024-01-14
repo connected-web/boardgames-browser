@@ -18,7 +18,7 @@
     <label>Play Records</label>
     <router-link to="/api/track">Track</router-link>
     <router-link to="/api/review">Review</router-link>
-    <router-link to="/api/tag">Tag</router-link>
+    <router-link v-if="false" to="/api/tag">Tag</router-link>
 
     <label>Extras</label>
     <router-link to="/extras/icons">Icon Browser</router-link>

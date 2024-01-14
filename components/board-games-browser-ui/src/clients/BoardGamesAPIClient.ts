@@ -3,6 +3,15 @@ import BoardgamesAPIDocument from './boardgames-api-services.json'
 import Auth from '../login/Auth'
 import { Client } from './BoardGamesAPIClientTypes'
 
+export interface PlayRecordModel {
+  date: string
+  coOp: string
+  winner?: string
+  name: string
+  noOfPlayers: number
+  key?: string
+}
+
 interface ServerInfo {
   baseUrl: string
   headers: {

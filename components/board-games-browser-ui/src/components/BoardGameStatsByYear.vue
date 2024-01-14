@@ -20,7 +20,7 @@ import sharedModel from '../helpers/sharedModel'
 import LoadingSpinner from './LoadingSpinner.vue'
 
 const { boardgamesApiUrl } = sharedModel.state
-const statsUrl = `${boardgamesApiUrl}/api/boardgame/stats`
+const statsUrl = `${boardgamesApiUrl}/api/boardgame/stats/allYears`
 
 export default {
   data() {
