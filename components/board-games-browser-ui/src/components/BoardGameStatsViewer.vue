@@ -14,36 +14,15 @@
         <stat-value label="Total Games Played">{{ stats.totalGamesPlayed }}</stat-value>
         <stat-value label="Unique games">{{ stats.uniqueGamesPlayedCount }}</stat-value>
         <stat-value label="Average games played per day">{{ stats.averageGamesPlayedPerDay }}</stat-value>
-        <div class="percentage bar">
-          <GameStatBox :game="{ coOp: 'No', winner: 'Other', name: `Competitive Games Played` }"
-            :style="`width: ${pc(stats.winnableGamesTotal / stats.totalGamesPlayed)};`">
-            <span>Competitive<br />{{ pc(stats.winnableGamesTotal / stats.totalGamesPlayed) }}<br />
-              <b>{{ stats.winnableGamesTotal }} games</b></span>
-          </GameStatBox>
-          <GameStatBox :game="{ coOp: 'Yes', coOpOutcome: 'Win', name: `Co-operative Games Played` }"
-            :style="`width: ${pc((stats.totalGamesPlayed - stats.winnableGamesTotal) / stats.totalGamesPlayed)};`">
-            <span>Co-operative<br />{{ pc((stats.totalGamesPlayed - stats.winnableGamesTotal) / stats.totalGamesPlayed) }}<br />
-              <b>{{ stats.totalGamesPlayed - stats.winnableGamesTotal }} games</b></span>
-          </GameStatBox>
-        </div>
       </div>
 
       <div class="stats group">
-        <h3>Winners</h3>
-        <p><b>{{ stats.mostWonGames }}</b> won the most games!</p>
-
-        <div class="percentage bar">
-          <GameStatBox :game="{ coOp: 'No', winner: 'Hannah', name: `Hannah's total win percentage` }"
-            :style="`width: ${pc(stats.winPercentageHannah)};`"><span>Hannah<br />{{ pc(stats.winPercentageHannah) }}<br />
-              <b>{{ stats.winCountHannah }} games</b></span></GameStatBox>
-          <GameStatBox :game="{ coOp: 'No', winner: 'John', name: `John's total win percentage` }"
-            :style="`width: ${pc(stats.winPercentageJohn)};`"><span>John<br />{{ pc(stats.winPercentageJohn) }}<br />
-              <b>{{ stats.winCountJohn }} games</b></span></GameStatBox>
-          <GameStatBox :game="{ coOp: 'No', winner: 'Other', name: 'Other winners percentage' }"
-            :style="`width: ${pc(stats.winPercentageOther)};`" class="slim"><span>Other <b>({{ stats.winCountOther }})</b></span></GameStatBox>
-          <GameStatBox v-if="stats.winCountDraw > 0" :game="{ coOp: 'No', winner: 'Draw', name: 'Draw percentage' }"
-            :style="`width: ${pc(stats.winPercentageDraw)};`" class="slim"><span>Draw <b>({{ stats.winCountDraw }})</b></span></GameStatBox>
-        </div>
+        <h3>Most played games</h3>
+        <ul>
+          <li v-for="item in stats.mostPlayedGames" :key="`mpg-${item.name}`">
+            <stat-value :label="`${item.name}`">{{ item.plays }} {{ item.plays > 1 ? 'plays' : 'play' }}</stat-value>
+          </li>
+        </ul>
       </div>
 
       <div class="stats group">
@@ -65,18 +44,37 @@
       </div>
 
       <div class="stats group">
-        <h3>Most played games</h3>
-        <ul>
-          <li v-for="item in stats.mostPlayedGames" :key="`mpg-${item.name}`">
-            <stat-value :label="`${item.name}`">{{ item.plays }} {{ item.plays > 1 ? 'plays' : 'play' }}</stat-value>
-          </li>
-        </ul>
-      </div>
+        <h3>Co-op vs Competitive</h3>
 
-      <div class="stats group">
-        <h3>Co-op Games</h3>
-        <stat-value label="Co-op Games Played">{{ stats.coOpGamesPlayedCount }}</stat-value>
+        <div class="percentage bar">
+          <GameStatBox :game="{ coOp: 'No', winner: 'Other', name: `Competitive Games Played` }"
+            :style="`width: ${pc(stats.winnableGamesTotal / stats.totalGamesPlayed)};`">
+            <span>Competitive<br />{{ pc(stats.winnableGamesTotal / stats.totalGamesPlayed) }}<br />
+              <b>{{ stats.winnableGamesTotal }} games</b></span>
+          </GameStatBox>
+          <GameStatBox :game="{ coOp: 'Yes', coOpOutcome: 'Win', name: `Co-operative Games Played` }"
+            :style="`width: ${pc((stats.totalGamesPlayed - stats.winnableGamesTotal) / stats.totalGamesPlayed)};`">
+            <span>Co-operative<br />{{ pc((stats.totalGamesPlayed - stats.winnableGamesTotal) / stats.totalGamesPlayed) }}<br />
+              <b>{{ stats.totalGamesPlayed - stats.winnableGamesTotal }} games</b></span>
+          </GameStatBox>
+        </div>
 
+        <h4>Competitive breakdown</h4>
+        <p><b>{{ stats.mostWonGames }}</b> won the most games!</p>
+        <div class="percentage bar">
+          <GameStatBox :game="{ coOp: 'No', winner: 'Hannah', name: `Hannah's total win percentage` }"
+            :style="`width: ${pc(stats.winPercentageHannah)};`"><span>Hannah<br />{{ pc(stats.winPercentageHannah) }}<br />
+              <b>{{ stats.winCountHannah }} games</b></span></GameStatBox>
+          <GameStatBox :game="{ coOp: 'No', winner: 'John', name: `John's total win percentage` }"
+            :style="`width: ${pc(stats.winPercentageJohn)};`"><span>John<br />{{ pc(stats.winPercentageJohn) }}<br />
+              <b>{{ stats.winCountJohn }} games</b></span></GameStatBox>
+          <GameStatBox :game="{ coOp: 'No', winner: 'Other', name: 'Other winners percentage' }"
+            :style="`width: ${pc(stats.winPercentageOther)};`" class="slim"><span>Other <b>({{ stats.winCountOther }})</b></span></GameStatBox>
+          <GameStatBox v-if="stats.winCountDraw > 0" :game="{ coOp: 'No', winner: 'Draw', name: 'Draw percentage' }"
+            :style="`width: ${pc(stats.winPercentageDraw)};`" class="slim"><span>Draw <b>({{ stats.winCountDraw }})</b></span></GameStatBox>
+        </div>
+
+        <h4>Cooperative breakdown</h4>
         <div class="percentage bar">
           <GameStatBox :game="{ coOp: 'Yes', coOpOutcome: 'Win', name: `Co-operative win percentage` }"
             :style="`width: ${pc(stats.coOpWinRate)};`"><span>Win<br />{{ pc(stats.coOpWinRate) }}<br />
@@ -91,6 +89,7 @@
       <div class="stats group">
         <h3>Most games played in a day</h3>
         <p v-if="stats.mostGamesPlayedInADay && stats.mostGamesPlayedInADay.length > 1">There were multiple days that tied for most games played in a day.</p>
+        <p v-else>A total of <b>{{ stats.mostGamesPlayedInADay[0]?.games?.length }} games</b> were played on <b>{{ stats.mostGamesPlayedInADay[0].date }}</b>.</p>
         <div v-for="day in stats.mostGamesPlayedInADay" :key="day.date">
           <h4>{{ day.date }}</h4>
           <ul>
