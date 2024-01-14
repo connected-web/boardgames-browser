@@ -24,7 +24,7 @@ import LineChart from '../charts/LineChart.vue'
 
 
 const { boardgamesApiUrl } = sharedModel.state
-const statsUrl = `${boardgamesApiUrl}/api/boardgame/stats`
+const statsUrl = `${boardgamesApiUrl}/api/boardgame/stats/allMonths`
 
 export default {
   components: { LoadingSpinner, LineChart },

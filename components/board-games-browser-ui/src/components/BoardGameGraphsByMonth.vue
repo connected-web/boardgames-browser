@@ -26,7 +26,7 @@ import LineChart from '../charts/LineChart.vue'
 import StatValue from './StatValue.vue'
 
 const { boardgamesApiUrl } = sharedModel.state
-const statsUrl = `${boardgamesApiUrl}/api/boardgame/stats`
+const statsUrl = `${boardgamesApiUrl}/api/boardgame/stats/allMonths`
 
 const expectedFields = [{
   label: 'Average Games Played per Day',

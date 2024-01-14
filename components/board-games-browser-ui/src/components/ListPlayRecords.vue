@@ -64,12 +64,21 @@ export default {
       status: 'Loading data...',
       playRecords: [],
       message: '',
-      serviceSelection: 'Not sure...'
+      serviceSelection: 'Not sure...',
+      refreshTimer: 0
     }
   },
   async mounted() {
     this.serviceSelection = await this.checkServiceSelection(this.$vueAuth)
     this.listPlayRecords()
+    clearInterval(this.refreshTimer)
+    this.refreshTimer = setInterval(async () => {
+      this.serviceSelection = await this.checkServiceSelection(this.$vueAuth)
+    }, 10000)
+  },
+  async unmounted() {
+    clearInterval(this.refreshTimer)
+    this.serviceSelection = null
   },
   computed: {
     currentMonth() {

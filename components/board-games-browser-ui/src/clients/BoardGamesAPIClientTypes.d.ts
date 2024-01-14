@@ -6,7 +6,7 @@ import type {
   AxiosRequestConfig
 } from 'openapi-client-axios'
 
-export declare namespace Components {
+declare namespace Components {
   namespace Schemas {
     /**
          * Message
@@ -73,6 +73,37 @@ export declare namespace Components {
              */
       deploymentTime: string
     }
+    /**
+         * Updated Playrecord
+         */
+    export interface UpdatedPlayrecordModel {
+      /**
+             * The filename of the play record
+             */
+      filename?: string
+      /**
+             * The month of the play record
+             */
+      month?: string
+      /**
+             * The year of the play record
+             */
+      year?: string
+      /**
+             * The keypath of the play record; may have changed if year or month have changed
+             */
+      keypath: string
+      /**
+             * The payload of the play record
+             */
+      payload?: {
+        [key: string]: any
+      }
+      /**
+             * The message returned by the server
+             */
+      message: string
+    }
   }
 }
 declare namespace Paths {
@@ -114,7 +145,8 @@ declare namespace Paths {
       playRecordKey: Parameters.PlayRecordKey
     }
     namespace Responses {
-      export type $200 = /* Message */ Components.Schemas.MessageModel
+      export type $200 = /* Play Record */ Components.Schemas.PlayRecordModel
+      export type $400 = /* Message */ Components.Schemas.MessageModel
     }
   }
   namespace GetStatus {
@@ -172,7 +204,9 @@ declare namespace Paths {
   namespace PutPlayrecordsUpdate {
     export type RequestBody = /* Play Record */ Components.Schemas.PlayRecordModel
     namespace Responses {
-      export type $200 = /* Message */ Components.Schemas.MessageModel
+      export type $200 = /* Updated Playrecord */ Components.Schemas.UpdatedPlayrecordModel
+      export type $400 = /* Message */ Components.Schemas.MessageModel
+      export type $500 = /* Message */ Components.Schemas.MessageModel
     }
   }
 }

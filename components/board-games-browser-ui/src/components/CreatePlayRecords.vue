@@ -127,7 +127,8 @@ export default {
       newFileKey: '',
       listOfGames: [],
       sending: false,
-      serviceSelection: 'Not sure...'
+      serviceSelection: 'Not sure...',
+      refreshTimer: 0,
     }
   },
   computed: {
@@ -251,6 +252,15 @@ export default {
   async mounted() {
     this.serviceSelection = await this.checkServiceSelection(this.$vueAuth)
     this.loadBoardGamesList()
+    clearInterval(this.refreshTimer)
+    this.refreshTimer = setInterval(async () => {
+      this.serviceSelection = await this.checkServiceSelection(this.$vueAuth)
+      this.dateToday = new Date().toISOString().substring(0, 10)
+    }, 10000)
+  },
+  async unmounted() {
+    clearInterval(this.refreshTimer)
+    this.serviceSelection = null
   }
 }
 </script>
