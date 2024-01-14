@@ -8,8 +8,6 @@
       <span>{{ currentMonth }} to Today</span>
     </p>
 
-    <p>Statistics for games played this month up to and including the current date.</p>
-
     <BoardGameStatsViewer datasourceUrl="https://boardgames-api.calisaurus.net/api/boardgame/stats/byMonth/toDate" />
 
     <div class="continuations">

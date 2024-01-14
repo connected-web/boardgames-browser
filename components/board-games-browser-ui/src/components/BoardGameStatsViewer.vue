@@ -5,40 +5,44 @@
       <LoadingSpinner>Loading stats...</LoadingSpinner>
     </p>
     <div v-if="stats">
+      <h3>Overview</h3>
       <p>Board game stats played by <i>Hannah and John</i> over <b>{{ stats.daysInSequence }}</b> days
         between <b>{{ stats.sequenceStartDate }}</b>
         and <b>{{ stats.sequenceEndDate }}</b>.</p>
 
       <div class="stats group">
         <stat-value label="Total Games Played">{{ stats.totalGamesPlayed }}</stat-value>
-        <stat-value label="Competitive Games">{{ stats.winnableGamesTotal }}</stat-value>
-        <stat-value label="Co-operative Games">{{ stats.totalGamesPlayed - stats.winnableGamesTotal }}</stat-value>
+        <stat-value label="Unique games">{{ stats.uniqueGamesPlayedCount }}</stat-value>
+        <stat-value label="Average games played per day">{{ stats.averageGamesPlayedPerDay }}</stat-value>
         <div class="percentage bar">
           <GameStatBox :game="{ coOp: 'No', winner: 'Other', name: `Competitive Games Played` }"
-            :style="`width: ${pc(stats.winnableGamesTotal / stats.totalGamesPlayed)};`"><span>Competitive<br />{{ pc(stats.winnableGamesTotal / stats.totalGamesPlayed) }}<br />{{ stats.winnableGamesTotal }} games</span></GameStatBox>
+            :style="`width: ${pc(stats.winnableGamesTotal / stats.totalGamesPlayed)};`">
+            <span>Competitive<br />{{ pc(stats.winnableGamesTotal / stats.totalGamesPlayed) }}<br />
+              <b>{{ stats.winnableGamesTotal }} games</b></span>
+          </GameStatBox>
           <GameStatBox :game="{ coOp: 'Yes', coOpOutcome: 'Win', name: `Co-operative Games Played` }"
-            :style="`width: ${pc((stats.totalGamesPlayed - stats.winnableGamesTotal) / stats.totalGamesPlayed)};`"><span>Co-operative<br />{{ pc((stats.totalGamesPlayed - stats.winnableGamesTotal) / stats.totalGamesPlayed) }}<br />{{ stats.totalGamesPlayed - stats.winnableGamesTotal }} games</span></GameStatBox>
+            :style="`width: ${pc((stats.totalGamesPlayed - stats.winnableGamesTotal) / stats.totalGamesPlayed)};`">
+            <span>Co-operative<br />{{ pc((stats.totalGamesPlayed - stats.winnableGamesTotal) / stats.totalGamesPlayed) }}<br />
+              <b>{{ stats.totalGamesPlayed - stats.winnableGamesTotal }} games</b></span>
+          </GameStatBox>
         </div>
       </div>
 
       <div class="stats group">
-        <h3>Who won the most games in this period?</h3>
+        <h3>Winners</h3>
         <p><b>{{ stats.mostWonGames }}</b> won the most games!</p>
-
-        <stat-value label="Wins by Hannah">{{ stats.winCountHannah }}</stat-value>
-        <stat-value label="Wins by John">{{ stats.winCountJohn }}</stat-value>
-        <stat-value label="Wins by Other players">{{ stats.winCountOther }}</stat-value>
-        <stat-value label="Drawn games">{{ stats.winCountDraw }}</stat-value>
 
         <div class="percentage bar">
           <GameStatBox :game="{ coOp: 'No', winner: 'Hannah', name: `Hannah's total win percentage` }"
-            :style="`width: ${pc(stats.winPercentageHannah)};`"><span>Hannah<br />{{ pc(stats.winPercentageHannah) }}<br />{{ stats.winCountHannah }} games</span></GameStatBox>
+            :style="`width: ${pc(stats.winPercentageHannah)};`"><span>Hannah<br />{{ pc(stats.winPercentageHannah) }}<br />
+              <b>{{ stats.winCountHannah }} games</b></span></GameStatBox>
           <GameStatBox :game="{ coOp: 'No', winner: 'John', name: `John's total win percentage` }"
-            :style="`width: ${pc(stats.winPercentageJohn)};`"><span>John<br />{{ pc(stats.winPercentageJohn) }}<br />{{ stats.winCountJohn }} games</span></GameStatBox>
+            :style="`width: ${pc(stats.winPercentageJohn)};`"><span>John<br />{{ pc(stats.winPercentageJohn) }}<br />
+              <b>{{ stats.winCountJohn }} games</b></span></GameStatBox>
           <GameStatBox :game="{ coOp: 'No', winner: 'Other', name: 'Other winners percentage' }"
-            :style="`width: ${pc(stats.winPercentageOther)};`" class="slim"><span>Other</span></GameStatBox>
+            :style="`width: ${pc(stats.winPercentageOther)};`" class="slim"><span>Other <b>({{ stats.winCountOther }})</b></span></GameStatBox>
           <GameStatBox v-if="stats.winCountDraw > 0" :game="{ coOp: 'No', winner: 'Draw', name: 'Draw percentage' }"
-            :style="`width: ${pc(stats.winPercentageDraw)};`" class="slim"><span>Draw</span></GameStatBox>
+            :style="`width: ${pc(stats.winPercentageDraw)};`" class="slim"><span>Draw <b>({{ stats.winCountDraw }})</b></span></GameStatBox>
         </div>
       </div>
 
@@ -70,17 +74,16 @@
       </div>
 
       <div class="stats group">
-        <h3>Co-op Stats</h3>
+        <h3>Co-op Games</h3>
         <stat-value label="Co-op Games Played">{{ stats.coOpGamesPlayedCount }}</stat-value>
-        <stat-value label="Co-op Games Percentage">{{ pc(stats.coOpGamesPlayedPercentage) }}</stat-value>
-        <stat-value label="Co-op Games Won">{{ stats.coOpGameWins }}</stat-value>
-        <stat-value label="Co-op Games Lost">{{ stats.coOpGameLoses }}</stat-value>
 
         <div class="percentage bar">
           <GameStatBox :game="{ coOp: 'Yes', coOpOutcome: 'Win', name: `Co-operative win percentage` }"
-            :style="`width: ${pc(stats.coOpWinRate)};`"><span>Win<br />{{ pc(stats.coOpWinRate) }}</span></GameStatBox>
+            :style="`width: ${pc(stats.coOpWinRate)};`"><span>Win<br />{{ pc(stats.coOpWinRate) }}<br />
+            <b>{{ stats.coOpGameWins }} games</b></span></GameStatBox>
           <GameStatBox :game="{ coOp: 'Yes', coOpOutcome: 'Loss', name: `Co-operative loss percentage` }"
-            :style="`width: ${pc(stats.coOpLossRate)};`"><span>Loss<br />{{ pc(stats.coOpLossRate) }}</span></GameStatBox>
+            :style="`width: ${pc(stats.coOpLossRate)};`"><span>Loss<br />{{ pc(stats.coOpLossRate) }}<br />
+            <b>{{ stats.coOpGameLoses }} games</b></span></GameStatBox>
         </div>
         
       </div>
@@ -88,21 +91,19 @@
       <div class="stats group">
         <h3>Most games played in a day</h3>
         <p v-if="stats.mostGamesPlayedInADay && stats.mostGamesPlayedInADay.length > 1">There were multiple days that tied for most games played in a day.</p>
-        <Collapsed title="List of games">
-          <div v-for="day in stats.mostGamesPlayedInADay" :key="day.date">
-            <h4>{{ day.date }}</h4>
-            <ul>
-              <li v-for="(game, idx) in day.games" :key="`mpiad-${game}-${idx}`">{{ game }}</li>
-            </ul>
-          </div>
-        </Collapsed>
+        <div v-for="day in stats.mostGamesPlayedInADay" :key="day.date">
+          <h4>{{ day.date }}</h4>
+          <ul>
+            <li v-for="(game, idx) in day.games" :key="`mpiad-${game}-${idx}`">{{ game }}</li>
+          </ul>
+        </div>
       </div>
 
       <div class="stats group">
         <h3>Unique games played</h3>
           <stat-value label="Unique games">{{ stats.uniqueGamesPlayedCount }}</stat-value>
           <stat-value label="Unique games percent">{{ pc(stats.uniqueGamesPlayedPercentage) }}</stat-value>
-        <Collapsed title="List of games">
+        <Collapsed title="List of unique games">
           <PaginatedItems :items="stats.uniqueGamesPlayed" :showFilter="false" itemTypePlural="games">
             <template v-slot="{ paginatedItems }">
               <ul>
@@ -122,9 +123,7 @@
       </div>
 
       <div class="stats group">
-        <h3>Games played</h3>
-        <stat-value label="Total games played">{{ stats.totalGamesPlayed }}</stat-value>
-        <stat-value label="Average games played per day">{{ stats.averageGamesPlayedPerDay }}</stat-value>
+        <h3>Play Records</h3>
 
         <Collapsed title="List of play records">
           <PaginatedItems :items="sortedPlayRecords" :pageSize="10" itemTypePlural="play records">
@@ -145,7 +144,7 @@
       </div>
 
       <div class="stats group">
-        <h3>Games played per day</h3>
+        <h3>Calendar</h3>
         <DayGrid :items="stats.gamesPlayedPerDay" :sequenceStartDate="new Date(stats.sequenceStartDate)" @selected="handleSelectedDay" />
       </div>
 
@@ -275,11 +274,7 @@ export default {
 .percentage.bar > .game.stat.box.slim > span {
   display: inline-block;
   transform: rotate(90deg);
-}
-
-ul {
-  margin: 0;
-  padding: 0
+  text-wrap: nowrap;
 }
 
 ul > li {
