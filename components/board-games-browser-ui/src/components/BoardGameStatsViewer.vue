@@ -259,7 +259,11 @@ export default {
 <style>
 .percentage.bar {
   display: flex;
-  height: 100px;
+  height: 60px;
+  border-radius: 5px;
+  overflow: hidden;
+  outline: 2px solid #666;
+  margin: 0.5em 0;
 }
 .percentage.bar > .game.stat.box {
   display: inline-flex;
