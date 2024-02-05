@@ -73,7 +73,7 @@ export default {
       return clonedPlayRecord
     },
     dateCode() {
-      const reverseDate:string | undefined = /(\d{2}\/\d{2}\/\d{4})/.exec(this.playRecord?.date)?.[1]
+      const reverseDate:string | undefined = /(\d{2}\/\d{2}\/\d{4})/.exec(String(this.playRecord?.date))?.[1]
       if (reverseDate !== undefined) {
         return reverseDate.split('/').reverse().join('-').slice(0, 7)
       }
