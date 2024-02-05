@@ -1,6 +1,13 @@
 <template>
   <div class="by-month">
-    <h1>Stats by Month</h1>
+    <div class="row p5">
+      <h1>Stats by Month</h1>
+      <span class="spacer"></span>
+      <router-link :to="`/api/review/${currentMonth}`" class="button">
+        <icon icon="clipboard-list" />
+        <label>Play records</label>
+      </router-link>
+    </div>
 
     <p class="breadcrumbs">
       <router-link :to="`/stats/by-month/`">Stats by Month</router-link>
