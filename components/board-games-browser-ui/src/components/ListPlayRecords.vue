@@ -1,17 +1,29 @@
 <template>
   <div>
+    <p class="breadcrumbs">
+      <router-link :to="`/api/review`">Play Records</router-link>
+      /
+      <router-link v-if="dateCode !== ''" :to="`/api/review/${dateCode}`">{{ dateCode }}</router-link>
+      <span v-else>Latest</span>
+    </p>
     <p class="auth-info">{{ serviceSelection?.message }}</p>
     
     <div v-if="serviceSelection?.authed === false">
       <p>This page requires user credentials to access and manipulate the latest play records.</p>
     </div>
     <div v-else class="list-of-play-records">
+      <p v-if="loading">
+        <LoadingSpinner>Loading play records...</LoadingSpinner>
+      </p>
       <div v-if="playRecords.length">
-        <p>Here is the list of the most recent raw play records available on the {{ serviceSelection?.name }} for {{ currentMonth }} and {{ previousMonth }}:</p>
+        <p v-if="dateCode !== ''">Here is the list of the play records available on the {{ serviceSelection?.name }} for {{ dateCode }}.</p>
+        <p v-else>Here is the list of the latest play records available on the {{ serviceSelection?.name }} for
+          <router-link :to="`/api/review/${currentMonth}`">{{ currentMonth }}</router-link> and
+          <router-link :to="`/api/review/${previousMonth}`">{{ previousMonth }}</router-link>:</p>
         <div v-for="record in playRecords" :key="record.key" class="play record">
           <pre><code>{{ record }}</code></pre>
           <div class="row p5 record-buttons">
-            <router-link :to="`/api/playrecord/view/${encodeURIComponent(record.key)}`" class="button">
+            <router-link :to="`/api/playrecord/view/${encodeURIComponent(record?.key ?? '')}`" class="button">
               <label class="fulltext">Details</label>
               <icon icon="clipboard-list" />
             </router-link>
@@ -19,9 +31,6 @@
         </div>
         <pre v-if="playRecords?.length === 0"><code>No play records found</code></pre>
       </div>
-      <p v-if="loading">
-        <LoadingSpinner>{{ status }}</LoadingSpinner>
-      </p>
       <div v-else-if="status" >
         <h3 class="status">Status: {{ status }}</h3>
         <p>
@@ -32,24 +41,23 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import axios from 'axios'
 import sharedModel from '../helpers/sharedModel'
-import checkServiceSelection from './helpers/checkServiceSelection'
+import checkServiceSelection, { ServiceSummary } from './helpers/checkServiceSelection'
 import dayjs from 'dayjs'
 
 import LoadingSpinner from './LoadingSpinner.vue'
 
-const { boardgamesSamApiUrl } = sharedModel.state
+import BoardGamesAPIClient, { PlayRecordModel } from '../clients/BoardGamesAPIClient'
+import { AxiosError } from 'openapi-client-axios'
 
-import BoardGamesAPIClient from '../clients/BoardGamesAPIClient'
-
-function convertDate(date) {
+function convertDate(date: string) {
   const [dd, mm, yyyy] = (date ?? '').split('/')
   return new Date([yyyy, mm, dd].join('-'))
 }
 
-function sortPlayRecordsByDate(a, b) {
+function sortPlayRecordsByDate(a: PlayRecordModel, b: PlayRecordModel) {
   const da = convertDate(a.date).getTime()
   const db = convertDate(b.date).getTime()
   return db - da
@@ -62,23 +70,32 @@ export default {
       sharedModel,
       loading: false,
       status: 'Loading data...',
-      playRecords: [],
+      playRecords: [] as PlayRecordModel[],
       message: '',
-      serviceSelection: 'Not sure...',
+      serviceSelection: {
+        message: 'Not sure...'
+      } as Partial<ServiceSummary>,
       refreshTimer: 0
     }
   },
+  props: {
+    dateCode: {
+      type: String,
+      default: ''
+    }
+  },
   async mounted() {
-    this.serviceSelection = await this.checkServiceSelection(this.$vueAuth)
+    const $vueAuth = (this as any).$vueAuth
+    this.serviceSelection = await this.checkServiceSelection($vueAuth)
     this.listPlayRecords()
     clearInterval(this.refreshTimer)
     this.refreshTimer = setInterval(async () => {
-      this.serviceSelection = await this.checkServiceSelection(this.$vueAuth)
+      this.serviceSelection = await this.checkServiceSelection($vueAuth)
     }, 10000)
   },
   async unmounted() {
     clearInterval(this.refreshTimer)
-    this.serviceSelection = null
+    this.serviceSelection = {}
   },
   computed: {
     currentMonth() {
@@ -99,33 +116,37 @@ export default {
       }
 
       try {
-        this.playRecords = await (this.serviceSelection?.service === 'OAuth' ? this.listPlayRecordsFromCDKAPI() : this.listPlayRecordsFromSAMAPI())
+        this.playRecords = await this.listPlayRecordsForDatecode()
         this.status = 'Loaded'
         this.message = `Found ${this.playRecords?.length ?? 0} play records.`
       } catch (ex) {
-        const { data } = ex.response || {}
-        this.message = data?.message || `Unable to load status: ${ex?.message}`
+        const error = ex as AxiosError
+        const { data } = (error.response || {}) as Record<string, Record<string, string>>
+        this.message = data?.message || `Unable to load status: ${error?.message}`
         this.status = 'Error'
       }
       this.loading = false
     },
-    async listPlayRecordsFromSAMAPI() {
-      const url = `${boardgamesSamApiUrl}/playrecords/list`
-      const axiosConfig = {
-        headers: sharedModel.getAuthHeaders()
+    async listPlayRecordsForDatecode(): Promise<PlayRecordModel[]> {
+      const { dateCode, currentMonth, previousMonth } = this
+      if (dateCode !== '') {
+        const client = await BoardGamesAPIClient.getSingleton().getInstance()
+        const response = await client.getPlayrecordsListDateCode({ dateCode })
+        return response?.data?.playRecords ?? []
+      } else {
+        const client = await BoardGamesAPIClient.getSingleton().getInstance()
+        const dataSets = await Promise.all([
+          client.getPlayrecordsListDateCode({ dateCode: currentMonth }),
+          client.getPlayrecordsListDateCode({ dateCode: previousMonth })
+        ])
+        const playRecords = dataSets.map(response => response?.data?.playRecords ?? []).flat()
+        return playRecords.sort(sortPlayRecordsByDate)
       }
-      const { data } = await axios.get(url, axiosConfig)
-      return (data?.playRecords ?? []).sort(sortPlayRecordsByDate)
-    },
-    async listPlayRecordsFromCDKAPI() {
-      const { currentMonth, previousMonth } = this
-      const client = await BoardGamesAPIClient.getSingleton().getInstance()
-      const dataSets = await Promise.all([
-        client.getPlayrecordsListDateCode({ dateCode: currentMonth }),
-        client.getPlayrecordsListDateCode({ dateCode: previousMonth })
-      ])
-      const playRecords = dataSets.map(response => response?.data?.playRecords ?? []).flat()
-      return playRecords.sort(sortPlayRecordsByDate)
+    }
+  },
+  watch: {
+    dateCode() {
+      this.listPlayRecords()
     }
   }
 }

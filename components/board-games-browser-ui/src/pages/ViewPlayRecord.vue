@@ -1,7 +1,15 @@
 <template>
   <div class="review">
     <h1>View Play Record</h1>
-    <p v-if="loadingPlayrecord"><LoadingSpinner>🚧 Loading play record to view... 
+    <p class="breadcrumbs">
+      <router-link :to="`/api/review`">Play Records</router-link>
+      /
+      <router-link :to="`/api/review/${dateCode}`">{{ dateCode }}</router-link>
+      /
+      <span>View</span>
+    </p>
+  
+    <p v-if="loadingPlayrecord"><LoadingSpinner>Loading play record to view... 
       <code>{{ playRecordKey }}</code>
     </LoadingSpinner></p>
     <div v-else-if="playRecord" class="column p5">
@@ -63,6 +71,13 @@ export default {
       delete clonedPlayRecord.history
       delete clonedPlayRecord.key
       return clonedPlayRecord
+    },
+    dateCode() {
+      const reverseDate:string | undefined = /(\d{2}\/\d{2}\/\d{4})/.exec(this.playRecord?.date)?.[1]
+      if (reverseDate !== undefined) {
+        return reverseDate.split('/').reverse().join('-').slice(0, 7)
+      }
+      return /(\d{4}-\d{2})/.exec(this.playRecordKey)?.[1] ?? '????'
     }
   },
   mounted() {

@@ -42,6 +42,7 @@ const routes = [
   { path: '/stats/by-all-time', component: ByAllTime },
   { path: '/api/track', component: Track },
   { path: '/api/review', component: ReviewPlayRecords },
+  { path: '/api/review/:dateCode', component: ReviewPlayRecords, props: true },
   { path: '/api/playrecord/view/:playRecordKey', component: ViewPlayRecord, props: true },
   { path: '/api/playrecord/edit/:playRecordKey', component: EditPlayRecord, props: true },
   { path: '/api/playrecord/delete/:playRecordKey', component: DeletePlayRecord, props: true },

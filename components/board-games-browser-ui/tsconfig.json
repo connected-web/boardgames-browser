@@ -36,7 +36,7 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.vue"
-  ],
+, "src/helpers/localStorage.js"  ],
   "exclude": [
     "node_modules"
   ]
