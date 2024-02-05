@@ -9,7 +9,8 @@ export interface PlayRecordModel {
   winner?: string
   name: string
   noOfPlayers: number
-  key?: string
+  key?: string,
+  history?: PlayRecordModel[]
 }
 
 interface ServerInfo {

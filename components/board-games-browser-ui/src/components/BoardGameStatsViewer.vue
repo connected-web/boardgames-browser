@@ -16,7 +16,7 @@
         <stat-value label="Average games played per day">{{ stats.averageGamesPlayedPerDay }}</stat-value>
       </div>
 
-      <div class="stats group">
+      <div v-if="stats.mostPlayedGames?.length > 0" class="stats group">
         <h3>Most played games</h3>
         <ul>
           <li v-for="item in stats.mostPlayedGames" :key="`mpg-${item.name}`">
@@ -25,7 +25,7 @@
         </ul>
       </div>
 
-      <div class="stats group">
+      <div v-if="stats.mostWonGamesHannah?.length > 0" class="stats group">
         <h3>Hannah's most won games</h3>
         <ul>
           <li v-for="item in stats.mostWonGamesHannah" :key="`mpg-${item.game}`">
@@ -34,7 +34,7 @@
         </ul>
       </div>
 
-      <div class="stats group">
+      <div v-if="stats.mostWonGamesJohn?.length > 0" class="stats group">
         <h3>John's most won games</h3>
         <ul>
           <li v-for="item in stats.mostWonGamesJohn" :key="`mpg-${item.game}`">
@@ -43,7 +43,7 @@
         </ul>
       </div>
 
-      <div class="stats group">
+      <div v-if="stats.winnableGamesTotal > 0" class="stats group">
         <h3>Co-op vs Competitive</h3>
 
         <div class="percentage bar">
@@ -86,10 +86,10 @@
         
       </div>
 
-      <div class="stats group">
+      <div  v-if="stats.mostGamesPlayedInADay?.length > 0"  class="stats group">
         <h3>Most games played in a day</h3>
-        <p v-if="stats.mostGamesPlayedInADay && stats.mostGamesPlayedInADay.length > 1">There were multiple days that tied for most games played in a day.</p>
-        <p v-else>A total of <b>{{ stats.mostGamesPlayedInADay[0]?.games?.length }} games</b> were played on <b>{{ stats.mostGamesPlayedInADay[0].date }}</b>.</p>
+        <p v-if="stats.mostGamesPlayedInADay?.length > 1">There were multiple days that tied for most games played in a day.</p>
+        <p v-else-if="stats.mostGamesPlayedInADay?.length > 0">A total of <b>{{ stats.mostGamesPlayedInADay[0]?.games?.length }} games</b> were played on <b>{{ stats.mostGamesPlayedInADay[0]?.date }}</b>.</p>
         <div v-for="day in stats.mostGamesPlayedInADay" :key="day.date">
           <h4>{{ day.date }}</h4>
           <ul>

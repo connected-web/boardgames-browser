@@ -17,9 +17,9 @@
           <label>Delete</label>
         </router-link>
       </div>
-      <div v-if="playRecord?.history?.length > 0">
+      <div v-if="(playRecord.history?.length ?? 0) > 0">
         <h3>History</h3>
-        <p>This play record has had <b>{{ playRecord.history.length }}</b> previous edits.</p>
+        <p>This play record has had <b>{{ playRecord.history?.length }}</b> previous edits.</p>
         <div class="column p5">
           <div v-for="(historyItem, index) in playRecord.history" :key="index">
             <pre><code>{{ historyItem }}</code></pre>
@@ -37,7 +37,8 @@
 
 <script lang="ts">
 import LoadingSpinner from '../components/LoadingSpinner.vue'
-import BoardGamesAPIClient from '../clients/BoardGamesAPIClient'
+import BoardGamesAPIClient, { PlayRecordModel } from '../clients/BoardGamesAPIClient'
+import { AxiosError } from 'openapi-client-axios'
 
 export default {
   components: { LoadingSpinner },
