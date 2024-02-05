@@ -118,6 +118,10 @@ button, .button {
   letter-spacing: 1px;
 }
 
+button > label, .button > label {
+  text-wrap: nowrap;
+}
+
 pre {
   background: #282c34;
   font-size: .85em;

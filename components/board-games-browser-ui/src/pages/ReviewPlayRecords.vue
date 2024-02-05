@@ -1,11 +1,15 @@
 <template>
   <div class="review">
     <div class="row p5">
-      <h1>Review Play Records</h1>
+      <h1>Play Records</h1>
       <span class="spacer"></span>
-      <router-link :to="`/stats/by-month/${dateCode}`" class="button">
+      <router-link v-if="dateCode" :to="`/stats/by-month/${dateCode}`" class="button">
         <icon icon="chart-area" />
-        <label>Play Stats</label>
+        <label class="fulltext">Play Stats</label>
+      </router-link>
+      <router-link v-else :to="`/stats/month-to-date`" class="button">
+        <icon icon="chart-area" />
+        <label class="fulltext">Play Stats</label>
       </router-link>
     </div>
 

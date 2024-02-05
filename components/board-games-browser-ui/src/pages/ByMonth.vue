@@ -3,7 +3,7 @@
     <div class="row p5">
       <h1>Stats by Month</h1>
       <span class="spacer"></span>
-      <router-link :to="`/api/review/${currentMonth}`" class="button">
+      <router-link v-if="dateCode" :to="`/api/review/${currentMonth}`" class="button">
         <icon icon="clipboard-list" />
         <label>Play records</label>
       </router-link>

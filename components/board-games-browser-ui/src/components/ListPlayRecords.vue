@@ -3,7 +3,7 @@
     <p class="breadcrumbs">
       <router-link :to="`/api/review`">Play Records</router-link>
       /
-      <router-link v-if="dateCode !== ''" :to="`/api/review/${dateCode}`">{{ dateCode }}</router-link>
+      <span v-if="dateCode !== ''">{{ dateCode }}</span>
       <span v-else>Latest</span>
     </p>
     <p class="auth-info">{{ serviceSelection?.message }}</p>
