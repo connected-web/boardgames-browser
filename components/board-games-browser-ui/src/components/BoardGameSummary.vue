@@ -58,11 +58,14 @@
       <p>Found {{filteredPlayRecords.length}} play records:</p>
       <p v-for="(playRecord, index) in filteredPlayRecords" :key="`playRecord_${playRecord.date}_${index}`">
         <stat-value :label="playRecord.date">
+          <span>{{ ucFirst(playRecord.winner || playRecord.coOpOutcome || 'undefined') }}</span>
           <game-stat-box :game="playRecord" :name="game.name" />
-          <span>{{ playRecord.winner || playRecord.coOpOutcome }}</span>
         </stat-value>
-        <stat-value label="Game Family" v-if="playRecord.gameFamily">{{ playRecord.gameFamily }}</stat-value>
-        <stat-value label="Notes" v-if="playRecord.notes">{{ playRecord.notes }}</stat-value>
+        <stat-value v-if="playRecord?.gameFamily" label="Game Family">{{ playRecord?.gameFamily }}</stat-value>
+        <stat-value v-if="playRecord?.expansions" label="Expansions">
+          <span v-for="expansion in playRecord.expansions" :key="expansion" class="badge">{{ expansion }}</span>
+        </stat-value>
+        <stat-value v-if="playRecord?.notes" label="Notes">{{ playRecord.notes }}</stat-value>
         <!-- <pre><code>{{ JSON.stringify(playRecord, null, 2) }}</code></pre> -->
       </p>
     </div>
@@ -114,6 +117,9 @@ export default {
     }
   },
   methods: {
+    ucFirst(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1)
+    },
     fmp(number) {
       const maxed = Math.min(number, 1.0)
       return (maxed * 100).toFixed(0) + '%'
@@ -160,5 +166,14 @@ export default {
 }
 .by-year > .year-in-use.selected {
   border-bottom: 3px solid rgb(164, 223, 203);
+}
+.badge {
+  display: inline-block;
+  padding: 0.25em 0.5em;
+  background: #dfdfdf;
+  border-radius: 0.5em;
+  font-size: 0.8em;
+  font-weight: bold;
+  color: #333;
 }
 </style>
