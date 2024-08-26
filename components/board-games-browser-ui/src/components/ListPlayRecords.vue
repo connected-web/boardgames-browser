@@ -42,7 +42,6 @@
 </template>
 
 <script lang="ts">
-import axios from 'axios'
 import sharedModel from '../helpers/sharedModel'
 import checkServiceSelection, { ServiceSummary } from './helpers/checkServiceSelection'
 import dayjs from 'dayjs'
