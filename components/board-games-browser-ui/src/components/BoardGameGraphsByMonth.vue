@@ -104,6 +104,10 @@ const expectedFields = [{
   label: 'Winnable Games Total',
   field: 'winnableGamesTotal',
   color: '#3F51B5'
+}, {
+  label: 'Total Games Played',
+  field: 'totalGamesPlayed',
+  color: '#FF5722'
 }]
 
 export default {
